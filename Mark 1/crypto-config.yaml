@@ -2,13 +2,13 @@
 
 OrdererOrgs:
   - Name: orderer
-    Domain: seva.gov.in
+    Domain: example.com
     Specs:
       - Hostname: orderer
 
 PeerOrgs:
   - Name: dl
-    Domain: dl.seva.gov.in
+    Domain: dl.example.com
     EnableNodeOUs: true
     Template:
       Count: 3                            #NUMBER OF PEERS

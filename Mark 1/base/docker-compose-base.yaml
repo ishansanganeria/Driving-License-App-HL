@@ -2,8 +2,8 @@ version: '2'
 
 services:
 
-  orderer.seva.gov.in:
-    container_name: orderer.seva.gov.in
+  orderer.example.com:
+    container_name: orderer.example.com
     image: hyperledger/fabric-orderer:$IMAGE_TAG
     environment:
       #- ORDERER_GENERAL_LOGLEVEL=INFO
@@ -23,68 +23,68 @@ services:
     command: orderer
     volumes:
     - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-    - ../crypto-config/ordererOrganizations/seva.gov.in/orderers/orderer.seva.gov.in/msp:/var/hyperledger/orderer/msp
-    - ../crypto-config/ordererOrganizations/seva.gov.in/orderers/orderer.seva.gov.in/tls/:/var/hyperledger/orderer/tls
-    - orderer.seva.gov.in:/var/hyperledger/production/orderer
+    - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/msp:/var/hyperledger/orderer/msp
+    - ../crypto-config/ordererOrganizations/example.com/orderers/orderer.example.com/tls/:/var/hyperledger/orderer/tls
+    - orderer.example.com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
 
-  peer0.dl.seva.gov.in:
-    container_name: peer0.dl.seva.gov.in
+  peer0.dl.example.com:
+    container_name: peer0.dl.example.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer0.dl.seva.gov.in
-      - CORE_PEER_ADDRESS=peer0.dl.seva.gov.in:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.dl.seva.gov.in:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dl.seva.gov.in:7051
+      - CORE_PEER_ID=peer0.dl.example.com
+      - CORE_PEER_ADDRESS=peer0.dl.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.dl.example.com:7051
+      # - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dl.example.com:7051
       - CORE_PEER_LOCALMSPID=dlMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/dl.seva.gov.in/peers/peer0.dl.seva.gov.in/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/dl.seva.gov.in/peers/peer0.dl.seva.gov.in/tls:/etc/hyperledger/fabric/tls
-        - peer0.dl.seva.gov.in:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/dl.example.com/peers/peer0.dl.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/dl.example.com/peers/peer0.dl.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.dl.example.com:/var/hyperledger/production
     ports:
       - 7051:7051
       - 7053:7053
 
-  peer1.dl.seva.gov.in:
-    container_name: peer1.dl.seva.gov.in
+  peer1.dl.example.com:
+    container_name: peer1.dl.example.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer1.dl.seva.gov.in
-      - CORE_PEER_ADDRESS=peer1.dl.seva.gov.in:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.dl.seva.gov.in:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.dl.seva.gov.in:7051
+      - CORE_PEER_ID=peer1.dl.example.com
+      - CORE_PEER_ADDRESS=peer1.dl.example.com:7051
+      # - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.dl.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.dl.example.com:7051
       - CORE_PEER_LOCALMSPID=dlMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/dl.seva.gov.in/peers/peer1.dl.seva.gov.in/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/dl.seva.gov.in/peers/peer1.dl.seva.gov.in/tls:/etc/hyperledger/fabric/tls
-        - peer1.dl.seva.gov.in:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/dl.example.com/peers/peer1.dl.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/dl.example.com/peers/peer1.dl.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.dl.example.com:/var/hyperledger/production
     ports:
       - 8051:7051
       - 8053:7053
 
-  peer2.dl.seva.gov.in:
-    container_name: peer2.dl.seva.gov.in
+  peer2.dl.example.com:
+    container_name: peer2.dl.example.com
     extends:
       file: peer-base.yaml
       service: peer-base
     environment:
-      - CORE_PEER_ID=peer2.dl.seva.gov.in
-      - CORE_PEER_ADDRESS=peer2.dl.seva.gov.in:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dl.seva.gov.in:7051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.dl.seva.gov.in:7051
+      - CORE_PEER_ID=peer2.dl.example.com
+      - CORE_PEER_ADDRESS=peer2.dl.example.com:7051
+      # - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dl.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.dl.example.com:7051
       - CORE_PEER_LOCALMSPID=dlMSP
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/dl.seva.gov.in/peers/peer2.dl.seva.gov.in/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/dl.seva.gov.in/peers/peer2.dl.seva.gov.in/tls:/etc/hyperledger/fabric/tls
-        - peer2.dl.seva.gov.in:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/dl.example.com/peers/peer2.dl.example.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/dl.example.com/peers/peer2.dl.example.com/tls:/etc/hyperledger/fabric/tls
+        - peer2.dl.example.com:/var/hyperledger/production
     ports:
       - 9051:7051
       - 9053:7053

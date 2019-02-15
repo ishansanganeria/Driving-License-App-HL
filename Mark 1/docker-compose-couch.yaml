@@ -24,7 +24,7 @@ services:
     networks:
       - v1
 
-  peer0.dl.seva.gov.in:
+  peer0.dl.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
@@ -51,7 +51,7 @@ services:
     networks:
       - v1
 
-  peer1.dl.seva.gov.in:
+  peer1.dl.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
@@ -78,7 +78,7 @@ services:
     networks:
       - v1
 
-  peer2.dl.seva.gov.in:
+  peer2.dl.example.com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
