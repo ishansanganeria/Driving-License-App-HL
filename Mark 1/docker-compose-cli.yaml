@@ -1,0 +1,79 @@
+version: '2'
+
+volumes:
+  orderer.seva.gov.in:
+  peer0.dl.seva.gov.in:
+  peer1.dl.seva.gov.in:
+  peer2.dl.seva.gov.in:
+  
+networks:
+  mark1:
+
+services:
+
+  orderer.seva.gov.in:
+    extends:
+      file:   base/docker-compose-base.yaml
+      service: orderer.seva.gov.in
+    container_name: orderer.seva.gov.in
+    networks:
+      - mark1
+
+  peer0.dl.seva.gov.in:
+    container_name: peer0.dl.seva.gov.in
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer0.dl.seva.gov.in
+    networks:
+      - mark1
+
+  peer1.dl.seva.gov.in:
+    container_name: peer1.dl.seva.gov.in
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer1.dl.seva.gov.in
+    networks:
+      - mark1
+
+  peer2.dl.seva.gov.in:
+    container_name: peer2.dl.seva.gov.in
+    extends:
+      file:  base/docker-compose-base.yaml
+      service: peer2.dl.seva.gov.in
+    networks:
+      - mark1
+
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools:$IMAGE_TAG
+    tty: true
+    stdin_open: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      #- CORE_LOGGING_LEVEL=DEBUG
+      - CORE_LOGGING_LEVEL=INFO
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.dl.seva.gov.in:7051
+      - CORE_PEER_LOCALMSPID=dlMSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/dl.seva.gov.in/peers/peer0.dl.seva.gov.in/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/dl.seva.gov.in/peers/peer0.dl.seva.gov.in/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/dl.seva.gov.in/peers/peer0.dl.seva.gov.in/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/dl.seva.gov.in/users/Admin@dl.seva.gov.in/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./../chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+    depends_on:
+      - orderer.seva.gov.in
+      - peer0.dl.seva.gov.in
+      - peer1.dl.seva.gov.in
+      - peer2.dl.seva.gov.in
+    networks:
+      - mark1
