@@ -6,7 +6,7 @@
 version: '2'
 
 networks:
-  byfn:
+  v1:
 
 services:
   couchdb0:
@@ -22,7 +22,7 @@ services:
     ports:
       - "5984:5984"
     networks:
-      - byfn
+      - v1
 
   peer0.dl.seva.gov.in:
     environment:
@@ -49,7 +49,7 @@ services:
     ports:
       - "6984:5984"
     networks:
-      - byfn
+      - v1
 
   peer1.dl.seva.gov.in:
     environment:
@@ -76,7 +76,7 @@ services:
     ports:
       - "7984:5984"
     networks:
-      - byfn
+      - v1
 
   peer2.dl.seva.gov.in:
     environment:

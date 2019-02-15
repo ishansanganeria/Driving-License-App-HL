@@ -38,7 +38,7 @@ services:
       - CORE_PEER_ID=peer0.dl.seva.gov.in
       - CORE_PEER_ADDRESS=peer0.dl.seva.gov.in:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.dl.seva.gov.in:7051
-     # - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dl.seva.gov.in:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dl.seva.gov.in:7051
       - CORE_PEER_LOCALMSPID=dlMSP
     volumes:
         - /var/run/:/host/var/run/
@@ -57,7 +57,7 @@ services:
     environment:
       - CORE_PEER_ID=peer1.dl.seva.gov.in
       - CORE_PEER_ADDRESS=peer1.dl.seva.gov.in:7051
-      #- CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.dl.seva.gov.in:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.dl.seva.gov.in:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.dl.seva.gov.in:7051
       - CORE_PEER_LOCALMSPID=dlMSP
     volumes:
@@ -77,7 +77,7 @@ services:
     environment:
       - CORE_PEER_ID=peer2.dl.seva.gov.in
       - CORE_PEER_ADDRESS=peer2.dl.seva.gov.in:7051
-      #- CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dl.seva.gov.in:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.dl.seva.gov.in:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.dl.seva.gov.in:7051
       - CORE_PEER_LOCALMSPID=dlMSP
     volumes:

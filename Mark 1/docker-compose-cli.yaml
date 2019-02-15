@@ -7,7 +7,7 @@ volumes:
   peer2.dl.seva.gov.in:
   
 networks:
-  mark1:
+  v1:
 
 services:
 
@@ -17,7 +17,7 @@ services:
       service: orderer.seva.gov.in
     container_name: orderer.seva.gov.in
     networks:
-      - mark1
+      - v1
 
   peer0.dl.seva.gov.in:
     container_name: peer0.dl.seva.gov.in
@@ -25,7 +25,7 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer0.dl.seva.gov.in
     networks:
-      - mark1
+      - v1
 
   peer1.dl.seva.gov.in:
     container_name: peer1.dl.seva.gov.in
@@ -33,7 +33,7 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer1.dl.seva.gov.in
     networks:
-      - mark1
+      - v1
 
   peer2.dl.seva.gov.in:
     container_name: peer2.dl.seva.gov.in
@@ -41,7 +41,7 @@ services:
       file:  base/docker-compose-base.yaml
       service: peer2.dl.seva.gov.in
     networks:
-      - mark1
+      - v1
 
 
   cli:
@@ -76,4 +76,4 @@ services:
       - peer1.dl.seva.gov.in
       - peer2.dl.seva.gov.in
     networks:
-      - mark1
+      - v1
