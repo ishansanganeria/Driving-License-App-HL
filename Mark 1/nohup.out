@@ -136,3 +136,18 @@ Most likely you need to configure your SUID sandbox correctly
 [27572:27572:0215/183924.620745:ERROR:http_bridge.cc(126)] Not implemented reached in virtual void syncer::HttpBridgeFactory::OnSignalReceived()
 [0215/183925.120933:ERROR:nacl_helper_linux.cc(310)] NaCl helper process running without a sandbox!
 Most likely you need to configure your SUID sandbox correctly
+[12587:12587:0218/191454.299072:ERROR:sandbox_linux.cc(379)] InitializeSandbox() called with multiple threads in process gpu-process.
+[12554:12554:0218/191503.335148:ERROR:input_method_base.cc(146)] Not implemented reached in virtual ui::InputMethodKeyboardController *ui::InputMethodBase::GetInputMethodKeyboardController()Using InputMethodKeyboardControllerStub
+[12554:12565:0218/191625.755910:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -21
+[12554:12565:0218/193227.343792:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -21
+[12554:12554:0218/193312.042427:ERROR:textfield.cc(1767)] Not implemented reached in virtual bool views::Textfield::ShouldDoLearning()
+[12554:12565:0218/193906.868366:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -106
+[12554:12751:0218/193909.049679:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0218/193911.215610:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -21
+[12554:12751:0218/193911.216181:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0218/200621.298759:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -21
+[12554:12565:0218/201243.739909:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -21
+[12554:12565:0218/201305.756157:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12751:0218/201325.666416:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0218/201336.619224:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12751:0218/201336.620987:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
