@@ -69,6 +69,14 @@ echo
 
 echo
 echo "######################################################################"
+echo "################# Defining Anchor Peers for dl ORG ###################"
+echo "######################################################################"
+echo
+
+./configtxgen -profile SingleOrgChannel -outputAnchorPeersUpdate ./channel-artifacts/dlMSPanchors.tx -channelID $CHANNEL_NAME -asOrg dlMSP
+
+echo
+echo "######################################################################"
 echo "#################     Running docker containers     ##################"
 echo "######################################################################"
 echo

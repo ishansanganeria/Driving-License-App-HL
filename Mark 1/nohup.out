@@ -151,3 +151,205 @@ Most likely you need to configure your SUID sandbox correctly
 [12554:12751:0218/201325.666416:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
 [12554:12565:0218/201336.619224:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
 [12554:12751:0218/201336.620987:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0218/211557.014901:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/211557.560186:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+Created new window in existing browser session.
+[0218/214429.245026:ERROR:nacl_helper_linux.cc(310)] NaCl helper process running without a sandbox!
+Most likely you need to configure your SUID sandbox correctly
+[12554:12554:0218/214431.305230:ERROR:input_method_base.cc(146)] Not implemented reached in virtual ui::InputMethodKeyboardController *ui::InputMethodBase::GetInputMethodKeyboardController()Using InputMethodKeyboardControllerStub
+[12587:12587:0218/221139.735138:ERROR:buffer_manager.cc(491)] [.BrowserCompositor-0x40244222100]GL ERROR :GL_INVALID_OPERATION : glBufferData: <- error from previous GL command
+[12587:12587:0218/221140.051288:ERROR:buffer_manager.cc(491)] [.BrowserCompositor-0x4024417e300]GL ERROR :GL_INVALID_OPERATION : glBufferData: <- error from previous GL command
+[12554:12565:0218/221452.585012:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12565:0218/221530.218738:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221530.243278:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221530.929054:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221531.206939:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221531.261978:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221531.313133:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221531.527237:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221531.720083:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221531.835163:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221531.864321:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221531.883278:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221532.103837:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12751:0218/221532.104443:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0218/221532.314571:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221532.357496:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221532.903031:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221532.931559:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.431022:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.431543:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.484386:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.484590:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.484703:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.485054:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.497949:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.508527:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.508764:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.515941:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.561376:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.561599:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.581804:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221536.582087:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221537.245997:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221537.286991:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221537.316570:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221537.333665:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221537.356940:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221537.380562:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221538.174137:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221538.260841:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221538.281084:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221538.931039:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221539.461068:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221539.788400:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221539.801717:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221539.942298:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221539.971862:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221540.012039:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221540.318973:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221540.346474:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.082033:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.100002:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.218616:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.245861:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.438046:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.463990:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.524126:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.535782:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.564749:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.827102:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.827311:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.845851:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.888577:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.921955:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.950561:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.973893:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221542.976136:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -102
+[12554:12565:0218/221543.001292:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.004373:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.031453:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.077796:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.108318:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.139788:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.152760:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.356337:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12751:0218/221543.356930:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0218/221543.380963:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.403863:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.711188:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.738614:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.738957:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221543.753052:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221544.022952:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221544.047780:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221544.081333:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221544.098409:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221544.710764:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221544.747106:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221545.993306:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221546.857589:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221546.877780:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221547.576347:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221547.623208:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221547.668730:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221547.751195:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221547.789377:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.743605:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.768633:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.803080:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.836769:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.837092:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.837278:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.876504:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.876886:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.911368:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.941562:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221553.968124:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.001688:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.002647:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.036968:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.037320:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.071808:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.097013:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.112461:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.169921:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.170598:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.206449:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.234503:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.234840:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.261906:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.262211:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.281512:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.281832:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.317849:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.336711:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.358693:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.377803:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.399603:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.413250:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.451184:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.451492:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.484099:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.484340:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.508087:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.521256:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.545923:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.546275:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.584314:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.584619:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.606809:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.607111:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.623314:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.652230:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.652538:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.677051:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.677683:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.708026:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.708251:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.738324:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221554.738502:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221555.193676:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221555.226725:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221555.555563:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/221555.596524:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0218/223926.417167:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12565:0218/225300.863700:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/225300.883767:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/225319.479367:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/230851.808125:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12565:0218/230939.609393:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12565:0218/231103.340289:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12565:0218/231257.680067:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12565:0218/231526.217355:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/231543.199235:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/231543.208338:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/231543.256459:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/231611.580861:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/231611.589801:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/231619.227968:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0218/231619.228238:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -101
+[12554:12565:0218/231653.311396:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12554:0218/233241.807802:ERROR:input_method_base.cc(146)] Not implemented reached in virtual ui::InputMethodKeyboardController *ui::InputMethodBase::GetInputMethodKeyboardController()Using InputMethodKeyboardControllerStub
+[28464:28464:0218/234125.516173:ERROR:sandbox_linux.cc(379)] InitializeSandbox() called with multiple threads in process gpu-process.
+Created new window in existing browser session.
+[0218/234125.650971:ERROR:nacl_helper_linux.cc(310)] NaCl helper process running without a sandbox!
+Most likely you need to configure your SUID sandbox correctly
+[12554:12554:0218/234656.906751:ERROR:input_method_base.cc(146)] Not implemented reached in virtual ui::InputMethodKeyboardController *ui::InputMethodBase::GetInputMethodKeyboardController()Using InputMethodKeyboardControllerStub
+[12554:12565:0219/002623.934867:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12565:0219/002628.658225:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12751:0219/002628.659248:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12751:0219/003737.271427:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0219/003739.354749:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12751:0219/003739.357485:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0219/003743.920330:ERROR:connection_factory_impl.cc(400)] Failed to connect to MCS endpoint with error -105
+[12554:12751:0219/003743.921253:ERROR:get_updates_processor.cc(242)] PostClientToServerMessage() failed during GetUpdates
+[12554:12565:0219/010259.744412:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[12554:12565:0219/012958.517649:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:12565:0219/012959.159971:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[12554:3323:0219/033754.296366:ERROR:cert_verify_proc_nss.cc(975)] CERT_PKIXVerifyCert for s.acxiomapac.com failed err=-8181
+[12554:12554:0219/035854.186233:ERROR:http_bridge.cc(126)] Not implemented reached in virtual void syncer::HttpBridgeFactory::OnSignalReceived()
+[0219/035854.618853:ERROR:nacl_helper_linux.cc(310)] NaCl helper process running without a sandbox!
+Most likely you need to configure your SUID sandbox correctly
+[18676:18676:0219/215821.552196:ERROR:sandbox_linux.cc(379)] InitializeSandbox() called with multiple threads in process gpu-process.
+[18641:18641:0219/215831.563093:ERROR:input_method_base.cc(146)] Not implemented reached in virtual ui::InputMethodKeyboardController *ui::InputMethodBase::GetInputMethodKeyboardController()Using InputMethodKeyboardControllerStub

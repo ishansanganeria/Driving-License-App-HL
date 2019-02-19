@@ -28,7 +28,11 @@ Organizations:
             Admins:
                 Type: Signature
                 Rule: "OR('dlMSP.admin')"
+        AnchorPeers:
+            - Host: peer0.dl.example.com
+              Port: 7051
 
+    
 Capabilities:
     Channel: &ChannelCapabilities
         V1_3: true
