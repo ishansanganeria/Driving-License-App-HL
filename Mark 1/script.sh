@@ -57,7 +57,7 @@ echo "#####################################################################"
 echo "#############          Creating Genesis Block      ##################"
 echo "#####################################################################"
 echo
-./configtxgen -profile SingleOrgOrdererGenesis -outputBlock ./channel-artifacts/genesis.block -channelID $CHANNEL_NAME
+./configtxgen -profile SingleOrgOrdererGenesis -outputBlock ./channel-artifacts/genesis.block 
 
 echo
 echo "######################################################################"
@@ -69,11 +69,11 @@ echo
 
 echo
 echo "######################################################################"
-echo "################# Defining Anchor Peers for dl ORG ###################"
+echo "################# Defining Anchor Peers for Orgdl ORG ###################"
 echo "######################################################################"
 echo
 
-./configtxgen -profile SingleOrgChannel -outputAnchorPeersUpdate ./channel-artifacts/dlMSPanchors.tx -channelID $CHANNEL_NAME -asOrg dlMSP
+./configtxgen -profile SingleOrgChannel -outputAnchorPeersUpdate ./channel-artifacts/OrgdlMSPanchors.tx -channelID $CHANNEL_NAME -asOrg OrgdlMSP
 
 echo
 echo "######################################################################"

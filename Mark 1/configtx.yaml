@@ -14,22 +14,22 @@ Organizations:
                 Type: Signature
                 Rule: "OR('OrdererMSP.admin')"
 
-    - &dl
-        Name: dlMSP
-        ID: dlMSP
-        MSPDir: crypto-config/peerOrganizations/dl.example.com/msp
+    - &Orgdl
+        Name: OrgdlMSP
+        ID: OrgdlMSP
+        MSPDir: crypto-config/peerOrganizations/orgdl.example.com/msp
         Policies:
             Readers:
                 Type: Signature
-                Rule: "OR('dlMSP.admin', 'dlMSP.peer', 'dlMSP.client')"
+                Rule: "OR('OrgdlMSP.admin', 'OrgdlMSP.peer', 'OrgdlMSP.client')"
             Writers:
                 Type: Signature
-                Rule: "OR('dlMSP.admin', 'dlMSP.client')"
+                Rule: "OR('OrgdlMSP.admin', 'OrgdlMSP.client')"
             Admins:
                 Type: Signature
-                Rule: "OR('dlMSP.admin')"
+                Rule: "OR('OrgdlMSP.admin')"
         AnchorPeers:
-            - Host: peer0.dl.example.com
+            - Host: peer0.orgdl.example.com
               Port: 7051
 
     
@@ -112,12 +112,12 @@ Profiles:
         Consortiums:
             SampleConsortium:
                 Organizations:
-                    - *dl
+                    - *Orgdl
     SingleOrgChannel:
         Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
-                - *dl
+                - *Orgdl
             Capabilities:
                 <<: *ApplicationCapabilities

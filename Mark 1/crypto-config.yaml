@@ -1,5 +1,3 @@
-
-
 OrdererOrgs:
   - Name: orderer
     Domain: example.com
@@ -7,8 +5,8 @@ OrdererOrgs:
       - Hostname: orderer
 
 PeerOrgs:
-  - Name: dl
-    Domain: dl.example.com
+  - Name: Orgdl
+    Domain: orgdl.example.com
     EnableNodeOUs: true
     Template:
       Count: 3                            #NUMBER OF PEERS

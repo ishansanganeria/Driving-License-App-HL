@@ -353,3 +353,9 @@ Most likely you need to configure your SUID sandbox correctly
 Most likely you need to configure your SUID sandbox correctly
 [18676:18676:0219/215821.552196:ERROR:sandbox_linux.cc(379)] InitializeSandbox() called with multiple threads in process gpu-process.
 [18641:18641:0219/215831.563093:ERROR:input_method_base.cc(146)] Not implemented reached in virtual ui::InputMethodKeyboardController *ui::InputMethodBase::GetInputMethodKeyboardController()Using InputMethodKeyboardControllerStub
+[18641:18652:0219/220502.639451:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -100
+[18641:18652:0219/220504.962332:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[18641:18652:0219/220523.896594:ERROR:ssl_client_socket_impl.cc(1061)] handshake failed; returned -1, SSL error code 1, net_error -101
+[18641:18641:0219/220734.553092:ERROR:http_bridge.cc(126)] Not implemented reached in virtual void syncer::HttpBridgeFactory::OnSignalReceived()
+[0219/220735.027392:ERROR:nacl_helper_linux.cc(310)] NaCl helper process running without a sandbox!
+Most likely you need to configure your SUID sandbox correctly

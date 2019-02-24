@@ -2,14 +2,32 @@ version: '2'
 
 volumes:
   orderer.example.com:
-  peer0.dl.example.com:
-  peer1.dl.example.com:
-  peer2.dl.example.com:
+  peer0.orgdl.example.com:
+  peer1.orgdl.example.com:
+  peer2.orgdl.example.com:
   
 networks:
   v1:
 
 services:
+
+services:
+  ca.example.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.example.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.orgdl.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/*_sk
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw'
+    volumes:
+      - ./crypto-config/peerOrganizations/orgdl.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/orgdl.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp/keystore
+    container_name: ca.example.com
+    networks:
+      - v1
 
   orderer.example.com:
     extends:
@@ -19,27 +37,27 @@ services:
     networks:
       - v1
 
-  peer0.dl.example.com:
-    container_name: peer0.dl.example.com
+  peer0.orgdl.example.com:
+    container_name: peer0.orgdl.example.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer0.dl.example.com
+      service: peer0.orgdl.example.com
     networks:
       - v1
 
-  peer1.dl.example.com:
-    container_name: peer1.dl.example.com
+  peer1.orgdl.example.com:
+    container_name: peer1.orgdl.example.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer1.dl.example.com
+      service: peer1.orgdl.example.com
     networks:
       - v1
 
-  peer2.dl.example.com:
-    container_name: peer2.dl.example.com
+  peer2.orgdl.example.com:
+    container_name: peer2.orgdl.example.com
     extends:
       file:  base/docker-compose-base.yaml
-      service: peer2.dl.example.com
+      service: peer2.orgdl.example.com
     networks:
       - v1
 
@@ -55,13 +73,13 @@ services:
       - CORE_LOGGING_LEVEL=DEBUG
       #- CORE_LOGGING_LEVEL=INFO
       - CORE_PEER_ID=cli
-      - CORE_PEER_ADDRESS=peer0.dl.example.com:7051
-      - CORE_PEER_LOCALMSPID=dlMSP
+      - CORE_PEER_ADDRESS=peer0.orgdl.example.com:7051
+      - CORE_PEER_LOCALMSPID=OrgdlMSP
       - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/dl.example.com/peers/peer0.dl.example.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/dl.example.com/peers/peer0.dl.example.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/dl.example.com/peers/peer0.dl.example.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/dl.example.com/users/Admin@dl.example.com/msp
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/peers/peer0.orgdl.example.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/peers/peer0.orgdl.example.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/peers/peer0.orgdl.example.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
@@ -72,8 +90,8 @@ services:
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
       - orderer.example.com
-      - peer0.dl.example.com
-      - peer1.dl.example.com
-      - peer2.dl.example.com
+      - peer0.orgdl.example.com
+      - peer1.orgdl.example.com
+      - peer2.orgdl.example.com
     networks:
       - v1
