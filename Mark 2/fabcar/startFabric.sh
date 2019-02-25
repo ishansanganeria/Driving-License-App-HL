@@ -14,7 +14,7 @@ LANGUAGE=${1:-"golang"}
 CC_SRC_PATH=github.com/fabdl
 
 docker rm -f $(docker ps -aq) > /dev/null 2>&1
-docker network prune
+docker network prune -f
 
 function clearContainers() {
   CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /dev-peer0.*.fabdl.*/) {print $1}')
@@ -58,7 +58,7 @@ echo
 sleep 5
 
 echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"CreateBaseRecord","Args":["1271","Ishan","05/11/1998","M"]}'
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"CreateBaseRecord","Args":["1271","Ishan","05/11/1998","M","Ishan","05/11/1998","M"]}'
 echo
 
 # printf "Start by installing required packages run 'npm install'\n"

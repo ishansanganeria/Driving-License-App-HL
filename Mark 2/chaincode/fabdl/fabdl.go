@@ -1,7 +1,7 @@
 package main
 
 import (
-//	"cmd/go/internal/str"
+	//	"cmd/go/internal/str"
 	// "bytes"
 	"encoding/json"
 	"fmt"
@@ -12,79 +12,160 @@ import (
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-var recordCount int 
+var recordCount int
 
-type SimpleChaincode struct {
-
+type CardHoldersDetails struct {
+	DocType         string			`json:"objectType"`
+	ID              string			`json:"id"`
+	BasicData_1 	basicData1		`json:"basicdata1"`
+	BasicData_2 	basicData2		`json:"basicdata2"`
+	RTO_Data		RTOInfo 		`json:"rto"`
+	AddressData		Address			`json:"address"`
+	LicenseData		[]LicenseInfo	`json:"licensedata"`
+	Tickets			[]TicketInfo 	`json:"tickets"`
+	VehiclesData	[]VehiclesOwned	`json:"vehiclesowned"`
+	TestData	 	[]TestInfo		`json:"testdata"`
 }
 
-type basicCardHolderData struct {
-	ObjectType 	string `json:"docType"`
-	ID			string `json:"id"`
-	Name 		string `json:"name"`
-	DOB			string `json:"dob"`
-	Gender		string `json:"gender"`
+type OfficerInfo struct {
+	ID              string			`json:"id"`
+	DocType         string			`json:"objectType"`
+	BasicData_1 	basicData1		`json:"basicdata1"`
+	BasicData_2 	basicData2		`json:"basicdata2"`
+	RTO_Affiliation	RTOInfo 	`json:"rto"`
+	AddressData		Address			`json:"address"`
 }
 
-type contactDetails struct {
+type basicData1 struct {
+	First_Name      string          `json:"firstname"`
+	Last_Name       string          `json:"lastname"`
+	UIDNo           string          `json:"uid"`
+	Gender          string          `json:"gender"`
+	DOB             string          `json:"dob"`
+	Age             string          `json:"age"`
+	BloodGroup		string			`json:"bloodgroup"`
+	PhotoHash		string			`json:"photohash"`
+}
 
+type basicData2 struct {
+	RelFirstName    string 			`json:"relfname"`
+	RelLastName     string 			`json:"rellname"`
+	BirthPlace      string 			`json:"birthplace"`
+	Nationality     string 			`json:"nationality"`
+	ContactNumber   string 			`json:"contact_number"`
+	EmergencyNumber string 			`json:"emergency_number"`
+	EmailID         string 			`json:"EMail"`
+}
+
+type RTOInfo struct {
+	RTOID			string			`json:rtoid`
+	AddressData		Address			`json:"address"`
+	ContactNumber   string			`json:"contactno"`
+}
+
+type Address struct {
+	AddressLine1 	string `json:"addressline1"`
+	AddressLine2 	string `json:"addressline2"`
+	City    		string `json:"city"`
+	Pin     		string `json:"pincode"`
+	State   		string `json:"state"`
+}
+
+type VehiclesOwned struct {
+	VehicleType 	string			`json:"vehicletype"`				//2,3,4 wheeler, truck,etc
+	NumberPlate		string			`json:"numberplate"`
+	CarCompany		string			`json:"carcompany"`					//Maruti,etc
+	CarMake			string			`json:"carmake"`					//800,alto
+	CarColour		string			`json:"carcolour"`					
+	ChasisNumber	string			`json:"chasisnumber"`				
+}
+
+type LicenseInfo struct {
+	FileNumber		string				`json:"filenumber"`
+	LicenseType		string				`json:"licensetype"`				//Learner, Permanent
+	LicenseNumber	string				`json:"licensenumber"`
+	DateOfIssue		string				`json:"dateofissue"`
+	DateOfExpiry	string				`json:"dateofexpiry"`
+	IsActive		bool				`json:"isactive"`	
+}
+
+type TicketInfo struct {
+	TicketIssuer	string				`json:"tickerissuer"`				//Issuer cops id number
+	Reason			string				`json:"reason"`
+	DateOfIssue		string				`json:"dateofissue"`
+	TimeOfIssue		string				`json:"timeofissue"`
+	Place			string				`json:"place"`
+}
+
+type TestInfo struct {
+	TestType 		string		`json:"testtype"`			//(written, simulated, practical)
+	TestCentre		RTOInfo 	`json:"testcentre"`
+	Score			string		`json:"score"`
+	MaxMarks		string		`json:"maxmarks"`
+	PassingMarks	string		`json:"passingmarks"`
+	IsPass			bool		`json:"ispass"`
+	Invigilator		string		`json:"invigilator"`
 }
 
 func main() {
-	err := shim.Start(new(SimpleChaincode))
+	err := shim.Start(new(CardHoldersDetails))
 	if err != nil {
 		fmt.Printf("Error in starting the simple chaincode: %s", err)
 	}
 }
 
-func (t *SimpleChaincode) Init(stub shim.ChaincodeStubInterface) pb.Response {
+func (t *CardHoldersDetails) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success(nil)
 }
 
-func (t *SimpleChaincode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
-	function, args:= stub.GetFunctionAndParameters()
+func (t *CardHoldersDetails) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
+	function, args := stub.GetFunctionAndParameters()
 	fmt.Println("The function being invoked is: " + function)
 
-	if function == "CreateBaseRecord" { 
+	if function == "CreateBaseRecord" { //create a new entry
 		return t.CreateBaseRecord(stub, args)
+	} else if function == "CreateBaseRecord1" { //create a new entry
+		return t.CreateBaseRecord1(stub, args)
 	} else if function == "ReadBaseRecord" {
 		return t.ReadBaseRecord(stub, args)
 	} else if function == "DeleteBaseRecord" {
-		return t.DeleteBaseRecord(stub,args)
+		return t.DeleteBaseRecord(stub, args)
 	} else if function == "CreateContactsRecord" {
 		// return t.CreateContactsRecord(stub, args)
 	}
-	
-	
+
 	fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
 }
 
-func (t *SimpleChaincode) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 3")
+	if len(args) != 7 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
 	}
 
-	for i := 0; i < 4; i++ {
+	for i := 0; i < 7; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
 		}
 	}
 
-
 	_, err := strconv.Atoi(args[0])
 	if err != nil {
 		return shim.Error("ID must be numeric string")
 	}
-	id 	:= string(args[0])
-	name	:= strings.ToUpper(args[1])
-	dob		:= args[2]
-	gender	:= args[3]
+
+	id := string(args[0])
+	fname := strings.ToUpper(args[1])
+	lname := strings.ToUpper(args[2])
+	dob := args[3]
+	age := args[4]
+	gender := args[5]
+	aadhar := args[6]
 	objectType := "basicData"
 
-	data := &basicCardHolderData{objectType, id, name, dob, gender}
+	data := &basicCardHolderData{objectType, id, fname, lname, dob, age, gender, aadhar}
 	dataJSONasBytes, err := json.Marshal(data)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -95,36 +176,79 @@ func (t *SimpleChaincode) CreateBaseRecord(stub shim.ChaincodeStubInterface, arg
 		return shim.Error(err.Error())
 	}
 
-	recordCount += 1 
+	//recordCount += 1
+	return shim.Success(nil)
+}
+func (t *CardHoldersDetails) CreateBaseRecord1(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 8 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
+	}
+
+	for i := 0; i < 8; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	_, err := strconv.Atoi(args[0])
+	if err != nil {
+		return shim.Error("ID must be numeric string")
+	}
+
+	ID := string(args[0])
+	Relfname := strings.ToUpper(args[1])
+	Rellname := strings.ToUpper(args[2])
+	Pob := args[3]
+	Cob := args[4]
+	Phone := args[5]
+	Emergencyphone := args[6]
+	Email := args[7]
+	objectType := "basicData1"
+
+	data := &basicData1{objectType, ID, Relfname, Rellname, Pob, Cob, Phone, Emergencyphone, Email}
+	dataJSONasBytes, err := json.Marshal(data)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(string(ID), dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	//recordCount += 1
 	return shim.Success(nil)
 }
 
-func (t *SimpleChaincode) ReadBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *CardHoldersDetails) ReadBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 1 {
-		return shim.Error("INCORRECT NUMBER OF ARGUMENTS. EXPECTING ID OF THE CARD HOLDER")
+		return shim.Error("Incorrect number of arguments. Expecting id of the card holder")
 	}
 
 	if len(args[0]) <= 0 {
-		ERR := "ARGUMENT 1 SHOULD BE NON EMPTY"
+		ERR := "Argument 1 should be non empty"
 		return shim.Error(ERR)
 	}
 
 	_, err := strconv.Atoi(args[0])
 	if err != nil {
-		return shim.Error("ID MUST BE NUMERIC STRING")
+		return shim.Error("ID must be numeric string")
 	}
-	
-	valAsbytes, err := stub.GetState(args[0])
+
+	valAsbytes, err := stub.GetState(string(args[0]))
+
 	if err != nil {
-		shim.Error("ERROR: FAILED TO FETCH DATABASE: " + err.Error())
+		shim.Error("Error: Failed to fetch database: " + err.Error())
 	} else if valAsbytes == nil {
-		shim.Error("ERROR: DATABASE DOESNT EXIST")
+		shim.Error("Error: Database doesnt exist")
 	}
 
 	return shim.Success(valAsbytes)
 }
 
-func (t *SimpleChaincode) DeleteBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *CardHoldersDetails) DeleteBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	var jsonResp string
 	var BaseDataJSON basicCardHolderData
 
@@ -158,54 +282,3 @@ func (t *SimpleChaincode) DeleteBaseRecord(stub shim.ChaincodeStubInterface, arg
 	}
 	return shim.Success(nil)
 }
-
-
-
-// type RTOinformation struct {
-
-//     ObjectType 		    string `json:"docType"`
-// 	ID					string `json:"id"`
-// 	State 				string `json:"state"`
-// 	RTO Office			string `json:"rto"`
-// 	Pincode				string `json:"pin"`
-// }
-
-// type basicCardHolderData struct {
-// 	ObjectType 		    string `json:"docType"`
-// 	ID					string `json:"id"`
-// 	FName				string `json:"fname"`
-// 	MName				string `json:"mname"`
-// 	LName				string `json:"lname"`
-// 	RelationFName 		string `json:"relfname"`
-// 	RelationMName 		string `json:"relmname"`
-// 	RelationLName 		string `json:"rellname"`
-// 	Aadhar Number		string `json:"aadhar"`
-// 	Gender				string `json:"gender"`
-// 	DOB 				string `json:"dob"`
-// 	Age  				string `json:"age"`
-// 	Place of birth		string `json:"pob"`
-// 	Country of birth  	string `json:"cob"`
-// 	Phone Number		string `json:"phone"`
-// 	Emer. Phone Number	string `json:"emergencyphone"`
-// 	E-Mail				string `json:"email"`
-// }
-
-
-// type Address struct {
-//     ObjectType 		    string `json:"docType"`
-// 	ID					string `json:"id"`
-//     Present State 	    string `json:"pstate"`
-// 	Present City        string `json:"pcity"`
-// 	Present Address		string `json:"paddress"`
-// 	Present Pincode		string `json:"pin"`
-// 	Permanent State		string `json:"permanentstate"`
-// 	Permanent City		string `json:"permanentcity"`
-// 	Permanent Address	string `json:"permanentaddress"`
-// 	Permanent Pincode	string `json:"permanentpin"`
-// }
-// type Vehicle struct {
-//     ObjectType 		    string `json:"docType"`
-// 	ID					string `json:"id"`
-//     Class		 	    string `json:"class"`
-	
-// }
