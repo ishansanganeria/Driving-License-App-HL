@@ -1,6 +1,7 @@
 Mark 1/nohup.out
-Mark 1/channel-artifacts
 Mark 1/crypto-config
 nohup.out
-Mark 1/channel-artifacts/channel.tx
-Mark 1/channel-artifacts/genesis.block
+Mark 1/channel-artifacts
+Mark2/basic-network/crypto-config
+Mark2/basic-network/channel-artifacts
+Mark2/chaincode/fabdl/fabdl
