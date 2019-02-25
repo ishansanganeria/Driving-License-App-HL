@@ -9,7 +9,7 @@ then
    service docker restart
 fi
 
-set -e
+# set -e
 LANGUAGE=${1:-"golang"}
 CC_SRC_PATH=github.com/fabdl
 
