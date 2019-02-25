@@ -101,25 +101,24 @@ func (t *SimpleChaincode) CreateBaseRecord(stub shim.ChaincodeStubInterface, arg
 
 func (t *SimpleChaincode) ReadBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting id of the card holder")
+		return shim.Error("INCORRECT NUMBER OF ARGUMENTS. EXPECTING ID OF THE CARD HOLDER")
 	}
 
 	if len(args[0]) <= 0 {
-		ERR := "Argument 1 should be non empty"
+		ERR := "ARGUMENT 1 SHOULD BE NON EMPTY"
 		return shim.Error(ERR)
 	}
 
 	_, err := strconv.Atoi(args[0])
 	if err != nil {
-		return shim.Error("ID must be numeric string")
+		return shim.Error("ID MUST BE NUMERIC STRING")
 	}
 	
-	valAsbytes, err := stub.GetState(string(args[0]))
-
+	valAsbytes, err := stub.GetState(args[0])
 	if err != nil {
-		shim.Error("Error: Failed to fetch database: " + err.Error())
+		shim.Error("ERROR: FAILED TO FETCH DATABASE: " + err.Error())
 	} else if valAsbytes == nil {
-		shim.Error("Error: Database doesnt exist")
+		shim.Error("ERROR: DATABASE DOESNT EXIST")
 	}
 
 	return shim.Success(valAsbytes)
