@@ -6,13 +6,12 @@ import (
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"strings"
+//	"strings"
 	// "time"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-var recordCount int
 
 type CardHoldersDetails struct {
 	DocType         string			`json:"objectType"`
@@ -32,7 +31,7 @@ type OfficerInfo struct {
 	DocType         string			`json:"objectType"`
 	BasicData_1 	basicData1		`json:"basicdata1"`
 	BasicData_2 	basicData2		`json:"basicdata2"`
-	RTO_Affiliation	RTOInfo 	`json:"rto"`
+	RTO_Affiliation	RTOInfo 		`json:"rto"`
 	AddressData		Address			`json:"address"`
 }
 
@@ -43,8 +42,9 @@ type basicData1 struct {
 	Gender          string          `json:"gender"`
 	DOB             string          `json:"dob"`
 	Age             string          `json:"age"`
-	BloodGroup		string			`json:"bloodgroup"`
-	PhotoHash		string			`json:"photohash"`
+	ContactNumber   string 			`json:"contact_number"`
+	EmailID         string 			`json:"EMail"`
+	
 }
 
 type basicData2 struct {
@@ -52,15 +52,8 @@ type basicData2 struct {
 	RelLastName     string 			`json:"rellname"`
 	BirthPlace      string 			`json:"birthplace"`
 	Nationality     string 			`json:"nationality"`
-	ContactNumber   string 			`json:"contact_number"`
 	EmergencyNumber string 			`json:"emergency_number"`
-	EmailID         string 			`json:"EMail"`
-}
-
-type RTOInfo struct {
-	RTOID			string			`json:rtoid`
-	AddressData		Address			`json:"address"`
-	ContactNumber   string			`json:"contactno"`
+	BloodGroup		string			`json:"bloodgroup"`
 }
 
 type Address struct {
@@ -69,6 +62,12 @@ type Address struct {
 	City    		string `json:"city"`
 	Pin     		string `json:"pincode"`
 	State   		string `json:"state"`
+}
+
+type RTOInfo struct {
+	RTOID			string			`json:rtoid`
+	AddressData		Address			`json:"address"`
+	ContactNumber   string			`json:"contactno"`
 }
 
 type VehiclesOwned struct {
@@ -86,6 +85,7 @@ type LicenseInfo struct {
 	LicenseNumber	string				`json:"licensenumber"`
 	DateOfIssue		string				`json:"dateofissue"`
 	DateOfExpiry	string				`json:"dateofexpiry"`
+	PhotoHash		string			`json:"photohash"`
 	IsActive		bool				`json:"isactive"`	
 }
 
@@ -100,6 +100,7 @@ type TicketInfo struct {
 type TestInfo struct {
 	TestType 		string		`json:"testtype"`			//(written, simulated, practical)
 	TestCentre		RTOInfo 	`json:"testcentre"`
+	FileNumber		string		`json:"filenumber"`
 	Score			string		`json:"score"`
 	MaxMarks		string		`json:"maxmarks"`
 	PassingMarks	string		`json:"passingmarks"`
@@ -124,15 +125,16 @@ func (t *CardHoldersDetails) Invoke(stub shim.ChaincodeStubInterface) pb.Respons
 
 	if function == "CreateBaseRecord" { //create a new entry
 		return t.CreateBaseRecord(stub, args)
-	} else if function == "CreateBaseRecord1" { //create a new entry
-		return t.CreateBaseRecord1(stub, args)
-	} else if function == "ReadBaseRecord" {
-		return t.ReadBaseRecord(stub, args)
-	} else if function == "DeleteBaseRecord" {
-		return t.DeleteBaseRecord(stub, args)
-	} else if function == "CreateContactsRecord" {
-		// return t.CreateContactsRecord(stub, args)
-	}
+	} 
+	// else if function == "CreateBaseRecord1" { //create a new entry
+	// 	return t.CreateBaseRecord1(stub, args)
+	// } else if function == "ReadBaseRecord" {
+	// 	return t.ReadBaseRecord(stub, args)
+	// } else if function == "DeleteBaseRecord" {
+	// 	return t.DeleteBaseRecord(stub, args)
+	// } else if function == "CreateContactsRecord" {
+	// 	// return t.CreateContactsRecord(stub, args)
+	// }
 
 	fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
@@ -140,11 +142,11 @@ func (t *CardHoldersDetails) Invoke(stub shim.ChaincodeStubInterface) pb.Respons
 
 func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 7 {
-		return shim.Error("Incorrect number of arguments. Expecting 7")
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 
-	for i := 0; i < 7; i++ {
+	for i := 0; i < 1; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
@@ -156,17 +158,16 @@ func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, 
 		return shim.Error("ID must be numeric string")
 	}
 
-	id := string(args[0])
-	fname := strings.ToUpper(args[1])
-	lname := strings.ToUpper(args[2])
-	dob := args[3]
-	age := args[4]
-	gender := args[5]
-	aadhar := args[6]
 	objectType := "basicData"
-
-	data := &basicCardHolderData{objectType, id, fname, lname, dob, age, gender, aadhar}
-	dataJSONasBytes, err := json.Marshal(data)
+	id := args[0]
+	
+	var baseData CardHoldersDetails
+	baseData.ID = id
+	baseData.DocType = objectType
+	
+	// data := &CardHoldersDetails{objectType, id, *blankBasicData1, *blankBasicData2, *blankRTOInfo, *blankAddress, *blankLicenseInfo, *blankTicketInfo, *blankVehicle, *blankTestInfo}
+	
+	dataJSONasBytes, err := json.Marshal(baseData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -176,109 +177,109 @@ func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, 
 		return shim.Error(err.Error())
 	}
 
-	//recordCount += 1
-	return shim.Success(nil)
-}
-func (t *CardHoldersDetails) CreateBaseRecord1(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-
-	if len(args) != 8 {
-		return shim.Error("Incorrect number of arguments. Expecting 7")
-	}
-
-	for i := 0; i < 8; i++ {
-		if len(args[i]) <= 0 {
-			ERR := "Argument " + string(i) + " should be non empty"
-			return shim.Error(ERR)
-		}
-	}
-
-	_, err := strconv.Atoi(args[0])
-	if err != nil {
-		return shim.Error("ID must be numeric string")
-	}
-
-	ID := string(args[0])
-	Relfname := strings.ToUpper(args[1])
-	Rellname := strings.ToUpper(args[2])
-	Pob := args[3]
-	Cob := args[4]
-	Phone := args[5]
-	Emergencyphone := args[6]
-	Email := args[7]
-	objectType := "basicData1"
-
-	data := &basicData1{objectType, ID, Relfname, Rellname, Pob, Cob, Phone, Emergencyphone, Email}
-	dataJSONasBytes, err := json.Marshal(data)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	err = stub.PutState(string(ID), dataJSONasBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	//recordCount += 1
 	return shim.Success(nil)
 }
 
-func (t *CardHoldersDetails) ReadBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting id of the card holder")
-	}
+// func (t *CardHoldersDetails) CreateBaseRecord1(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args[0]) <= 0 {
-		ERR := "Argument 1 should be non empty"
-		return shim.Error(ERR)
-	}
+// 	if len(args) != 8 {
+// 		return shim.Error("Incorrect number of arguments. Expecting 7")
+// 	}
 
-	_, err := strconv.Atoi(args[0])
-	if err != nil {
-		return shim.Error("ID must be numeric string")
-	}
+// 	for i := 0; i < 8; i++ {
+// 		if len(args[i]) <= 0 {
+// 			ERR := "Argument " + string(i) + " should be non empty"
+// 			return shim.Error(ERR)
+// 		}
+// 	}
 
-	valAsbytes, err := stub.GetState(string(args[0]))
+// 	_, err := strconv.Atoi(args[0])
+// 	if err != nil {
+// 		return shim.Error("ID must be numeric string")
+// 	}
 
-	if err != nil {
-		shim.Error("Error: Failed to fetch database: " + err.Error())
-	} else if valAsbytes == nil {
-		shim.Error("Error: Database doesnt exist")
-	}
+// 	ID := string(args[0])
+// 	Relfname := strings.ToUpper(args[1])
+// 	Rellname := strings.ToUpper(args[2])
+// 	Pob := args[3]
+// 	Cob := args[4]
+// 	Phone := args[5]
+// 	Emergencyphone := args[6]
+// 	Email := args[7]
+// 	objectType := "basicData1"
 
-	return shim.Success(valAsbytes)
-}
+// 	data := &basicData1{objectType, ID, Relfname, Rellname, Pob, Cob, Phone, Emergencyphone, Email}
+// 	dataJSONasBytes, err := json.Marshal(data)
+// 	if err != nil {
+// 		return shim.Error(err.Error())
+// 	}
 
-func (t *CardHoldersDetails) DeleteBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-	var jsonResp string
-	var BaseDataJSON basicCardHolderData
+// 	err = stub.PutState(string(ID), dataJSONasBytes)
+// 	if err != nil {
+// 		return shim.Error(err.Error())
+// 	}
 
-	if len(args) != 1 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
-	}
+// 	//recordCount += 1
+// 	return shim.Success(nil)
+// }
 
-	id := args[0]
-	_, err := strconv.Atoi(id)
-	if err != nil {
-		return shim.Error("ID must be numeric string")
-	}
+// func (t *CardHoldersDetails) ReadBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+// 	if len(args) != 1 {
+// 		return shim.Error("Incorrect number of arguments. Expecting id of the card holder")
+// 	}
 
-	valAsbytes, err := stub.GetState(id)
+// 	if len(args[0]) <= 0 {
+// 		ERR := "Argument 1 should be non empty"
+// 		return shim.Error(ERR)
+// 	}
 
-	if err != nil {
-		shim.Error("Error: Failed to fetch database: " + err.Error())
-	} else if valAsbytes == nil {
-		shim.Error("Error: Database doesnt exist")
-	}
+// 	_, err := strconv.Atoi(args[0])
+// 	if err != nil {
+// 		return shim.Error("ID must be numeric string")
+// 	}
 
-	err = json.Unmarshal([]byte(valAsbytes), &BaseDataJSON)
-	if err != nil {
-		jsonResp = "{\"Error\":\"Failed to decode JSON of: " + id + "\"}"
-		return shim.Error(jsonResp)
-	}
+// 	valAsbytes, err := stub.GetState(string(args[0]))
 
-	err = stub.DelState(id) //remove the marble from chaincode state
-	if err != nil {
-		return shim.Error("Failed to delete state:" + err.Error())
-	}
-	return shim.Success(nil)
-}
+// 	if err != nil {
+// 		shim.Error("Error: Failed to fetch database: " + err.Error())
+// 	} else if valAsbytes == nil {
+// 		shim.Error("Error: Database doesnt exist")
+// 	}
+
+// 	return shim.Success(valAsbytes)
+// }
+
+// func (t *CardHoldersDetails) DeleteBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+// 	var jsonResp  	string
+// 	var BaseDataJSON basicCardHolderData
+
+// 	if len(args) != 1 {
+// 		return shim.Error("Incorrect number of arguments. Expecting 1")
+// 	}
+
+// 	id := args[0]
+// 	_, err := strconv.Atoi(id)
+// 	if err != nil {
+// 		return shim.Error("ID must be numeric string")
+// 	}
+
+// 	valAsbytes, err := stub.GetState(id)
+
+// 	if err != nil {
+// 		shim.Error("Error: Failed to fetch database: " + err.Error())
+// 	} else if valAsbytes == nil {
+// 		shim.Error("Error: Database doesnt exist")
+// 	}
+
+// 	err = json.Unmarshal([]byte(valAsbytes), &BaseDataJSON)
+// 	if err != nil {
+// 		jsonResp = "{\"Error\":\"Failed to decode JSON of: " + id + "\"}"
+// 		return shim.Error(jsonResp)
+// 	}
+
+// 	err = stub.DelState(id) //remove the marble from chaincode state
+// 	if err != nil {
+// 		return shim.Error("Failed to delete state:" + err.Error())
+// 	}
+// 	return shim.Success(nil)
+// }
