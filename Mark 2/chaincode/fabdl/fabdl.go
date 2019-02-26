@@ -10,6 +10,7 @@ import (
 	// "time"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
+	//"reflect"
 )
 
 
@@ -211,7 +212,6 @@ func (t *CardHoldersDetails) AddBaseData2(stub shim.ChaincodeStubInterface, args
 		return shim.Error("Failed to get marble: " + err.Error())
 	} else if dataAsBytes == nil {
 		fmt.Println("This data already exists: " + string(dataAsBytes))
-	
 		return shim.Error("This user doesn't exist: " + id)
 	}
 
@@ -221,25 +221,19 @@ func (t *CardHoldersDetails) AddBaseData2(stub shim.ChaincodeStubInterface, args
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	// RelFirstName
-	// RelLastName
-	// BirthPlace
-	// Nationality
-	// EmergencyNumber
-	// BloodGroup
+	
+	relfname 		:= 	args[1]
+	rellname  		:= 	args[2]
+	pob	  			:= 	args[3]
+	nationality		:= 	args[4]
+	emerno		  	:= 	args[5]
+	bg 				:= 	args[6]
 
-	relfname 		:= 		args[1]
-	rellname  		:= 		args[2]
-	pob	  		:= 		args[3]
-	nationality		  		:= 		args[4]
-	emerno		  		:= 		args[5]
-	bg 	:= 		args[6]
-
-	baseData.BasicData_2.RelFirstName 	= relfname
+	baseData.BasicData_2.RelFirstName 		= relfname
 	baseData.BasicData_2.RelLastName		= rellname
-	baseData.BasicData_2.BirthPlace 			= pob
-	baseData.BasicData_2.Nationality			= nationality 
-	baseData.BasicData_2.EmergencyNumber			= emerno
+	baseData.BasicData_2.BirthPlace 		= pob
+	baseData.BasicData_2.Nationality		= nationality 
+	baseData.BasicData_2.EmergencyNumber	= emerno
 	baseData.BasicData_2.BloodGroup			= bg
 	
 	dataJSONasBytes, err := json.Marshal(baseData)
