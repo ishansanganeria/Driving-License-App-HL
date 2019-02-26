@@ -5,7 +5,7 @@ import (
 	// "bytes"
 	"encoding/json"
 	"fmt"
-	"strconv"
+	//"strconv"
 //	"strings"
 	// "time"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
@@ -26,15 +26,6 @@ type CardHoldersDetails struct {
 	TestData	 	[]TestInfo		`json:"testdata"`
 }
 
-type OfficerInfo struct {
-	ID              string			`json:"id"`
-	DocType         string			`json:"objectType"`
-	BasicData_1 	basicData1		`json:"basicdata1"`
-	BasicData_2 	basicData2		`json:"basicdata2"`
-	RTO_Affiliation	RTOInfo 		`json:"rto"`
-	AddressData		Address			`json:"address"`
-}
-
 type basicData1 struct {
 	First_Name      string          `json:"firstname"`
 	Last_Name       string          `json:"lastname"`
@@ -43,8 +34,7 @@ type basicData1 struct {
 	DOB             string          `json:"dob"`
 	Age             string          `json:"age"`
 	ContactNumber   string 			`json:"contact_number"`
-	EmailID         string 			`json:"EMail"`
-	
+	EmailID         string 			`json:"Email"`
 }
 
 type basicData2 struct {
@@ -65,7 +55,7 @@ type Address struct {
 }
 
 type RTOInfo struct {
-	RTOID			string			`json:rtoid`
+	RTOID			string			`json:"rtoid"`
 	AddressData		Address			`json:"address"`
 	ContactNumber   string			`json:"contactno"`
 }
@@ -85,8 +75,9 @@ type LicenseInfo struct {
 	LicenseNumber	string				`json:"licensenumber"`
 	DateOfIssue		string				`json:"dateofissue"`
 	DateOfExpiry	string				`json:"dateofexpiry"`
-	PhotoHash		string			`json:"photohash"`
+	PhotoHash		string				`json:"photohash"`
 	IsActive		bool				`json:"isactive"`	
+	ReasonOfInactivity	string
 }
 
 type TicketInfo struct {
@@ -108,6 +99,15 @@ type TestInfo struct {
 	Invigilator		string		`json:"invigilator"`
 }
 
+type OfficerInfo struct {
+	ID              string			`json:"id"`
+	DocType         string			`json:"objectType"`
+	BasicData_1 	basicData1		`json:"basicdata1"`
+	BasicData_2 	basicData2		`json:"basicdata2"`
+	RTO_Affiliation	RTOInfo 		`json:"rto"`
+	AddressData		Address			`json:"address"`
+}
+
 func main() {
 	err := shim.Start(new(CardHoldersDetails))
 	if err != nil {
@@ -125,7 +125,10 @@ func (t *CardHoldersDetails) Invoke(stub shim.ChaincodeStubInterface) pb.Respons
 
 	if function == "CreateBaseRecord" { //create a new entry
 		return t.CreateBaseRecord(stub, args)
-	} 
+	} else if function == "AddBaseData2" { //Add ENtries of baseData2
+		return t.AddBaseData2(stub, args)
+	}
+	 
 	// else if function == "CreateBaseRecord1" { //create a new entry
 	// 	return t.CreateBaseRecord1(stub, args)
 	// } else if function == "ReadBaseRecord" {
@@ -140,32 +143,41 @@ func (t *CardHoldersDetails) Invoke(stub shim.ChaincodeStubInterface) pb.Respons
 	return shim.Error("Received unknown function invocation")
 }
 
-func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+//Account initialization and BasicData_1
+func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response{
 
-	if len(args) != 1 {
+	if len(args) != 8 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
 
-	for i := 0; i < 1; i++ {
+	for i := 0; i < 8; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
 		}
 	}
 
-	_, err := strconv.Atoi(args[0])
-	if err != nil {
-		return shim.Error("ID must be numeric string")
-	}
-
 	objectType := "basicData"
 	id := args[0]
-	
+	firstname 		:= 		args[1]
+	lastname  		:= 		args[2]
+	gender	  		:= 		args[3]
+	dob		  		:= 		args[4]
+	age		  		:= 		args[5]
+	contact_number 	:= 		args[6]
+	emailid	  		:= 		args[7]
+
 	var baseData CardHoldersDetails
-	baseData.ID = id
+	baseData.ID =  id
 	baseData.DocType = objectType
-	
-	// data := &CardHoldersDetails{objectType, id, *blankBasicData1, *blankBasicData2, *blankRTOInfo, *blankAddress, *blankLicenseInfo, *blankTicketInfo, *blankVehicle, *blankTestInfo}
+	baseData.BasicData_1.First_Name 	= firstname
+	baseData.BasicData_1.Last_Name		= lastname
+	baseData.BasicData_1.UIDNo 			= id
+	baseData.BasicData_1.Gender			= gender 
+	baseData.BasicData_1.DOB			= dob
+	baseData.BasicData_1.Age			= age
+	baseData.BasicData_1.ContactNumber	= contact_number
+	baseData.BasicData_1.EmailID		= emailid
 	
 	dataJSONasBytes, err := json.Marshal(baseData)
 	if err != nil {
@@ -180,48 +192,70 @@ func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, 
 	return shim.Success(nil)
 }
 
-// func (t *CardHoldersDetails) CreateBaseRecord1(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *CardHoldersDetails) AddBaseData2(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-// 	if len(args) != 8 {
-// 		return shim.Error("Incorrect number of arguments. Expecting 7")
-// 	}
+	if len(args) != 7 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
+	}
 
-// 	for i := 0; i < 8; i++ {
-// 		if len(args[i]) <= 0 {
-// 			ERR := "Argument " + string(i) + " should be non empty"
-// 			return shim.Error(ERR)
-// 		}
-// 	}
+	for i := 0; i < 7; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
 
-// 	_, err := strconv.Atoi(args[0])
-// 	if err != nil {
-// 		return shim.Error("ID must be numeric string")
-// 	}
+	id := args[0]
+	dataAsBytes, err := stub.GetState(id)
+	if err != nil {
+		return shim.Error("Failed to get marble: " + err.Error())
+	} else if dataAsBytes == nil {
+		fmt.Println("This data already exists: " + string(dataAsBytes))
+	
+		return shim.Error("This user doesn't exist: " + id)
+	}
 
-// 	ID := string(args[0])
-// 	Relfname := strings.ToUpper(args[1])
-// 	Rellname := strings.ToUpper(args[2])
-// 	Pob := args[3]
-// 	Cob := args[4]
-// 	Phone := args[5]
-// 	Emergencyphone := args[6]
-// 	Email := args[7]
-// 	objectType := "basicData1"
+	var baseData CardHoldersDetails
+	// baseData := CardHoldersDetails{}
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	// RelFirstName
+	// RelLastName
+	// BirthPlace
+	// Nationality
+	// EmergencyNumber
+	// BloodGroup
 
-// 	data := &basicData1{objectType, ID, Relfname, Rellname, Pob, Cob, Phone, Emergencyphone, Email}
-// 	dataJSONasBytes, err := json.Marshal(data)
-// 	if err != nil {
-// 		return shim.Error(err.Error())
-// 	}
+	relfname 		:= 		args[1]
+	rellname  		:= 		args[2]
+	pob	  		:= 		args[3]
+	nationality		  		:= 		args[4]
+	emerno		  		:= 		args[5]
+	bg 	:= 		args[6]
 
-// 	err = stub.PutState(string(ID), dataJSONasBytes)
-// 	if err != nil {
-// 		return shim.Error(err.Error())
-// 	}
+	baseData.BasicData_2.RelFirstName 	= relfname
+	baseData.BasicData_2.RelLastName		= rellname
+	baseData.BasicData_2.BirthPlace 			= pob
+	baseData.BasicData_2.Nationality			= nationality 
+	baseData.BasicData_2.EmergencyNumber			= emerno
+	baseData.BasicData_2.BloodGroup			= bg
+	
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 
-// 	//recordCount += 1
-// 	return shim.Success(nil)
-// }
+	err = stub.PutState(id, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+
 
 // func (t *CardHoldersDetails) ReadBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 // 	if len(args) != 1 {
