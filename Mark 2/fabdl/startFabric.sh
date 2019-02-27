@@ -80,7 +80,7 @@ echo
 sleep 3
 
 echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"AddRTOData","Args":["865219083334","1","888888","aligarh","110095","delhi"]}'
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"AddRTO","Args":["100000","Add line 1","Add line 2","cityyy","stateeee","2155112"]}'
 echo
 sleep 3
 # printf "Start by installing required packages run 'npm install'\n"

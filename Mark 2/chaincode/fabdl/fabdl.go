@@ -13,13 +13,16 @@ import (
 	//"reflect"
 )
 
+type SimpleChainCode struct {
+
+}
 
 type CardHoldersDetails struct {
 	DocType         string			`json:"objectType"`
 	ID              string			`json:"id"`
 	BasicData_1 	basicData1		`json:"basicdata1"`
 	BasicData_2 	basicData2		`json:"basicdata2"`
-	RTO_Data		RTOInfo 		`json:"rto"`
+	RTO_ID			string 			`json:"rto"`
 	AddressData		Address			`json:"address"`
 	LicenseData		[]LicenseInfo	`json:"licensedata"`
 	Tickets			[]TicketInfo 	`json:"tickets"`
@@ -56,11 +59,12 @@ type Address struct {
 }
 
 type RTOInfo struct {
+	DocType         string			`json:"objectType"`
 	RTOID			string			`json:"rtoid"`
 	AddressData		Address			`json:"address"`
 	ContactNumber   string			`json:"contactno"`
 }
-//
+
 type VehiclesOwned struct {
 	VehicleType 	string			`json:"vehicletype"`				//2,3,4 wheeler, truck,etc
 	NumberPlate		string			`json:"numberplate"`
@@ -87,6 +91,7 @@ type TicketInfo struct {
 	DateOfIssue		string				`json:"dateofissue"`
 	TimeOfIssue		string				`json:"timeofissue"`
 	Place			string				`json:"place"`
+	IsPaid			bool				`json:"ispaid"`
 }
 
 type TestInfo struct {
@@ -110,38 +115,41 @@ type OfficerInfo struct {
 }
 
 func main() {
-	err := shim.Start(new(CardHoldersDetails))
+	err := shim.Start(new(SimpleChainCode))
 	if err != nil {
 		fmt.Printf("Error in starting the simple chaincode: %s", err)
 	}
 }
 
-func (t *CardHoldersDetails) Init(stub shim.ChaincodeStubInterface) pb.Response {
+func (t *SimpleChainCode) Init(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success(nil)
 }
 
-func (t *CardHoldersDetails) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
+func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	fmt.Println("The function being invoked is: " + function)
 
-	if function == "CreateBaseRecord" { //create a new entry
+	if function == "CreateBaseRecord" 		{ //CREATE USER
 		return t.CreateBaseRecord(stub, args)
-	} else if function == "AddBaseData2" { //Add ENtries of baseData2
+	} else if function == "AddBaseData2" 	{ //ADD ENTRIES OF BASEDATA2
 		return t.AddBaseData2(stub, args)
-	}  else if function == "AddAddressData" { //Add ENtries of baseData2
+	}  else if function == "AddAddressData" { //ADD ENTRIES OF ADDRESS
 		return t.AddAddressData(stub, args)
-	} else if function == "AddRTOData" { //Add ENtries of baseData2
-		return t.AddRTOData(stub, args)
-	} else if function == "AddVehicle" { //Add ENtries of baseData2
+	} else if function == "AddVehicle" 		{ //ADD USER'S VEHICLE 
 		return t.AddVehicle(stub, args)
+	} else if function == "AddRTO" 			{ //ADD A NEW RTO
+		return t.AddRTO(stub, args)
 	}
+	//  else if function == "AddTicket" 		{ //Register a ticket generated
+	// 	return t.AddTicket(stub, args)
+	// } 
 	 
 	fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
 }
 
 //Account initialization and BasicData_1
-func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response{
+func (t *SimpleChainCode) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response{
 
 	if len(args) != 8 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
@@ -154,7 +162,7 @@ func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, 
 		}
 	}
 
-	objectType := "basicData"
+	objectType := "User Data"
 	id := args[0]
 	firstname 		:= 		args[1]
 	lastname  		:= 		args[2]
@@ -189,7 +197,7 @@ func (t *CardHoldersDetails) CreateBaseRecord(stub shim.ChaincodeStubInterface, 
 	return shim.Success(nil)
 }
 
-func (t *CardHoldersDetails) AddBaseData2(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 7 {
 		return shim.Error("Incorrect number of arguments. Expecting 7")
@@ -244,7 +252,7 @@ func (t *CardHoldersDetails) AddBaseData2(stub shim.ChaincodeStubInterface, args
 	return shim.Success(nil)
 }
 
-func (t *CardHoldersDetails) AddVehicle(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) AddVehicle(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 7 {
 		return shim.Error("Incorrect number of arguments. Expecting 7")
@@ -303,7 +311,7 @@ func (t *CardHoldersDetails) AddVehicle(stub shim.ChaincodeStubInterface, args [
 	return shim.Success(nil)
 }
 
-func (t *CardHoldersDetails) AddAddressData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) AddAddressData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 6 {
 		return shim.Error("Incorrect number of arguments. Expecting 6")
@@ -343,6 +351,7 @@ func (t *CardHoldersDetails) AddAddressData(stub shim.ChaincodeStubInterface, ar
 	baseData.AddressData.City = city
 	baseData.AddressData.Pin = pincode
 	baseData.AddressData.State = state
+	baseData.RTO_ID = pincode
 
 	dataJSONasBytes, err := json.Marshal(baseData)
 	if err != nil {
@@ -357,7 +366,7 @@ func (t *CardHoldersDetails) AddAddressData(stub shim.ChaincodeStubInterface, ar
 	return shim.Success(nil)
 }
 
-func (t *CardHoldersDetails) AddRTOData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) AddRTO(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 6 {
 		return shim.Error("Incorrect number of arguments. Expecting 6")
@@ -374,100 +383,39 @@ func (t *CardHoldersDetails) AddRTOData(stub shim.ChaincodeStubInterface, args [
 	dataAsBytes, err := stub.GetState(id)
 	if err != nil {
 		return shim.Error("Failed to get marble: " + err.Error())
-	} else if dataAsBytes == nil {
-		fmt.Println("This data already exists: " + string(dataAsBytes))
-		return shim.Error("This user doesn't exist: " + id)
+	} else if dataAsBytes != nil {
+		return shim.Error("There already exists an RTO in this pincode: " + id)
 	}
 
-	var baseData CardHoldersDetails
-	// baseData := CardHoldersDetails{}
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var rtodata RTOInfo
+	doctype 		:= 		"RTO_Info"
+	rtoid 			:= 		id				//PIN CODE
+	addline1 		:= 		args[1]
+	addline2 		:= 		args[2]
+	city 			:= 		args[3]
+	pincode 		:= 		id
+	state 			:= 		args[4]
+	contactno 		:= 		args[5]
+
+	rtodata.DocType 					= 	doctype
+	rtodata.RTOID 						= 	rtoid
+	rtodata.AddressData.AddressLine1 	= 	addline1
+	rtodata.AddressData.AddressLine2 	= 	addline2
+	rtodata.AddressData.City 			= 	city
+	rtodata.AddressData.Pin 			= 	pincode
+	rtodata.AddressData.State 			= 	state
+	rtodata.ContactNumber 				= 	contactno
+
+	dataJSONasBytes, err := json.Marshal(rtodata)
 	if err != nil {
-		return shim.Error(err.Error())
+		return shim.Error("1" + err.Error())
 	}
 
-	rtoid := args[1]
-	contactno := args[2]
-	city := args[3]
-	pincode := args[4]
-	state := args[5]
-
-	baseData.RTO_Data.RTOID = rtoid
-	baseData.RTO_Data.ContactNumber = contactno
-	baseData.RTO_Data.AddressData.City = city
-	baseData.RTO_Data.AddressData.Pin = pincode
-	baseData.RTO_Data.AddressData.State = state
-
-	dataJSONasBytes, err := json.Marshal(baseData)
+	err = stub.PutState(rtoid, dataJSONasBytes)
 	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	err = stub.PutState(id, dataJSONasBytes)
-	if err != nil {
-		return shim.Error(err.Error())
+		return shim.Error("2" + err.Error())
 	}
 
 	return shim.Success(nil)
 }
 
-// func (t *CardHoldersDetails) ReadBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-// 	if len(args) != 1 {
-// 		return shim.Error("Incorrect number of arguments. Expecting id of the card holder")
-// 	}
-
-// 	if len(args[0]) <= 0 {
-// 		ERR := "Argument 1 should be non empty"
-// 		return shim.Error(ERR)
-// 	}
-
-// 	_, err := strconv.Atoi(args[0])
-// 	if err != nil {
-// 		return shim.Error("ID must be numeric string")
-// 	}
-
-// 	valAsbytes, err := stub.GetState(string(args[0]))
-
-// 	if err != nil {
-// 		shim.Error("Error: Failed to fetch database: " + err.Error())
-// 	} else if valAsbytes == nil {
-// 		shim.Error("Error: Database doesnt exist")
-// 	}
-
-// 	return shim.Success(valAsbytes)
-// }
-
-// func (t *CardHoldersDetails) DeleteBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-// 	var jsonResp  	string
-// 	var BaseDataJSON basicCardHolderData
-
-// 	if len(args) != 1 {
-// 		return shim.Error("Incorrect number of arguments. Expecting 1")
-// 	}
-
-// 	id := args[0]
-// 	_, err := strconv.Atoi(id)
-// 	if err != nil {
-// 		return shim.Error("ID must be numeric string")
-// 	}
-
-// 	valAsbytes, err := stub.GetState(id)
-
-// 	if err != nil {
-// 		shim.Error("Error: Failed to fetch database: " + err.Error())
-// 	} else if valAsbytes == nil {
-// 		shim.Error("Error: Database doesnt exist")
-// 	}
-
-// 	err = json.Unmarshal([]byte(valAsbytes), &BaseDataJSON)
-// 	if err != nil {
-// 		jsonResp = "{\"Error\":\"Failed to decode JSON of: " + id + "\"}"
-// 		return shim.Error(jsonResp)
-// 	}
-
-// 	err = stub.DelState(id) //remove the marble from chaincode state
-// 	if err != nil {
-// 		return shim.Error("Failed to delete state:" + err.Error())
-// 	}
-// 	return shim.Success(nil)
-// }
