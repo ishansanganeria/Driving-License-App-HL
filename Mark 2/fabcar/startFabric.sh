@@ -73,6 +73,16 @@ echo
 docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"AddVehicle","Args":["865219083334","asd","asd","asd","asd","asd","asd"]}'
 echo
 
+echo
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"AddAddressData","Args":["865219083334","mumbai","delhi","aligarh","110095","delhi"]}'
+echo
+
+sleep 3
+
+echo
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"AddRTOData","Args":["865219083334","1","888888","aligarh","110095","delhi"]}'
+echo
+sleep 3
 # printf "Start by installing required packages run 'npm install'\n"
 # printf "Then run 'node enrollAdmin.js', then 'node registerUser'\n\n"
 # printf "The 'node invoke.js' will fail until it has been updated with valid arguments\n"

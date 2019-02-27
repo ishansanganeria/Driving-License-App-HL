@@ -128,6 +128,10 @@ func (t *CardHoldersDetails) Invoke(stub shim.ChaincodeStubInterface) pb.Respons
 		return t.CreateBaseRecord(stub, args)
 	} else if function == "AddBaseData2" { //Add ENtries of baseData2
 		return t.AddBaseData2(stub, args)
+	}  else if function == "AddAddressData" { //Add ENtries of baseData2
+		return t.AddAddressData(stub, args)
+	} else if function == "AddRTOData" { //Add ENtries of baseData2
+		return t.AddRTOData(stub, args)
 	} else if function == "AddVehicle" { //Add ENtries of baseData2
 		return t.AddVehicle(stub, args)
 	}
@@ -276,19 +280,6 @@ func (t *CardHoldersDetails) AddVehicle(stub shim.ChaincodeStubInterface, args [
 		return shim.Error(err.Error())
 	}
 	
-	i := 0
-	for _, info := range baseData.VehiclesData {
-		i++;		_ = info					//Reduntant statement to avoid error
-	}
-	
-	// VehicleType 	string			`json:"	   vehicletype"`				//2,3,4 wheeler, truck,etc
-	// NumberPlate		string			`json:"numberplate"`
-	// CarCompany		string			`json:"carcompany"`					//Maruti,etc
-	// CarMake			string			`json:"carmake"`					//800,alto
-	// CarColour		string			`json:"carcolour"`					
-	// ChasisNumber	string			`json:"    chasisnumber"`				
-	fmt.Println("0")
-	
 	var vehiclesdata VehiclesOwned
 	vehiclesdata.VehicleType = vehicletype
 	vehiclesdata.NumberPlate = numberplate
@@ -299,21 +290,125 @@ func (t *CardHoldersDetails) AddVehicle(stub shim.ChaincodeStubInterface, args [
 	
 	baseData.VehiclesData = append(baseData.VehiclesData, vehiclesdata)
 
-	fmt.Println("1")
 	dataJSONasBytes, err := json.Marshal(baseData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	fmt.Println("2")
 
 	err = stub.PutState(id, dataJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	fmt.Println("3")
 
 	return shim.Success(nil)
+}
 
+func (t *CardHoldersDetails) AddAddressData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
+	}
+
+	for i := 0; i < 6; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	id := args[0]
+	dataAsBytes, err := stub.GetState(id)
+	if err != nil {
+		return shim.Error("Failed to get marble: " + err.Error())
+	} else if dataAsBytes == nil {
+		fmt.Println("This data already exists: " + string(dataAsBytes))
+		return shim.Error("This user doesn't exist: " + id)
+	}
+
+	var baseData CardHoldersDetails
+	// baseData := CardHoldersDetails{}
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	addressline1 := args[1]
+	addressline2 := args[2]
+	city := args[3]
+	pincode := args[4]
+	state := args[5]
+
+	baseData.AddressData.AddressLine1 = addressline1
+	baseData.AddressData.AddressLine2 = addressline2
+	baseData.AddressData.City = city
+	baseData.AddressData.Pin = pincode
+	baseData.AddressData.State = state
+
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(id, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+func (t *CardHoldersDetails) AddRTOData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
+	}
+
+	for i := 0; i < 6; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	id := args[0]
+	dataAsBytes, err := stub.GetState(id)
+	if err != nil {
+		return shim.Error("Failed to get marble: " + err.Error())
+	} else if dataAsBytes == nil {
+		fmt.Println("This data already exists: " + string(dataAsBytes))
+		return shim.Error("This user doesn't exist: " + id)
+	}
+
+	var baseData CardHoldersDetails
+	// baseData := CardHoldersDetails{}
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	rtoid := args[1]
+	contactno := args[2]
+	city := args[3]
+	pincode := args[4]
+	state := args[5]
+
+	baseData.RTO_Data.RTOID = rtoid
+	baseData.RTO_Data.ContactNumber = contactno
+	baseData.RTO_Data.AddressData.City = city
+	baseData.RTO_Data.AddressData.Pin = pincode
+	baseData.RTO_Data.AddressData.State = state
+
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(id, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
 }
 
 // func (t *CardHoldersDetails) ReadBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
