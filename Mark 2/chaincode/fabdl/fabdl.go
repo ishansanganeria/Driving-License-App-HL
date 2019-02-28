@@ -1,3 +1,16 @@
+package main
+
+import (
+	//	"cmd/go/internal/str"
+	// "bytes"
+	"encoding/json"
+	"fmt"
+
+	//"strconv"
+	//	"strings"
+	// "time"
+	"github.com/hyperledger/fabric/core/chaincode/shim"
+	pb "github.com/hyperledger/fabric/protos/peer"
 	//"reflect"
 )
 
@@ -131,9 +144,10 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
     return t.AddOfficer(stub, args)
   } else if function == "LicenseApply"  { //CREATE APPLICATION FILE
     return t.LicenseApply(stub, args)
-  } else if function == "AddTestResult"  { //CREATE APPLICATION FILE
-    return t.AddTestResult(stub, args)
   }
+//    else if function == "AddTestResult"  { //CREATE APPLICATION FILE
+//     return t.AddTestResult(stub, args)
+//   }
   
   fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
@@ -597,97 +611,96 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 
 }
 
-func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+// func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 7 {
-		return shim.Error("Incorrect number of arguments. Expecting 7")
-	}
+// 	if len(args) != 7 {
+// 		return shim.Error("Incorrect number of arguments. Expecting 7")
+// 	}
 
-	for i := 0; i < 7; i++ {
-		if len(args[i]) <= 0 {
-			ERR := "Argument " + string(i) + " should be non empty"
-			return shim.Error(ERR)
-		}
-	}
+// 	for i := 0; i < 7; i++ {
+// 		if len(args[i]) <= 0 {
+// 			ERR := "Argument " + string(i) + " should be non empty"
+// 			return shim.Error(ERR)
+// 		}
+// 	}
 
-  uid              := args[0]
-	dataAsBytes, err := stub.GetState(uid)
-	if err != nil {
-		return shim.Error("Failed to fetch user details: " + err.Error())
-	} else if dataAsBytes == nil {
-		return shim.Error("This user doesn't exist: " + uid)
-	}
+//   uid              := args[0]
+// 	dataAsBytes, err := stub.GetState(uid)
+// 	if err != nil {
+// 		return shim.Error("Failed to fetch user details: " + err.Error())
+// 	} else if dataAsBytes == nil {
+// 		return shim.Error("This user doesn't exist: " + uid)
+// 	}
   
-	testtype      := args[1]
-	score         := args[2]
-  maxmarks      := args[3]
-  passingmarks  := args[4]
-  var ispass string
-  if score >= maxmarks {
-    ispass = "true" 
-  } else {
-    ispass = "false"
-  }
-  officerid     := args[5]
-  fileno        := args[6]
+// 	testtype      := args[1]
+// 	score         := args[2]
+//   maxmarks      := args[3]
+//   passingmarks  := args[4]
+//   var ispass string
+//   if score >= maxmarks {
+//     ispass = "true" 
+//   } else {
+//     ispass = "false"
+//   }
+//   officerid     := args[5]
+//   fileno        := args[6]
   
-  if fileno[0] == 'L' && testtype != "Written" {
-    return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
-  } 
+//   if fileno[0] == 'L' && testtype != "Written" {
+//     return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
+//   } 
 
-  var baseData CardHoldersDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
-	if err != nil {
-		return shim.Error(err.Error())
-	}
+//   var baseData CardHoldersDetails
+// 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+// 	if err != nil {
+// 		return shim.Error(err.Error())
+// 	}
 	
-	var testdata TestInfo
-  testdata.TestType        = testtype 
-  testdata.Score           = score
-  testdata.MaxMarks        = maxmarks
-  testdata.PassingMarks    = passingmarks
-  testdata.IsPass          = ispass
-  testdata.Invigilator     = officerid 
+// 	var testdata TestInfo
+//   testdata.TestType        = testtype 
+//   testdata.Score           = score
+//   testdata.MaxMarks        = maxmarks
+//   testdata.PassingMarks    = passingmarks
+//   testdata.IsPass          = ispass
+//   testdata.Invigilator     = officerid 
   
-  var i,j int
-  var wflag, sflag bool
-  for i := range baseData.LicenseData {
-    if  baseData.LicenseData[i].FileNumber == fileno {
-      wflag = true
-      break 
-    }  
-  }
+//   var i,j int
+//   var wflag, sflag bool
+//   for i := range baseData.LicenseData {
+//     if  baseData.LicenseData[i].FileNumber == fileno {
+//       wflag = true
+//       break 
+//     }  
+//   }
   
-  if !wflag {
-    return shim.Error("License Application File not found")
-  } 
+//   if !wflag {
+//     return shim.Error("License Application File not found")
+//   } 
 
-  if fileno[0] == 'P' {
-    for j := range baseData.LicenseData[i].TestData {
-      if  baseData.LicenseData[i].TestData[j].TestType == "Written" {
-        wflag = true
-        break 
-      }  else if {
+//   if fileno[0] == 'P' {
+//     for j := range baseData.LicenseData[i].TestData {
+//       if  baseData.LicenseData[i].TestData[j].TestType == "Written" {
+//         wflag = true
+//         break 
+//       }  else if {
         
-      }
-    }     
-    return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
-  } 
+//       }
+//     }     
+//     return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
+//   } 
 
 
 
-	baseData.LicenseData[i].TestData = append(baseData.LicenseData[i].TestData, testdata)
+// 	baseData.LicenseData[i].TestData = append(baseData.LicenseData[i].TestData, testdata)
 
-	dataJSONasBytes, err := json.Marshal(baseData)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
+// 	dataJSONasBytes, err := json.Marshal(baseData)
+// 	if err != nil {
+// 		return shim.Error(err.Error())
+// 	}
 
-	err = stub.PutState(uid, dataJSONasBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
+// 	err = stub.PutState(uid, dataJSONasBytes)
+// 	if err != nil {
+// 		return shim.Error(err.Error())
+// 	}
 
-	return shim.Success(nil)
-
-}
+// 	return shim.Success(nil)
+// }
