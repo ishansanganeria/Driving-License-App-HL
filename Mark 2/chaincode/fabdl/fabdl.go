@@ -18,6 +18,7 @@ type SimpleChainCode struct {
 
 }
 
+// SEPERATE DOC 1
 type CardHoldersDetails struct {
 	DocType      string           `json:"objectType"`
 	ID           string           `json:"id"`
@@ -58,11 +59,12 @@ type Address struct {
 	State        string `json:"state"`
 }
 
+// SEPERATE DOC 2
 type RTOInfo struct {
-  DocType         string			`json:"objectType"`
-	RTOID         string  `json:"rtoid"`
-	AddressData   Address `json:"address"`
-	ContactNumber string  `json:"contactno"`
+  	DocType       	string			`json:"objectType"`
+	RTOID         	string  		`json:"rtoid"`
+	AddressData   	Address 		`json:"address"`
+	ContactNumber 	string  		`json:"contactno"`
 }
 
 type VehiclesOwned struct {
@@ -81,12 +83,12 @@ type LicenseInfo struct {
 	DateOfIssue			    string				`json:"dateofissue"`
 	DateOfExpiry		    string				`json:"dateofexpiry"`
 	PhotoHash	  		    string				`json:"photohash"`
-	IsActive		  	    string				`json:"isactive"`	
 	ReasonOfInactivity		string				`json:"reason"`
 	TestData			    []TestInfo			`json:"testdata"`
 	IsPassWritten		    string			  	`json:"ispass_written"`
 	IsPassSim			    string			  	`json:"ispass_sim"`
 	IsPassPrac			    string			  	`json:"ispass_prac"`
+	IsActive		  	    string				`json:"isactive"`	
 }
 
 type TicketInfo struct {
@@ -97,6 +99,7 @@ type TicketInfo struct {
 	TimeOfIssue		      	string				`json:"timeofissue"`
 	Place		    	  	string				`json:"place"`
 	IsPaid		  	      	string				`json:"ispaid"`
+	Amount					string				`json:"amount"`
 }
 
 type TestInfo struct {
@@ -107,6 +110,7 @@ type TestInfo struct {
 	Invigilator			    string				`json:"officerid"`
 }
 
+// SEPERATE DOC 3
 type OfficerInfo struct {
 	OfficerID           string			  `json:"id"`				//officer's phone number
 	DocType             string			  `json:"objectType"`
@@ -129,31 +133,37 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	fmt.Println("The function being invoked is: " + function)
 
-	if function == "CreateBaseRecord" { //create a new entry
+	if function == "CreateBaseRecord" 			{ //CREATE A NEW ENTRY
 		return t.CreateBaseRecord(stub, args)
-	} else if function == "AddBaseData2" { //Add ENtries of baseData2
+	} else if function == "AddBaseData2" 		{ //Add ENtries of baseData2
 		return t.AddBaseData2(stub, args)
-	} else if function == "AddAddressData" { //Add ENtries of baseData2
+	} else if function == "AddAddressData"  	{ //Add ENtries of baseData2
 		return t.AddAddressData(stub, args)
-  } else if function == "AddVehicle" 		{ //ADD USER'S VEHICLE 
-    return t.AddVehicle(stub, args)
-  } else if function == "AddRTO" 			{ //ADD A NEW RTO TO THE SYSTEM
-    return t.AddRTO(stub, args)
-  } else if function == "AddTicket" 		{ //REGISTER A TICKET GENERATED FOR USER
-    return t.AddTicket(stub, args)
-  } else if function == "AddOfficer" 		{ //REGISTER A OFFICER TO THE SYSTEM
-    return t.AddOfficer(stub, args)
-  } else if function == "LicenseApply"  { //CREATE APPLICATION FILE
-    return t.LicenseApply(stub, args)
-  } else if function == "AddTestResult"  { //CREATE APPLICATION FILE
-    return t.AddTestResult(stub, args)
-  }
+	} else if function == "AddVehicle" 			{ //ADD USER'S VEHICLE 
+		return t.AddVehicle(stub, args)
+	} else if function == "AddRTO" 				{ //ADD A NEW RTO TO THE SYSTEM
+		return t.AddRTO(stub, args)
+	} else if function == "AddOfficer" 			{ //REGISTER A OFFICER TO THE SYSTEM
+		return t.AddOfficer(stub, args)
+	} else if function == "LicenseApply" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.LicenseApply(stub, args)
+	} else if function == "AddTestResult" 		{ //ADD TEST SCORE AND SUBSEQUENT PASS FAIL FLAGS
+		return t.AddTestResult(stub, args)
+	} else if function == "ApproveApplication" 	{ //APPROVE THE LICENSE
+		return t.ApproveApplication(stub, args)
+	} else if function == "AddTicket" 			{ //REGISTER A TICKET GENERATED FOR USER
+		return t.AddTicket(stub, args)
+	} else if function == "PayFine" 			{ //PAY FINE ON A TICKET
+		return t.PayFine(stub, args)
+	} else if function == "SuspendLicense"		{
+		return t.SuspendLicense(stub, args)
+	}
   
-  fmt.Println("Function not found: " + function)
+    fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
 }
 
-//Account initialization and BasicData_1
+// id, firstname, lastname, gender, dob, age, contact_number, emailid
 func (t *SimpleChainCode) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 8 {
@@ -202,6 +212,7 @@ func (t *SimpleChainCode) CreateBaseRecord(stub shim.ChaincodeStubInterface, arg
 	return shim.Success(nil)
 }
 
+// id, relfname, rellname, pob, nationality, emerno, bg
 func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 7 {
@@ -258,6 +269,7 @@ func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []
 	return shim.Success(nil)
 }
 
+// id, addressline1, addressline2, city, pincode, state
 func (t *SimpleChainCode) AddAddressData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 6 {
@@ -311,6 +323,7 @@ func (t *SimpleChainCode) AddAddressData(stub shim.ChaincodeStubInterface, args 
 	return shim.Success(nil)
 }
 
+// id, vehicletype, numberplate, carcompany, carmake, carcolour, chasisnumber
 func (t *SimpleChainCode) AddVehicle(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 7 {
@@ -370,6 +383,7 @@ func (t *SimpleChainCode) AddVehicle(stub shim.ChaincodeStubInterface, args []st
 	return shim.Success(nil)
 }
 
+// id, addline1, addline2, city, state, contactno
 func (t *SimpleChainCode) AddRTO(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 6 {
@@ -423,74 +437,7 @@ func (t *SimpleChainCode) AddRTO(stub shim.ChaincodeStubInterface, args []string
 	return shim.Success(nil)
 }
 
-func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-
-	if len(args) != 8 {
-		return shim.Error("Incorrect number of arguments. Expecting 8")
-	}
-
-	for i := 0; i < 8; i++ {
-		if len(args[i]) <= 0 {
-			ERR := "Argument " + string(i) + " should be non empty"
-			return shim.Error(ERR)
-		}
-	}
-
-	ticketid := args[0]
-	uid := args[1]
-	ticketissuer := args[2]
-	reason := args[3]
-	dateofissue := args[4]
-	timeofissue := args[5]
-	place := args[6]
-	ispaid := args[7]
-
-	dataAsBytes, err := stub.GetState(ticketissuer)
-	if err != nil {
-		return shim.Error("Failed to fetch officer details: " + err.Error())
-	} else if dataAsBytes == nil {
-		return shim.Error("This officer doesn't exist: " + ticketissuer)
-	}
-
-
-  dataAsBytes, err = stub.GetState(uid)
-	if err != nil {
-		return shim.Error("Failed to fetch user details: " + err.Error())
-	} else if dataAsBytes == nil {
-		return shim.Error("This user doesn't exist: " + uid)
-	}
-
-	var baseData CardHoldersDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-	
-	var ticket TicketInfo
-
-	ticket.TicketIssuer 	= ticketissuer
-	ticket.TicketID			= ticketid
-	ticket.Reason 			= reason
-	ticket.DateOfIssue 		= dateofissue
-	ticket.TimeOfIssue 		= timeofissue
-	ticket.Place 			= place
-	ticket.IsPaid 			= ispaid
-	
-	baseData.Tickets = append(baseData.Tickets, ticket)
-
-	dataJSONasBytes, err := json.Marshal(baseData)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	err = stub.PutState(uid, dataJSONasBytes)
-	if err != nil {
-		return shim.Error(err.Error())
-	}
-
-	return shim.Success(nil)
-}
-
+// firstname, lastname, uid, gender, dob, age, contact_number, Email, rtoid
 func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 9 {
@@ -557,6 +504,7 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 	return shim.Success(nil)
 }
 
+// uid, licensetype, photohash
 func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 3 {
@@ -611,6 +559,7 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 
 }
 
+// uid, testtype, score, maxmarks, passingmarks, officerid, filenumber, 
 func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 7 {
@@ -643,10 +592,10 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 		ispass = "false"
 	}
 	officerid     := args[5]
-	fileno        := args[6]
+	filenumber        := args[6]
 	
 	// CHECK IF GIVING THE WRITE TEST IN CASE OF LEARNING LICENSE
-	if fileno[0] == 'L' && testtype != "Written" {
+	if filenumber[0] == 'L' && testtype != "Written" {
  	   return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
  	} 
 
@@ -656,23 +605,15 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 		return shim.Error(err.Error())
 	}
 	
-	// CHECK IF THE TEST FLOW IS CORRECT
 	var i int
 
 	//FIND THE INDEX OF THE FILE OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
 	for i := range baseData.LicenseData {
-		if  baseData.LicenseData[i].FileNumber == fileno {
+		if  baseData.LicenseData[i].FileNumber == filenumber {
 			break 
 		}  
 	}
   
-	// //FIND THE INDEX OF THE TEST OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
-	// for i := range baseData.LicenseData {
-	// 	if  baseData.LicenseData[i].FileNumber == fileno {
-	// 		break 
-	// 	}  
-	// }
-	
 	if testtype == "Simulator" && baseData.LicenseData[i].IsPassWritten != "true" {
  	   return shim.Error("Not eligible for the test " + testtype + ". Qualify written test first")
 	} else if testtype == "Practical" && (baseData.LicenseData[i].IsPassSim != "true" || baseData.LicenseData[i].IsPassWritten != "true") {
@@ -707,5 +648,201 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 		return shim.Error(err.Error())
 	}
 
+	return shim.Success(nil)
+}
+
+// uid, filenumber, dateofissue, dateofexpiry
+func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
+	}
+
+	for i := 0; i < 4; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+ 	uid             	:= 	args[0]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+
+	filenumber := args[1]
+	dateofissue := args[2]
+	dateofexpiry := args[3]
+
+	var baseData CardHoldersDetails
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	//FIND THE INDEX OF THE FILE OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
+	var i int
+	for i := range baseData.LicenseData {
+		if  baseData.LicenseData[i].FileNumber == filenumber {
+			break 
+		}  
+	}
+
+	if baseData.LicenseData[i].LicenseType == "Learning" && baseData.LicenseData[i].IsPassWritten != "true" {
+		return shim.Error("Cannot activate Learning License since Written test hasn't been cleared")
+	}	else if  baseData.LicenseData[i].LicenseType == "Learning" && (baseData.LicenseData[i].IsPassWritten != "true" || baseData.LicenseData[i].IsPassSim != "true" || baseData.LicenseData[i].IsPassPrac != "true") {
+		return shim.Error("Cannot activate Driving License since a test hasn't been cleared")
+	}
+
+	baseData.LicenseData[i].DateOfIssue 		 = dateofissue
+	baseData.LicenseData[i].DateOfExpiry 		 = dateofexpiry
+	baseData.LicenseData[i].IsActive	 		 = "true"
+	baseData.LicenseData[i].ReasonOfInactivity	 = ""
+
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+//ticketid, uid, ticketissuer, reason, dateofissue, timeofissue, place, ispaid, amount
+func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 9 {
+		return shim.Error("Incorrect number of arguments. Expecting 9")
+	}
+
+	for i := 0; i < 9; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	ticketid := args[0]
+	uid := args[1]
+	ticketissuer := args[2]
+	reason := args[3]
+	dateofissue := args[4]
+	timeofissue := args[5]
+	place := args[6]
+	ispaid := args[7]
+	amount := args[8]
+
+	dataAsBytes, err := stub.GetState(ticketissuer)
+	if err != nil {
+		return shim.Error("Failed to fetch officer details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This officer doesn't exist: " + ticketissuer)
+	}
+
+
+  dataAsBytes, err = stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+
+	var baseData CardHoldersDetails
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	
+	var ticket TicketInfo
+
+	ticket.TicketIssuer 	= ticketissuer
+	ticket.TicketID			= ticketid
+	ticket.Reason 			= reason
+	ticket.DateOfIssue 		= dateofissue
+	ticket.TimeOfIssue 		= timeofissue
+	ticket.Place 			= place
+	ticket.IsPaid 			= ispaid
+	ticket.Amount			= amount
+	
+	baseData.Tickets = append(baseData.Tickets, ticket)
+
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+//uid, ticketid
+func (t *SimpleChainCode) PayFine(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	for i := 0; i < 2; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+	
+	uid             	:= 	args[0]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+
+	ticketid := args[1]
+
+	var baseData CardHoldersDetails
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	//FIND THE INDEX OF THE TICKET OUT OF ALL THE USERS TICKETS
+	var i int
+	for i := range baseData.Tickets {
+		if  baseData.Tickets[i].TicketID == ticketid {
+			break 
+		}  
+	}
+
+	if baseData.Tickets[i].IsPaid == "true" {
+		return shim.Error("Already Paid for the ticket")
+	} else {
+		baseData.Tickets[i].IsPaid = "true"
+	}
+
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+func (t *SimpleChainCode) SuspendLicense(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	return shim.Success(nil)
 }
