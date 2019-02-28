@@ -81,28 +81,29 @@ type LicenseInfo struct {
 	DateOfIssue			    string				`json:"dateofissue"`
 	DateOfExpiry		    string				`json:"dateofexpiry"`
 	PhotoHash	  		    string				`json:"photohash"`
-	IsActive		  	    string				  `json:"isactive"`	
-	ReasonOfInactivity	string				`json:"reason"`
-	TestData			      []TestInfo		`json:"testdata"`
-
+	IsActive		  	    string				`json:"isactive"`	
+	ReasonOfInactivity		string				`json:"reason"`
+	TestData			    []TestInfo			`json:"testdata"`
+	IsPassWritten		    string			  	`json:"ispass_written"`
+	IsPassSim			    string			  	`json:"ispass_sim"`
+	IsPassPrac			    string			  	`json:"ispass_prac"`
 }
 
 type TicketInfo struct {
-	TicketIssuer	      string				`json:"ticketissuer"`	    			//Issuer cops id number
-	TicketID	  	      string				`json:"ticketid"`				      	//Gotta figure out
-	Reason		  	      string				`json:"reason"`
-	DateOfIssue		      string				`json:"dateofissue"`
-	TimeOfIssue		      string				`json:"timeofissue"`
-	Place		    	      string				`json:"place"`
-	IsPaid		  	      string				`json:"ispaid"`
+	TicketIssuer	      	string				`json:"ticketissuer"`	    			//Issuer cops id number
+	TicketID	  	      	string				`json:"ticketid"`				      	//Gotta figure out
+	Reason		  	      	string				`json:"reason"`
+	DateOfIssue		      	string				`json:"dateofissue"`
+	TimeOfIssue		      	string				`json:"timeofissue"`
+	Place		    	  	string				`json:"place"`
+	IsPaid		  	      	string				`json:"ispaid"`
 }
 
 type TestInfo struct {
-	TestType 		      	string				`json:"testtype"`			//(written, simulated, practical)
-	Score				        string				`json:"score"`
+	TestType 		      	string				`json:"testtype"`						//(written, simulated, practical)
+	Score				    string				`json:"score"`
 	MaxMarks        		string				`json:"maxmarks"`
 	PassingMarks		    string				`json:"passingmarks"`
-	IsPass				      string			  `json:"ispass"`
 	Invigilator			    string				`json:"officerid"`
 }
 
@@ -144,10 +145,9 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
     return t.AddOfficer(stub, args)
   } else if function == "LicenseApply"  { //CREATE APPLICATION FILE
     return t.LicenseApply(stub, args)
+  } else if function == "AddTestResult"  { //CREATE APPLICATION FILE
+    return t.AddTestResult(stub, args)
   }
-//    else if function == "AddTestResult"  { //CREATE APPLICATION FILE
-//     return t.AddTestResult(stub, args)
-//   }
   
   fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
@@ -611,96 +611,101 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 
 }
 
-// func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-// 	if len(args) != 7 {
-// 		return shim.Error("Incorrect number of arguments. Expecting 7")
-// 	}
+	if len(args) != 7 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
+	}
 
-// 	for i := 0; i < 7; i++ {
-// 		if len(args[i]) <= 0 {
-// 			ERR := "Argument " + string(i) + " should be non empty"
-// 			return shim.Error(ERR)
-// 		}
-// 	}
+	for i := 0; i < 7; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
 
-//   uid              := args[0]
-// 	dataAsBytes, err := stub.GetState(uid)
-// 	if err != nil {
-// 		return shim.Error("Failed to fetch user details: " + err.Error())
-// 	} else if dataAsBytes == nil {
-// 		return shim.Error("This user doesn't exist: " + uid)
-// 	}
+ 	uid             	:= 	args[0]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
   
-// 	testtype      := args[1]
-// 	score         := args[2]
-//   maxmarks      := args[3]
-//   passingmarks  := args[4]
-//   var ispass string
-//   if score >= maxmarks {
-//     ispass = "true" 
-//   } else {
-//     ispass = "false"
-//   }
-//   officerid     := args[5]
-//   fileno        := args[6]
-  
-//   if fileno[0] == 'L' && testtype != "Written" {
-//     return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
-//   } 
-
-//   var baseData CardHoldersDetails
-// 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
-// 	if err != nil {
-// 		return shim.Error(err.Error())
-// 	}
+	testtype      := args[1]
+	score         := args[2]
+ 	maxmarks      := args[3]
+  	passingmarks  := args[4]
+	var ispass string
+	if score >= maxmarks {
+		ispass = "true" 
+	} else {
+		ispass = "false"
+	}
+	officerid     := args[5]
+	fileno        := args[6]
 	
-// 	var testdata TestInfo
-//   testdata.TestType        = testtype 
-//   testdata.Score           = score
-//   testdata.MaxMarks        = maxmarks
-//   testdata.PassingMarks    = passingmarks
-//   testdata.IsPass          = ispass
-//   testdata.Invigilator     = officerid 
+	// CHECK IF GIVING THE WRITE TEST IN CASE OF LEARNING LICENSE
+	if fileno[0] == 'L' && testtype != "Written" {
+ 	   return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
+ 	} 
+
+ 	var baseData CardHoldersDetails
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	
+	// CHECK IF THE TEST FLOW IS CORRECT
+	var i int
+
+	//FIND THE INDEX OF THE FILE OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
+	for i := range baseData.LicenseData {
+		if  baseData.LicenseData[i].FileNumber == fileno {
+			break 
+		}  
+	}
   
-//   var i,j int
-//   var wflag, sflag bool
-//   for i := range baseData.LicenseData {
-//     if  baseData.LicenseData[i].FileNumber == fileno {
-//       wflag = true
-//       break 
-//     }  
-//   }
-  
-//   if !wflag {
-//     return shim.Error("License Application File not found")
-//   } 
+	// //FIND THE INDEX OF THE TEST OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
+	// for i := range baseData.LicenseData {
+	// 	if  baseData.LicenseData[i].FileNumber == fileno {
+	// 		break 
+	// 	}  
+	// }
+	
+	if testtype == "Simulator" && baseData.LicenseData[i].IsPassWritten != "true" {
+ 	   return shim.Error("Not eligible for the test " + testtype + ". Qualify written test first")
+	} else if testtype == "Practical" && (baseData.LicenseData[i].IsPassSim != "true" || baseData.LicenseData[i].IsPassWritten != "true") {
+ 	   return shim.Error("Not eligible for the test " + testtype + ". Qualify earlier tests first")
+	}
 
-//   if fileno[0] == 'P' {
-//     for j := range baseData.LicenseData[i].TestData {
-//       if  baseData.LicenseData[i].TestData[j].TestType == "Written" {
-//         wflag = true
-//         break 
-//       }  else if {
-        
-//       }
-//     }     
-//     return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
-//   } 
+	var testdata TestInfo
+  	testdata.TestType        = testtype 
+  	testdata.Score           = score
+  	testdata.MaxMarks        = maxmarks
+	testdata.PassingMarks    = passingmarks
+	testdata.Invigilator     = officerid 
+	
+	if testtype == "Written" {
+		baseData.LicenseData[i].IsPassWritten = ispass
+	} else if testtype == "Simulator" {
+		baseData.LicenseData[i].IsPassSim = ispass
+	} else if testtype == "Practical" {
+		baseData.LicenseData[i].IsPassPrac = ispass
+	}
+	
 
+	baseData.LicenseData[i].TestData = append(baseData.LicenseData[i].TestData, testdata)
 
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 
-// 	baseData.LicenseData[i].TestData = append(baseData.LicenseData[i].TestData, testdata)
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 
-// 	dataJSONasBytes, err := json.Marshal(baseData)
-// 	if err != nil {
-// 		return shim.Error(err.Error())
-// 	}
-
-// 	err = stub.PutState(uid, dataJSONasBytes)
-// 	if err != nil {
-// 		return shim.Error(err.Error())
-// 	}
-
-// 	return shim.Success(nil)
-// }
+	return shim.Success(nil)
+}
