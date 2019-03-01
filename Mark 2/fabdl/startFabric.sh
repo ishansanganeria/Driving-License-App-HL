@@ -57,36 +57,54 @@ sleep 5
 
 cd ../fabdl
 node enrollAdmin.js
+
 echo
 sleep 3
 node registerUser.js
+
 echo
 sleep 3
 node addRTO.js 
+
 echo
 sleep 3
 node addOfficer.js
+
 echo
 sleep 3
 node createUserAccount.js
+
 echo
 sleep 3
 node addAddressData.js 
+
 echo
 sleep 3
 node addBaseData2.js 
+
 echo
 sleep 3
 node addVehicle.js 
+
 echo
 sleep 3
 node licenseApply.js 
+
 echo
 sleep 3
 node addTestResult.js 
+
 echo
 sleep 3
 node approveApplication.js
+
+echo
+sleep 3
+node addTicket.js
+
+echo
+sleep 3
+node suspendLicense.js
 # echo
 # docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"CreateBaseRecord","Args":["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com"]}'
 # echo

@@ -865,8 +865,8 @@ func (t *SimpleChainCode) PayFine(stub shim.ChaincodeStubInterface, args []strin
 //uid, licensenumber, reason
 func (t *SimpleChainCode) SuspendLicense(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 2 {
-		return shim.Error("Incorrect number of arguments. Expecting 2")
+	if len(args) != 3 {
+		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
 
 	for i := 0; i < 2; i++ {
