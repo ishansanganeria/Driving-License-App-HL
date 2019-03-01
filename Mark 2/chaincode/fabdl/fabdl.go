@@ -229,9 +229,8 @@ func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []
 	id := args[0]
 	dataAsBytes, err := stub.GetState(id)
 	if err != nil {
-		return shim.Error("Failed to get marble: " + err.Error())
+		return shim.Error("Failed to get user details: " + err.Error())
 	} else if dataAsBytes == nil {
-		fmt.Println("This data already exists: " + string(dataAsBytes))
 		return shim.Error("This user doesn't exist: " + id)
 	}
 
@@ -400,7 +399,7 @@ func (t *SimpleChainCode) AddRTO(stub shim.ChaincodeStubInterface, args []string
 	id := args[0]
 	dataAsBytes, err := stub.GetState(id)
 	if err != nil {
-		return shim.Error("Failed to get marble: " + err.Error())
+		return shim.Error("Failed to get rto details: " + err.Error())
 	} else if dataAsBytes != nil {
 		return shim.Error("There already exists an RTO in this pincode: " + id)
 	}
@@ -592,7 +591,7 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 		ispass = "false"
 	}
 	officerid     := args[5]
-	filenumber        := args[6]
+	filenumber    := args[6]
 	
 	// CHECK IF GIVING THE WRITE TEST IN CASE OF LEARNING LICENSE
 	if filenumber[0] == 'L' && testtype != "Written" {
@@ -715,6 +714,7 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 	return shim.Success(nil)
 }
 
+//ADD ARGUMENT LICENSE NUMBER AND CHECK IF IT EXISTS
 //ticketid, uid, ticketissuer, reason, dateofissue, timeofissue, place, ispaid, amount
 func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
@@ -747,7 +747,7 @@ func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []str
 	}
 
 
-  dataAsBytes, err = stub.GetState(uid)
+    dataAsBytes, err = stub.GetState(uid)
 	if err != nil {
 		return shim.Error("Failed to fetch user details: " + err.Error())
 	} else if dataAsBytes == nil {
@@ -843,6 +843,57 @@ func (t *SimpleChainCode) PayFine(stub shim.ChaincodeStubInterface, args []strin
 	return shim.Success(nil)
 }
 
+//uid, licenseid, reason
 func (t *SimpleChainCode) SuspendLicense(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	for i := 0; i < 2; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+	
+	uid             	:= 	args[0]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+
+	licensenumber := args[1]
+	reason 	  := args[2]
+
+	var baseData CardHoldersDetails
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	//FIND THE INDEX OF THE LICENSE OUT OF ALL THE USERS CURRENT OR PREVIOUS LICENSES
+	var i int
+	for i := range baseData.LicenseData {
+		if  baseData.LicenseData[i].LicenseNumber == licensenumber {
+			break 
+		}  
+	}
+	
+	baseData.LicenseData[i].IsActive 			 = "false"
+	baseData.LicenseData[i].ReasonOfInactivity   =  reason
+
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
 	return shim.Success(nil)
 }
