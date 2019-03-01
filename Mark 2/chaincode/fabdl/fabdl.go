@@ -608,14 +608,19 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 	}
 	
 	var i int
-
+	flag := false
 	//FIND THE INDEX OF THE FILE OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
 	for i := range baseData.LicenseData {
 		if  baseData.LicenseData[i].FileNumber == filenumber {
+			flag = true
 			break 
 		}  
 	}
   
+	if !flag {
+		return shim.Error("This file doesnt exist.")
+	}
+
 	if testtype == "Simulator" && baseData.LicenseData[i].IsPassWritten != "true" {
  	   return shim.Error("Not eligible for the test " + testtype + ". Qualify written test first")
 	} else if testtype == "Practical" && (baseData.LicenseData[i].IsPassSim != "true" || baseData.LicenseData[i].IsPassWritten != "true") {
