@@ -1,5 +1,5 @@
 // Expecting the following args as variables in the code
-// args: [userid,fname,lname,gender,dob,age,contactno,emailid],
+// id, addressline1, addressline2, city, pincode, state
 
 'use strict';
 
@@ -46,12 +46,12 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 
 	var request = {
 		chaincodeId: 'fabdl',
-		fcn: 'CreateUserAccount',
-		args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com"],
-		// args: [userid,fname,lname,gender,dob,age,contactno,emailid],
+		fcn: 'AddAddressData',
+		args: ["865219083334","Line 1","Line 2","Mumbai","401101","Maharashtra"],
+		// args: [id, addressline1, addressline2, city, pincode, state ],
 		chainId: 'mychannel',
 		txId: tx_id
-	};
+		};
 
 	return channel.sendTransactionProposal(request);
 

@@ -133,8 +133,8 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	fmt.Println("The function being invoked is: " + function)
 
-	if function == "CreateBaseRecord" 			{ //CREATE A NEW ENTRY
-		return t.CreateBaseRecord(stub, args)
+	if function == "CreateUserAccount" 			{ //CREATE A NEW ENTRY
+		return t.CreateUserAccount(stub, args)
 	} else if function == "AddBaseData2" 		{ //Add ENtries of baseData2
 		return t.AddBaseData2(stub, args)
 	} else if function == "AddAddressData"  	{ //Add ENtries of baseData2
@@ -164,7 +164,7 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 }
 
 // id, firstname, lastname, gender, dob, age, contact_number, emailid
-func (t *SimpleChainCode) CreateBaseRecord(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) CreateUserAccount(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 8 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
@@ -682,7 +682,7 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 	filenumber := args[1]
 	dateofissue := args[2]
 	dateofexpiry := args[3]
-
+	licenseno	:= string(filenumber[0]) + "L" + uid
 	var baseData CardHoldersDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
@@ -699,7 +699,7 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 
 	if baseData.LicenseData[i].LicenseType == "Learning" && baseData.LicenseData[i].IsPassWritten != "true" {
 		return shim.Error("Cannot activate Learning License since Written test hasn't been cleared")
-	}	else if  baseData.LicenseData[i].LicenseType == "Learning" && (baseData.LicenseData[i].IsPassWritten != "true" || baseData.LicenseData[i].IsPassSim != "true" || baseData.LicenseData[i].IsPassPrac != "true") {
+	}	else if  baseData.LicenseData[i].LicenseType == "Permanent" && (baseData.LicenseData[i].IsPassWritten != "true" || baseData.LicenseData[i].IsPassSim != "true" || baseData.LicenseData[i].IsPassPrac != "true") {
 		return shim.Error("Cannot activate Driving License since a test hasn't been cleared")
 	}
 
@@ -707,6 +707,7 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 	baseData.LicenseData[i].DateOfExpiry 		 = dateofexpiry
 	baseData.LicenseData[i].IsActive	 		 = "true"
 	baseData.LicenseData[i].ReasonOfInactivity	 = ""
+	baseData.LicenseData[i].LicenseNumber		 = licenseno
 
 	dataJSONasBytes, err := json.Marshal(baseData)
 	if err != nil {
@@ -721,7 +722,6 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 	return shim.Success(nil)
 }
 
-//ADD ARGUMENT LICENSE NUMBER AND CHECK IF IT EXISTS
 //ticketid, uid, licensenumber , ticketissuer, reason, dateofissue, timeofissue, place, ispaid, amount
 func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 

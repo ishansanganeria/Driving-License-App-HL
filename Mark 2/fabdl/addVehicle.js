@@ -1,5 +1,5 @@
 // Expecting the following args as variables in the code
-// args: [userid,fname,lname,gender,dob,age,contactno,emailid],
+// id, vehicletype, numberplate, carcompany, carmake, carcolour, chasisnumber
 
 'use strict';
 
@@ -46,9 +46,10 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 
 	var request = {
 		chaincodeId: 'fabdl',
-		fcn: 'CreateUserAccount',
-		args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com"],
-		// args: [userid,fname,lname,gender,dob,age,contactno,emailid],
+		fcn: 'AddVehicle',
+		args: ["865219083334","4 wheeler","MH47GV698","Maruti","Alto","Black","CSDC4D53FSDF5DSD"],
+		// args: [id, vehicletype, numberplate, carcompany, carmake, carcolour, chasisnumber]
+
 		chainId: 'mychannel',
 		txId: tx_id
 	};
