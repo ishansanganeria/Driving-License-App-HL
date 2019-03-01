@@ -561,6 +561,7 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 
 }
 
+//ADD officerid CHECK
 // uid, testtype, score, maxmarks, passingmarks, officerid, filenumber, 
 func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
