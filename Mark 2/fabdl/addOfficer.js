@@ -125,8 +125,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 
 		});
 		promises.push(txPromise);
-
 		return Promise.all(promises);
+
 	} else {
 		console.error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...' + proposalResponses[0].response.message);
 		throw new Error('Failed to xsend Proposal or receive valid response. Response null or status is not 200. exiting...'  + proposalResponses[0].response.message);

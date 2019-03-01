@@ -775,7 +775,7 @@ func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []str
 		}  
 	}
 
-	if flag {
+	if !flag {
 		return shim.Error("This License number Doesn't exist")
 	}
 
