@@ -541,9 +541,9 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
   filedata.PhotoHash             = photohash
   filedata.IsActive              = "false"
   filedata.ReasonOfInactivity    = "Under Process for Initial Approval"
-  filedata.IsPassWritten		 = "flase"
-  filedata.IsPassSim		 	 = "flase"
-  filedata.IsPassPrac     		 = "flase"
+  filedata.IsPassWritten		 = "false"
+  filedata.IsPassSim		 	 = "false"
+  filedata.IsPassPrac     		 = "false"
   
 	baseData.LicenseData = append(baseData.LicenseData, filedata)
 
