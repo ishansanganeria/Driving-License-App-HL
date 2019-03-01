@@ -541,6 +541,9 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
   filedata.PhotoHash             = photohash
   filedata.IsActive              = "false"
   filedata.ReasonOfInactivity    = "Under Process for Initial Approval"
+  filedata.IsPassWritten		 = "flase"
+  filedata.IsPassSim		 	 = "flase"
+  filedata.IsPassPrac     		 = "flase"
   
 	baseData.LicenseData = append(baseData.LicenseData, filedata)
 
@@ -585,7 +588,7 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
  	maxmarks      := args[3]
   	passingmarks  := args[4]
 	var ispass string
-	if score >= maxmarks {
+	if score >= passingmarks {
 		ispass = "true" 
 	} else {
 		ispass = "false"
@@ -634,7 +637,6 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 		baseData.LicenseData[i].IsPassPrac = ispass
 	}
 	
-
 	baseData.LicenseData[i].TestData = append(baseData.LicenseData[i].TestData, testdata)
 
 	dataJSONasBytes, err := json.Marshal(baseData)
