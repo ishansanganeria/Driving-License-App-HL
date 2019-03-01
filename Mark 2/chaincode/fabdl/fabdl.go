@@ -717,11 +717,11 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 }
 
 //ADD ARGUMENT LICENSE NUMBER AND CHECK IF IT EXISTS
-//ticketid, uid, ticketissuer, reason, dateofissue, timeofissue, place, ispaid, amount
+//ticketid, uid, licensenumber , ticketissuer, reason, dateofissue, timeofissue, place, ispaid, amount
 func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 9 {
-		return shim.Error("Incorrect number of arguments. Expecting 9")
+	if len(args) != 10 {
+		return shim.Error("Incorrect number of arguments. Expecting 10")
 	}
 
 	for i := 0; i < 9; i++ {
@@ -730,16 +730,16 @@ func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []str
 			return shim.Error(ERR)
 		}
 	}
-
 	ticketid := args[0]
 	uid := args[1]
-	ticketissuer := args[2]
-	reason := args[3]
-	dateofissue := args[4]
-	timeofissue := args[5]
-	place := args[6]
-	ispaid := args[7]
-	amount := args[8]
+	licensenumber := args[2]
+	ticketissuer := args[3]
+	reason := args[4]
+	dateofissue := args[5]
+	timeofissue := args[6]
+	place := args[7]
+	ispaid := args[8]
+	amount := args[9]
 
 	dataAsBytes, err := stub.GetState(ticketissuer)
 	if err != nil {
@@ -762,6 +762,18 @@ func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []str
 		return shim.Error(err.Error())
 	}
 	
+	flag := false
+	for i := range baseData.LicenseData {
+		if  baseData.LicenseData[i].LicenseNumber == licensenumber {
+			flag = true
+			break 
+		}  
+	}
+
+	if flag {
+		return shim.Error("This License number Doesn't exist")
+	}
+
 	var ticket TicketInfo
 
 	ticket.TicketIssuer 	= ticketissuer
@@ -845,7 +857,7 @@ func (t *SimpleChainCode) PayFine(stub shim.ChaincodeStubInterface, args []strin
 	return shim.Success(nil)
 }
 
-//uid, licenseid, reason
+//uid, licensenumber, reason
 func (t *SimpleChainCode) SuspendLicense(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 2 {
