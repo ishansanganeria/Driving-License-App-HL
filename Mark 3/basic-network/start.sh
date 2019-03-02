@@ -38,14 +38,14 @@ echo
 docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@orgdl.example.com/msp" peer0.orgdl.example.com peer channel join -b mychanneldl.block
 echo
 
-echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrguidaiMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@orguidai.example.com/msp" peer0.orguidai.example.com peer channel join -b mychanneldl.block
-echo
+# echo
+# docker exec -e "CORE_PEER_LOCALMSPID=OrguidaiMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@orguidai.example.com/msp" peer0.orguidai.example.com peer channel join -b mychanneldl.block
+# echo
 
-echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrguidaiMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@orguidai.example.com/msp" peer0.orguidai.example.com peer channel join -b mychannelpp.block
-echo
+# echo
+# docker exec -e "CORE_PEER_LOCALMSPID=OrguidaiMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@orguidai.example.com/msp" peer0.orguidai.example.com peer channel join -b mychannelpp.block
+# echo
 
-echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrguidaiMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@orguidai.example.com/msp" peer0.orguidai.example.com peer channel join -b mychannelpan.block
-echo
+# echo
+# docker exec -e "CORE_PEER_LOCALMSPID=OrguidaiMSP" -e "CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/users/Admin@orguidai.example.com/msp" peer0.orguidai.example.com peer channel join -b mychannelpan.block
+# echo

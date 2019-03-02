@@ -39,13 +39,12 @@ rm -rf ./hfc-key-store
 
 cd ../basic-network
 ./start.sh
-exit
 echo
-# docker-compose -f ./docker-compose.yml up -d cli
 echo
 
 #########################################
 
+set -ev 
 echo
 docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode install -n fabdl -v 1.0 -p "$CC_SRC_PATH" -l "$LANGUAGE"
 echo
