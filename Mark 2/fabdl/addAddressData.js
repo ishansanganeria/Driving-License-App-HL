@@ -1,6 +1,12 @@
 // Expecting the following args as variables in the code
 // id, addressline1, addressline2, city, pincode, state
 
+// var id = 
+// var addressline1 = 
+// var addressline2 = 
+// var city = 
+// var pincode = 
+// var state = 
 'use strict';
 
 var Fabric_Client = require('fabric-client');

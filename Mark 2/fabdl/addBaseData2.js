@@ -3,6 +3,14 @@
 
 'use strict';
 
+// var id =
+// var relfname =
+// var rellname =
+// var pob =
+// var nationality =
+// var emerno =
+// var bg =
+
 var Fabric_Client = require('fabric-client');
 var path = require('path');
 var util = require('util');

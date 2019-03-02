@@ -3,6 +3,16 @@
 
 'use strict';
 
+// var uid = 
+// var testtype = 
+// var score = 
+// var maxmarks = 
+// var passingmarks = 
+// var officerid = 
+// var filenumber = 
+// var date = 
+// var  time = 
+
 var Fabric_Client = require('fabric-client');
 var path = require('path');
 var util = require('util');
