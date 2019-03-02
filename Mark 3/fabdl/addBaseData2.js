@@ -1,18 +1,15 @@
 // Expecting the following args as variables in the code
-// ticketid, uid, licensenumber , ticketissuer, reason, dateofissue, timeofissue, place, ispaid, amount
+// id, relfname, rellname, pob, nationality, emerno, bg
 
 'use strict';
 
-// var
-// var
-// var
-// var
-// var
-// var
-// var
-// var
-// var
-// var
+// var id =
+// var relfname =
+// var rellname =
+// var pob =
+// var nationality =
+// var emerno =
+// var bg =
 
 var Fabric_Client = require('fabric-client');
 var path = require('path');
@@ -57,9 +54,9 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 
 	var request = {
 		chaincodeId: 'fabdl',
-		fcn: 'AddTicket',
-		args: ["0001","865219083334","LL865219083334","9876951796","Rash Driving","05/11/1987","7 AM","Kings Cross", "false","100"],
-		// args: [ticketid, uid, licensenumber , ticketissuer, reason, dateofissue, timeofissue, place, ispaid, amount],
+		fcn: 'AddBaseData2',
+		args: ["865219083334","Raj","Sanganeria","bhayandar","indian","8949716007","AB+"],
+		// args: [ id, relfname, rellname, pob, nationality, emerno, bg],
 		chainId: 'mychannel',
 		txId: tx_id
 	};
