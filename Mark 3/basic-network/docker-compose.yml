@@ -54,6 +54,8 @@ services:
       - CORE_PEER_LOCALMSPID=OrguidaiMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
       - CORE_PEER_ADDRESS=peer0.orguidai.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orgdl.example.com:7051
+
       # # the following setting starts chaincode containers on the same
       # # bridge network as the peers
       # # https://docs.docker.com/compose/networking/
@@ -134,6 +136,8 @@ services:
       - CORE_PEER_LOCALMSPID=OrgdlMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
       - CORE_PEER_ADDRESS=peer0.orgdl.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orguidai.example.com:7051
+
       # # the following setting starts chaincode containers on the same
       # # bridge network as the peers
       # # https://docs.docker.com/compose/networking/
@@ -214,6 +218,8 @@ services:
       - CORE_PEER_LOCALMSPID=OrgppMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
       - CORE_PEER_ADDRESS=peer0.orgpp.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orguidai.example.com:7051
+
       # # the following setting starts chaincode containers on the same
       # # bridge network as the peers
       # # https://docs.docker.com/compose/networking/
@@ -264,7 +270,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_LEVEL=debug
       - CORE_PEER_ID=clipp
-      - CORE_PEER_ADDRESS=peer0.orgpp.example.com:9051
+      - CORE_PEER_ADDRESS=peer0.orgpp.example.com:7051
       - CORE_PEER_LOCALMSPID=OrgppMSP
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgpp.example.com/users/Admin@orgpp.example.com/msp
       - CORE_CHAINCODE_KEEPALIVE=10
@@ -294,11 +300,14 @@ services:
       - CORE_PEER_LOCALMSPID=OrgpanMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
       - CORE_PEER_ADDRESS=peer0.orgpan.example.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orguidai.example.com:7051
+
       # # the following setting starts chaincode containers on the same
       # # bridge network as the peers
       # # https://docs.docker.com/compose/networking/
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb_pan:5984
       # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
       # provide the credentials for ledger to connect to CouchDB.  The username and password must
       # match the username and password set for the associated CouchDB.
