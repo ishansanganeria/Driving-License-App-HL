@@ -1,5 +1,5 @@
 // Expecting the following args as variables in the code
-// uid, licensetype, photohash
+// uid, licensetype, date, time
 
 'use strict';
 
@@ -47,7 +47,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	var request = {
 		chaincodeId: 'fabdl',
 		fcn: 'LicenseApply',
-		args: ["865219083334","Learning","A8B413E5F26"],
+		args: ["865219083334","Learning","05/11/4685","15AM"],
 		// args: [uid, licensetype, photohash],
 		chainId: 'mychannel',
 		txId: tx_id

@@ -541,11 +541,11 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 		}
 	}
 
-	uid := args[0]
+	uid 		:= args[0]
 	licensetype := args[1]
 	date		:= args[2]
 	time		:= args[3]
-	filenumber := string(args[1][0]) + uid
+	filenumber 	:= string(args[1][0]) + uid
 		
 	dataAsBytes, err := stub.GetState(uid)
 	if err != nil {
@@ -568,10 +568,13 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	filedata.IsPassWritten		   = "false"
 	filedata.IsPassSim		 	   = "false"
 	filedata.IsPassPrac     	   = "false"
-	filedata.FileStatus[0].Status    		   = "Under Process for Initial Approval"
-	filedata.FileStatus[0].Date 	   		   = date
-	filedata.FileStatus[0].Time  			   = time
+	
+	var status FileStatusInfo
+	status.Status  = "Under Process for Initial Approval"
+	status.Date    = date
+	status.Time    = time
 
+	filedata.FileStatus  = append(filedata.FileStatus, status)
 	baseData.LicenseData = append(baseData.LicenseData, filedata)
 
 	dataJSONasBytes, err := json.Marshal(baseData)

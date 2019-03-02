@@ -62,34 +62,39 @@ echo
 sleep 3
 node registerUser.js
 
+# echo
+# sleep 3
+# node createUserAccountDummy.js
+
+set -e
+echo
+sleep 3
+node createUserAccount.js
+
 
 echo
 sleep 3
-node createUserAccountDummy.js
+node addRTO.js 
 
-# echo
-# sleep 3
-# node addRTO.js 
+echo
+sleep 3
+node addOfficer.js
 
-# echo
-# sleep 3
-# node addOfficer.js
+echo
+sleep 3
+node addAddressData.js 
 
-# echo
-# sleep 3
-# node addAddressData.js 
+echo
+sleep 3
+node addBaseData2.js 
 
-# echo
-# sleep 3
-# node addBaseData2.js 
+echo
+sleep 3
+node addVehicle.js 
 
-# echo
-# sleep 3
-# node addVehicle.js 
-
-# echo
-# sleep 3
-# node licenseApply.js 
+echo
+sleep 3
+node licenseApply.js 
 
 # echo
 # sleep 3

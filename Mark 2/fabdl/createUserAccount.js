@@ -1,5 +1,5 @@
 // Expecting the following args as variables in the code
-// args: [userid,fname,lname,gender,dob,age,contactno,emailid],
+// id, firstname, lastname, gender, dob, age, contact_number, emailid, photohash, dochash
 
 'use strict';
 
@@ -47,7 +47,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	var request = {
 		chaincodeId: 'fabdl',
 		fcn: 'CreateUserAccount',
-		args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com"],
+		args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com","sdasd","askdaskdn"],
 		// args: [userid,fname,lname,gender,dob,age,contactno,emailid],
 		chainId: 'mychannel',
 		txId: tx_id
