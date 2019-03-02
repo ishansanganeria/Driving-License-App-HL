@@ -172,23 +172,11 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.FetchListOfTickets(stub, args)
     } else if function == "FetchTestResults"	{ //FETCH LIST OF ALL TEST RESULTS FOR A GIVEN USER
 		return t.FetchTestResults(stub, args)
-	} else if function == "FetchCurrentStatus"	{ //FETCH CURRENT STATUS OF THE APPLICATION
-		return t.FetchCurrentStatus(stub, args)
+	} else if function == "UpdateStatus"		{ //UPDATE STATUSES OF THE APPLICATION
+		return t.UpdateStatus(stub, args)
+	} else if function == "FetchStatus"			{ //FETCH CURRENT STATUS OF THE APPLICATION
+		return t.FetchStatus(stub, args)
 	} 
-	// else if function == "isPassedWritten"	{
-	// 	return t.isPassedWritten(stub, args)
-	// } else if function == "isPassedPractical"	{
-	// 	return t.isPassedPractical(stub, args)
-	// } else if function == "isPassedSimulator"	{
-	// 	return t.isPassedSimulator(stub, args)
-	// } else if function == "fetchBasicDetails"	{
-	// 	return t.fetchBasicDetails(stub, args)
-	// } else if function == "fetchListOfUnapprovedApplications"	{
-	// 	return t.fetchListOfUnapprovedApplications(stub, args)
-	// } else if function == "fetchListOf"	{
-	// 	return t.fetchListOf(stub, args)
-	// }
-	//userExist?
 	
     fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
@@ -534,7 +522,7 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 	return shim.Success(nil)
 }
 
-// uid, licensetype, photohash, time, date
+// uid, licensetype, photohash,  date, time,
 func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 5 {
@@ -1131,8 +1119,67 @@ func (t *SimpleChainCode) FetchTestResults(stub shim.ChaincodeStubInterface, arg
 	return shim.Success(dataJSONasBytes)
 }
 
+//uid, filenumber, status, date, time,
+func (t *SimpleChainCode) UpdateStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
+	}
+
+	for i := 0; i < 5; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	uid             := 	args[0]
+	filenumber 		:= 	args[1]
+	status 			:=	args[2]
+	date			:=  args[3]
+	time			:=  args[4]
+
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+
+	var baseData CardHoldersDetails
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	var i int
+	for i = range baseData.LicenseData {
+		if baseData.LicenseData[i].FileNumber == filenumber{
+			break
+		}
+	}
+
+	var filestatus FileStatusInfo
+	filestatus.Status 	 = status
+	filestatus.Time 	 = time
+	filestatus.Date 	 = date
+	baseData.LicenseData[i].FileStatus = append(baseData.LicenseData[i].FileStatus, filestatus)
+	
+	dataJSONasBytes, err := json.Marshal(baseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(dataJSONasBytes)
+}
+
 //uid, filenumber
-func (t *SimpleChainCode) FetchCurrentStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) FetchStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	
 	if len(args) != 2 {
 		return shim.Error("Incorrect number of arguments. Expecting 2")
@@ -1167,7 +1214,7 @@ func (t *SimpleChainCode) FetchCurrentStatus(stub shim.ChaincodeStubInterface, a
 		}
 	}
 
-	dataJSONasBytes, err := json.Marshal(baseData.LicenseData[i].FileNumber)
+	dataJSONasBytes, err := json.Marshal(baseData.LicenseData[i].FileStatus)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
