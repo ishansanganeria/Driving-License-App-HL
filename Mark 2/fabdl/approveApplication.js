@@ -1,5 +1,5 @@
 // Expecting the following args as variables in the code
-// uid, filenumber, dateofissue, dateofexpiry
+// uid, filenumber, dateofissue, dateofexpiry, date, time
 
 'use strict';
 
@@ -47,8 +47,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	var request = {
 		chaincodeId: 'fabdl',
 		fcn: 'ApproveApplication',
-		args: ["865219083334","L865219083334","14/09/1987","14/09/1997"],
-		// args: [uid, filenumber, dateofissue, dateofexpiry],
+		args: ["865219083334","L865219083334","14/09/1987","14/09/1997", "date", "time"],
+		// args: [uid, filenumber, dateofissue, dateofexpiry,date, time],
 		chainId: 'mychannel',
 		txId: tx_id
 	};

@@ -1,3 +1,4 @@
+//uid
 'use strict';
 
 var Fabric_Client = require('fabric-client');

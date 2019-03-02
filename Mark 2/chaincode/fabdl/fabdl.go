@@ -592,14 +592,14 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 }
 
 //ADD officerid CHECK
-// uid, testtype, score, maxmarks, passingmarks, officerid, filenumber, 
+// uid, testtype, score, maxmarks, passingmarks, officerid, filenumber, date, time
 func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 7 {
-		return shim.Error("Incorrect number of arguments. Expecting 7")
+	if len(args) != 9 {
+		return shim.Error("Incorrect number of arguments. Expecting 9")
 	}
 
-	for i := 0; i < 7; i++ {
+	for i := 0; i < 9; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
@@ -618,16 +618,20 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 	score         := args[2]
  	maxmarks      := args[3]
   	passingmarks  := args[4]
-	var ispass string
+	var ispass,status string
 	if score >= passingmarks {
 		ispass = "true" 
+		status = "You passed the " + testtype + " test."
 	} else {
 		ispass = "false"
+		status = "You failed the " + testtype + " test."
 	}
 	officerid     := args[5]
 	filenumber    := args[6]
-	
-	// CHECK IF GIVING THE WRITE TEST IN CASE OF LEARNING LICENSE
+	date 		  := args[7]
+	time		  := args[8]
+
+	// CHECK IF GIVING THE RIGHT TEST IN CASE OF LEARNING LICENSE
 	if filenumber[0] == 'L' && testtype != "Written" {
  	   return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
  	} 
@@ -672,9 +676,14 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 	} else if testtype == "Practical" {
 		baseData.LicenseData[i].IsPassPrac = ispass
 	}
-	
-	baseData.LicenseData[i].TestData = append(baseData.LicenseData[i].TestData, testdata)
+	var filestatus FileStatusInfo
+	filestatus.Status 	= status
+	filestatus.Date     = date
+	filestatus.Time     = time
 
+	baseData.LicenseData[i].FileStatus = append(baseData.LicenseData[i].FileStatus, filestatus)
+	baseData.LicenseData[i].TestData  = append(baseData.LicenseData[i].TestData, testdata)
+ 
 	dataJSONasBytes, err := json.Marshal(baseData)
 	if err != nil {
 		return shim.Error(err.Error())
@@ -688,14 +697,14 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 	return shim.Success(nil)
 }
 
-// uid, filenumber, dateofissue, dateofexpiry
+// uid, filenumber, dateofissue, dateofexpiry,date,time
 func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
 	}
 
-	for i := 0; i < 4; i++ {
+	for i := 0; i < 6; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
@@ -713,6 +722,8 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 	filenumber := args[1]
 	dateofissue := args[2]
 	dateofexpiry := args[3]
+	date	:= args[4]
+	time	:= args[5]
 	licensenumber	:= string(filenumber[0]) + "L" + uid
 	var baseData CardHoldersDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
@@ -739,6 +750,14 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 	baseData.LicenseData[i].IsActive	 		 = "true"
 	baseData.LicenseData[i].ReasonOfInactivity	 = ""
 	baseData.LicenseData[i].LicenseNumber		 = licensenumber
+
+	var filestatus FileStatusInfo
+	filestatus.Status 	= "Your Application has been granted. Your License number is " + licensenumber + ". It'll be dispatched shortly"
+	filestatus.Date     = date
+	filestatus.Time     = time
+
+	baseData.LicenseData[i].FileStatus = append(baseData.LicenseData[i].FileStatus, filestatus)
+	
 
 	dataJSONasBytes, err := json.Marshal(baseData)
 	if err != nil {

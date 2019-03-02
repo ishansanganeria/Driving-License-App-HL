@@ -1,5 +1,5 @@
 // Expecting the following args as variables in the code
-// uid, testtype, score, maxmarks, passingmarks, officerid, filenumber, 
+// uid, testtype, score, maxmarks, passingmarks, officerid, filenumber, date, time
 
 'use strict';
 
@@ -47,8 +47,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	var request = {
 		chaincodeId: 'fabdl',
 		fcn: 'AddTestResult',
-		args: ["865219083334","Written","74","100","45","9876951796","L865219083334"],
-		// args: [uid, testtype, score, maxmarks, passingmarks, officerid, filenumber],
+		args: ["865219083334","Written","74","100","45","9876951796","L865219083334", "date", "time"],
+		// args: [uid, testtype, score, maxmarks, passingmarks, officerid, filenumber, date, time],
 		chainId: 'mychannel',
 		txId: tx_id
 	};

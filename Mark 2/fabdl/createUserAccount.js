@@ -48,7 +48,7 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		chaincodeId: 'fabdl',
 		fcn: 'CreateUserAccount',
 		args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com","sdasd","askdaskdn"],
-		// args: [userid,fname,lname,gender,dob,age,contactno,emailid],
+		// args: [userid,fname,lname,gender,dob,age,contactno,emailid,photohash, dochash],
 		chainId: 'mychannel',
 		txId: tx_id
 	};
