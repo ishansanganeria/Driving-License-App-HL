@@ -88,7 +88,8 @@ type LicenseInfo struct {
 	IsPassWritten		    string			  	`json:"ispass_written"`
 	IsPassSim			    string			  	`json:"ispass_sim"`
 	IsPassPrac			    string			  	`json:"ispass_prac"`
-	IsActive		  	    string				`json:"isactive"`	
+	IsActive		  	    string				`json:"isactive"`
+	FileStatus				[]FileStatusInfo	`json:"filestatus"`	
 }
 
 type TicketInfo struct {
@@ -116,6 +117,12 @@ type OfficerInfo struct {
 	DocType             string			  `json:"objectType"`
 	BasicData_1 	      basicData1		`json:"basicdata"`
 	RTO_ID			        string 			  `json:"rtoid"`
+}
+
+type FileStatusInfo struct {
+	Status					string				`json:"filestatus"`
+	Date					string				`json:"date"`
+	Time					string				`json:"string"`
 }
 
 func main() {
@@ -165,6 +172,8 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.FetchListOfTickets(stub, args)
     } else if function == "FetchTestResults"	{ //FETCH LIST OF ALL TEST RESULTS FOR A GIVEN USER
 		return t.FetchTestResults(stub, args)
+	} else if function == "FetchCurrentStatus"	{ //FETCH CURRENT STATUS OF THE APPLICATION
+		return t.FetchCurrentStatus(stub, args)
 	} 
 	// else if function == "isPassedWritten"	{
 	// 	return t.isPassedWritten(stub, args)
@@ -174,10 +183,6 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	// 	return t.isPassedSimulator(stub, args)
 	// } else if function == "fetchBasicDetails"	{
 	// 	return t.fetchBasicDetails(stub, args)
-	// } else if function == "fetchTestResult"	{
-	// 	return t.fetchTestResult(stub, args)
-	// } else if function == "fetchCurrentStatus"	{
-	// 	return t.fetchCurrentStatus(stub, args)
 	// } else if function == "fetchListOfUnapprovedApplications"	{
 	// 	return t.fetchListOfUnapprovedApplications(stub, args)
 	// } else if function == "fetchListOf"	{
@@ -529,14 +534,14 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 	return shim.Success(nil)
 }
 
-// uid, licensetype, photohash
+// uid, licensetype, photohash, time, date
 func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 3 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 5 {
+		return shim.Error("Incorrect number of arguments. Expecting 5")
 	}
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < 5; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
@@ -546,6 +551,8 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	uid := args[0]
 	licensetype := args[1]
 	photohash := args[2]
+	date		:= args[3]
+	time		:= args[4]
 	filenumber := string(args[1][0]) + uid
 		
 	dataAsBytes, err := stub.GetState(uid)
@@ -562,15 +569,18 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	}
 	
 	var filedata LicenseInfo
-  filedata.FileNumber            = filenumber 
-  filedata.LicenseType           = licensetype
-  filedata.PhotoHash             = photohash
-  filedata.IsActive              = "false"
-  filedata.ReasonOfInactivity    = "Under Process for Initial Approval"
-  filedata.IsPassWritten		 = "false"
-  filedata.IsPassSim		 	 = "false"
-  filedata.IsPassPrac     		 = "false"
-  
+	filedata.FileNumber            = filenumber 
+	filedata.LicenseType           = licensetype
+	filedata.PhotoHash             = photohash
+	filedata.IsActive              = "false"
+	filedata.ReasonOfInactivity    = "Under Process for Initial Approval"
+	filedata.IsPassWritten		   = "false"
+	filedata.IsPassSim		 	   = "false"
+	filedata.IsPassPrac     	   = "false"
+	filedata.FileStatus[0].Status    		   = "Under Process for Initial Approval"
+	filedata.FileStatus[0].Date 	   		   = date
+	filedata.FileStatus[0].Time  			   = time
+
 	baseData.LicenseData = append(baseData.LicenseData, filedata)
 
 	dataJSONasBytes, err := json.Marshal(baseData)
@@ -1114,6 +1124,50 @@ func (t *SimpleChainCode) FetchTestResults(stub shim.ChaincodeStubInterface, arg
 	}
 
 	dataJSONasBytes, err := json.Marshal(testResults)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(dataJSONasBytes)
+}
+
+//uid, filenumber
+func (t *SimpleChainCode) FetchCurrentStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	for i := 0; i < 2; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	uid             	:= 	args[0]
+	filenumber 			:= 	args[1]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+
+	var baseData CardHoldersDetails
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	var i int
+	for i = range baseData.LicenseData {
+		if baseData.LicenseData[i].FileNumber == filenumber{
+			break
+		}
+	}
+
+	dataJSONasBytes, err := json.Marshal(baseData.LicenseData[i].FileNumber)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
