@@ -155,15 +155,17 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.AddTicket(stub, args)
 	} else if function == "PayFine" 			{ //PAY FINE ON A TICKET
 		return t.PayFine(stub, args)
-	} else if function == "SuspendLicense"		{
+	} else if function == "SuspendLicense"		{ //SUSPEND A GIVEN LICENSE
 		return t.SuspendLicense(stub, args)
-	} else if function == "IsLicenseActive"	{
+	} else if function == "IsLicenseActive"		{ //CHECK IF A GIVEN LICENSE IS ACTIVE
 		return t.IsLicenseActive(stub, args)
-	} else if function == "IsFinePaid"	{
+	} else if function == "IsFinePaid"			{ //CHECK IF A GIVEN TICKET'S FINE HAS BEEN PAID
 		return t.IsFinePaid(stub, args)
-	} else if function == "FetchListOfFines"	{
-		return t.FetchListOfFines(stub, args)
-    } 
+	} else if function == "FetchListOfTickets"	{ //FETCH LIST OF ALL TICKETS FOR A GIVEN USER
+		return t.FetchListOfTickets(stub, args)
+    } else if function == "FetchTestResults"	{ //FETCH LIST OF ALL TEST RESULTS FOR A GIVEN USER
+		return t.FetchTestResults(stub, args)
+	} 
 	// else if function == "isPassedWritten"	{
 	// 	return t.isPassedWritten(stub, args)
 	// } else if function == "isPassedPractical"	{
@@ -176,8 +178,6 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	// 	return t.fetchTestResult(stub, args)
 	// } else if function == "fetchCurrentStatus"	{
 	// 	return t.fetchCurrentStatus(stub, args)
-	// } else if function == "fetchListOfFines"	{
-	// 	return t.fetchListOfFines(stub, args)
 	// } else if function == "fetchListOfUnapprovedApplications"	{
 	// 	return t.fetchListOfUnapprovedApplications(stub, args)
 	// } else if function == "fetchListOf"	{
@@ -1043,7 +1043,7 @@ func (t *SimpleChainCode) IsFinePaid(stub shim.ChaincodeStubInterface, args []st
 }
 
 //uid
-func (t *SimpleChainCode) FetchListOfFines(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) FetchListOfTickets(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
@@ -1070,18 +1070,50 @@ func (t *SimpleChainCode) FetchListOfFines(stub shim.ChaincodeStubInterface, arg
 		return shim.Error(err.Error())
 	}
 
-	//FIND THE INDEX OF THE LICENSE OUT OF ALL THE USERS CURRENT OR PREVIOUS LICENSES
-	// var i int
-	// for i := range baseData.Tickets {
-	// 	if  baseData.Tickets[i].TicketID == ticketid {
-	// 		fmt.Printf("%d",i)
-	// 		break 
-	// 	}  
-	// }
-	
-	// ispaid := baseData.Tickets[i].IsPaid
-
 	dataJSONasBytes, err := json.Marshal(baseData.Tickets)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(dataJSONasBytes)
+}
+
+//uid
+func (t *SimpleChainCode) FetchTestResults(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	for i := 0; i < 1; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	uid             	:= 	args[0]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+
+	var baseData CardHoldersDetails
+	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	var testResults []TestInfo
+	for i := range baseData.LicenseData {
+		for j := range baseData.LicenseData[i].TestData{
+			testResults = append(testResults, baseData.LicenseData[i].TestData[j])
+		}
+	}
+
+	dataJSONasBytes, err := json.Marshal(testResults)
 	if err != nil {
 		return shim.Error(err.Error())
 	}

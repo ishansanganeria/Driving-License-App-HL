@@ -113,8 +113,11 @@ node isLicenseActive.js
 
 echo
 sleep 3
-node fetchListOfFines.js
+node fetchListOfTickets.js
 
+echo
+sleep 3
+node fetchTestResults.js
 
 # # echo
 # # docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"CreateBaseRecord","Args":["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com"]}'
