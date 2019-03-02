@@ -1224,3 +1224,4 @@ func (t *SimpleChainCode) FetchStatus(stub shim.ChaincodeStubInterface, args []s
 
 	return shim.Success(dataJSONasBytes)
 }
+
