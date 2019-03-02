@@ -40,6 +40,8 @@ type basicData1 struct {
 	Age           string          `json:"age"`
 	ContactNumber string          `json:"contact_number"`
 	EmailID       string          `json:"Email"`
+	PhotoHash	  string		  `json:"photohash"`	
+	DocumentHash  string		  `json:"dochash"`	
 }
 
 type basicData2 struct {
@@ -82,7 +84,6 @@ type LicenseInfo struct {
 	LicenseNumber		    string				`json:"licensenumber"`
 	DateOfIssue			    string				`json:"dateofissue"`
 	DateOfExpiry		    string				`json:"dateofexpiry"`
-	PhotoHash	  		    string				`json:"photohash"`
 	ReasonOfInactivity		string				`json:"reason"`
 	TestData			    []TestInfo			`json:"testdata"`
 	IsPassWritten		    string			  	`json:"ispass_written"`
@@ -182,29 +183,31 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Error("Received unknown function invocation")
 }
 
-// id, firstname, lastname, gender, dob, age, contact_number, emailid
+// id, firstname, lastname, gender, dob, age, contact_number, emailid, photohash, dochash
 func (t *SimpleChainCode) CreateUserAccount(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 8 {
-		return shim.Error("Incorrect number of arguments. Expecting 1")
+	if len(args) != 10 {
+		return shim.Error("Incorrect number of arguments. Expecting 10")
 	}
 
-	for i := 0; i < 8; i++ {
+	for i := 0; i < 10; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
 		}
 	}
 
-	objectType := "basicData"
-	id := args[0]
-	firstname := args[1]
+	objectType 	:= "basicData"
+	id 			:= args[0]
+	firstname   := args[1]
 	lastname := args[2]
 	gender := args[3]
 	dob := args[4]
 	age := args[5]
 	contact_number := args[6]
 	emailid := args[7]
+	photohash := args[8]
+	dochash := args[9]
 
 	var baseData CardHoldersDetails
 	baseData.ID = id
@@ -217,6 +220,8 @@ func (t *SimpleChainCode) CreateUserAccount(stub shim.ChaincodeStubInterface, ar
 	baseData.BasicData_1.Age = age
 	baseData.BasicData_1.ContactNumber = contact_number
 	baseData.BasicData_1.EmailID = emailid
+	baseData.BasicData_1.PhotoHash = photohash
+	baseData.BasicData_1.DocumentHash = dochash
 
 	dataJSONasBytes, err := json.Marshal(baseData)
 	if err != nil {
@@ -522,14 +527,14 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 	return shim.Success(nil)
 }
 
-// uid, licensetype, photohash,  date, time,
+// uid, licensetype,  date, time,
 func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 5 {
-		return shim.Error("Incorrect number of arguments. Expecting 5")
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
 	}
 
-	for i := 0; i < 5; i++ {
+	for i := 0; i < 4; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
@@ -538,9 +543,8 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 
 	uid := args[0]
 	licensetype := args[1]
-	photohash := args[2]
-	date		:= args[3]
-	time		:= args[4]
+	date		:= args[2]
+	time		:= args[3]
 	filenumber := string(args[1][0]) + uid
 		
 	dataAsBytes, err := stub.GetState(uid)
@@ -559,7 +563,6 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	var filedata LicenseInfo
 	filedata.FileNumber            = filenumber 
 	filedata.LicenseType           = licensetype
-	filedata.PhotoHash             = photohash
 	filedata.IsActive              = "false"
 	filedata.ReasonOfInactivity    = "Under Process for Initial Approval"
 	filedata.IsPassWritten		   = "false"
