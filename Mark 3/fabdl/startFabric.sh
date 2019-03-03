@@ -84,7 +84,7 @@ sleep 5
 #########################################
 
 
-docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode invoke -o orderer.example.com:7050 -C mychanneldl -n fabdl -c '{"function":"CreateUserAccount","Args":["9660440353","Pulkit","Gupta","Male","05/11/1998","20","sdkasbdkhab@gmail.com","#25656565","#995959"]}'
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode invoke -o orderer.example.com:7050 -C mychanneldl -n fabdl -c '{"function":"CreateUserAccount","Args":["9660440353","Pulkit","Gupta","Male","05/11/1998","20","pulkit@gmail.com","#25656565","#995959"]}'
 
 sleep 5
 
@@ -93,9 +93,7 @@ docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/
 
 sleep 5
 
-docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode invoke -o orderer.example.com:7050 -C mychanneldl -n fabdl -c '{"function":"AddBaseData2","Args":["9660440353","Nagendra","Gupta","India","Indaia","5355315","AB+"]}'
 
-sleep 5
 
 docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode invoke -o orderer.example.com:7050 -C mychanneldl -n fabdl -c '{"function":"AadharApply","Args":["9660440353","12/12/12","12:20"]}'
 
@@ -110,3 +108,11 @@ docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/
 sleep 5
 
 docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode invoke -o orderer.example.com:7050 -C mychanneldl -n fabdl -c '{"function":"ApplyDL","Args":["9660440353"]}'
+
+sleep 5
+
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode invoke -o orderer.example.com:7050 -C mychanneldl -n fabdl -c '{"function":"ApplyPP","Args":["9660440353"]}'
+
+sleep 5
+
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode invoke -o orderer.example.com:7050 -C mychanneldl -n fabdl -c '{"function":"ApplyPAN","Args":["9660440353"]}'

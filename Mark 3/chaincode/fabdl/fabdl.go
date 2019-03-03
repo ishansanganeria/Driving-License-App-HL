@@ -30,11 +30,29 @@ type CardHoldersDetails struct {
 	// Tickets      []TicketInfo    `json:"tickets"`
 	// VehiclesData []VehiclesOwned `json:"vehiclesowned"`
 }
+type Passport struct {
+	DocType      string          `json:"objectType"`
+	ID           string          `json:"id"`
+	BasicData_1 basicData1 `		json:"basicdata1"`
+	BasicData_2  basicData2      `json:"basicdata2"`
+	// RTO_ID       string          `json:"rto"`
+	 AddressData  Address         `json:"address"`
+	// LicenseData  AadharInfo      `json:"licensedata"`
+	// Tickets      []TicketInfo    `json:"tickets"`
+	// VehiclesData []VehiclesOwned `json:"vehiclesowned"`
+}
 type Aadhar struct {
 	DocType     string     `json:"objectType"`
 	ID          string     `json:"id"`
 	BasicData_1 basicData1 `json:"basicdata1"`
 	BasicData_2 basicData2 `json:"basicdata2"`
+	AddressData Address    `json:"address"`
+	AadharData  AadharInfo `json:"aadhardata"`
+}
+type PAN struct {
+	DocType     string     `json:"objectType"`
+	ID          string     `json:"id"`
+	BasicData_1 basicData1 `json:"basicdata1"`
 	AddressData Address    `json:"address"`
 	AadharData  AadharInfo `json:"aadhardata"`
 }
@@ -154,6 +172,10 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.ApproveApplication(stub, args)
 	} else if function == "ApplyDL" { //Add ENtries of baseData2
 		return t.ApplyDL(stub, args)
+	} else if function == "ApplyPP" { //Add ENtries of baseData2
+		return t.ApplyPP(stub, args)
+	} else if function == "ApplyPAN" { //Add ENtries of baseData2
+		return t.ApplyPAN(stub, args)
 	}
 	// if function == "CreateUserAccount" { //CREATE A NEW ENTRY
 	// 	return t.CreateUserAccount(stub, args)
@@ -499,6 +521,95 @@ func (t *SimpleChainCode) ApplyDL(stub shim.ChaincodeStubInterface, args []strin
 	}
 
 	err = stub.PutState(DLdata.ID, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+
+}
+func (t *SimpleChainCode) ApplyPP(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) < 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	contact_number := args[0]
+	fmt.Println("- Reading details for user ", contact_number)
+
+	userAsBytes, err := stub.GetState(contact_number)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if userAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + contact_number)
+	}
+
+	var baseData Aadhar
+	err = json.Unmarshal(userAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	var PPData Passport	
+
+	PPData.ID = "PP" + contact_number 
+	PPData.DocType = "Passport"
+	PPData.BasicData_1.First_Name = baseData.BasicData_1.First_Name
+	PPData.BasicData_1.Last_Name = baseData.BasicData_1.Last_Name
+	PPData.BasicData_1.Gender = baseData.BasicData_1.Gender
+	PPData.BasicData_1.DOB = baseData.BasicData_1.DOB
+	PPData.BasicData_1.Age = baseData.BasicData_1.Age
+	PPData.BasicData_1.ContactNumber = baseData.BasicData_1.ContactNumber
+	dataJSONasBytes, err := json.Marshal(PPData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(PPData.ID, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+
+}
+func (t *SimpleChainCode) ApplyPAN(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) < 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	contact_number := args[0]
+	fmt.Println("- Reading details for user ", contact_number)
+
+	userAsBytes, err := stub.GetState(contact_number)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if userAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + contact_number)
+	}
+
+	var baseData Aadhar
+	err = json.Unmarshal(userAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	var PANData PAN	
+
+	PANData.ID = "PAN" + contact_number 
+	PANData.DocType = "PAN"
+	PANData.BasicData_1.First_Name = baseData.BasicData_1.First_Name
+	PANData.BasicData_1.Last_Name = baseData.BasicData_1.Last_Name
+	PANData.BasicData_1.Gender = baseData.BasicData_1.Gender
+	PANData.BasicData_1.DOB = baseData.BasicData_1.DOB
+	PANData.BasicData_1.Age = baseData.BasicData_1.Age
+	PANData.BasicData_1.ContactNumber = baseData.BasicData_1.ContactNumber
+	
+	dataJSONasBytes, err := json.Marshal(PANData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(PANData.ID, dataJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
