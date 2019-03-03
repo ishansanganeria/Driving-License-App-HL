@@ -148,6 +148,13 @@ type FileStatusInfo struct {
 	Time   string `json:"string"`
 }
 
+type OBJ struct {
+	BasicData_1 basicData1
+	BasicData_2 basicData2
+	address	    Address
+}
+
+
 func main() {
 	err := shim.Start(new(SimpleChainCode))
 	if err != nil {
@@ -179,6 +186,8 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.ApplyPP(stub, args)
 	} else if function == "ApplyPAN" { //Add ENtries of baseData2
 		return t.ApplyPAN(stub, args)
+	} else if function == "FetchBD12Add" { //Add ENtries of baseData2
+		return t.FetchBD12Add(stub, args)
 	}
 	// if function == "CreateUserAccount" { //CREATE A NEW ENTRY
 	// 	return t.CreateUserAccount(stub, args)
@@ -617,6 +626,43 @@ func (t *SimpleChainCode) ApplyPAN(stub shim.ChaincodeStubInterface, args []stri
 	}
 
 	return shim.Success(nil)
+
+}
+
+//contact_no
+func (t *SimpleChainCode) FetchBD12Add(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) < 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	contact_number := args[0]
+	fmt.Println("- Reading details for user ", contact_number)
+
+	userAsBytes, err := stub.GetState(contact_number)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if userAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + contact_number)
+	}
+
+	var baseData Aadhar
+	err = json.Unmarshal(userAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	
+	var obj OBJ 
+	obj.BasicData_1 = baseData.BasicData_1
+	obj.BasicData_2 = baseData.BasicData_2
+	obj.address	    = baseData.AddressData
+
+	dataJSONasBytes, err := json.Marshal(obj)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(dataJSONasBytes)
 
 }
 
