@@ -20,9 +20,9 @@ type SimpleChainCode struct {
 // SEPERATE DOC 1
 type CardHoldersDetails struct {
 	First_Name string `json:"firstname"`
-	// DocType      string          `json:"objectType"`
-	// ID           string          `json:"id"`
-	// BasicData_1 basicData1 `json:"basicdata1"`
+	DocType      string          `json:"objectType"`
+	ID           string          `json:"id"`
+	BasicData_1 basicData1 `json:"basicdata1"`
 	// BasicData_2  basicData2      `json:"basicdata2"`
 	// RTO_ID       string          `json:"rto"`
 	// AddressData  Address         `json:"address"`
@@ -487,18 +487,23 @@ func (t *SimpleChainCode) ApplyDL(stub shim.ChaincodeStubInterface, args []strin
 	if err != nil {
 		return shim.Error(err.Error())
 	}
-	var DLdataa CardHoldersDetails
+	var DLdata CardHoldersDetails
 
-	DLdataa.First_Name = baseData.BasicData_1.First_Name
-	// readData.Last_Name = baseData.BasicData_1.Last_Name
-	// readData.UIDNo = baseData.BasicData_1.UIDNo
-	// readData.Age = baseData.BasicData_1.Age
-	dataJSONasBytes, err := json.Marshal(DLdataa)
+	DLdata.ID = "DL" + contact_number 
+	DLdata.DocType = "Driving License"
+	DLdata.First_Name = baseData.BasicData_1.First_Name
+
+	dataJSONasBytes, err := json.Marshal(DLdata)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
-	return shim.Success(dataJSONasBytes)
+	err = stub.PutState(DLdata.ID, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
 
 }
 
