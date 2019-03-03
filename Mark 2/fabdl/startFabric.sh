@@ -66,10 +66,10 @@ node registerUser.js
 # sleep 3
 # node createUserAccountDummy.js
 
-set -e
-echo
-sleep 3
-node createUserAccount.js
+# set -e
+# echo
+# sleep 3
+# node createUserAccount.js
 
 
 # echo

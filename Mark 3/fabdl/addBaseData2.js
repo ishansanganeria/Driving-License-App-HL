@@ -2,14 +2,16 @@
 // id, relfname, rellname, pob, nationality, emerno, bg
 
 'use strict';
+const fs = require('fs')
+let jsonData = JSON.parse(fs.readFileSync('f1.json', 'utf-8'))
 
-// var id =
-// var relfname =
-// var rellname =
-// var pob =
-// var nationality =
-// var emerno =
-// var bg =
+var id =   jsonData.id
+var relfname =   jsonData.relfname
+var rellname =   jsonData.rellname
+var pob =   jsonData.pob
+var nationality =   jsonData.nationality
+var emerno =   jsonData.emerno
+var bg =   jsonData.bg
 
 var Fabric_Client = require('fabric-client');
 var path = require('path');
@@ -18,8 +20,7 @@ var os = require('os');
 
 var fabric_client = new Fabric_Client();
 
-// setup the fabric network
-var channel = fabric_client.newChannel('mychannel');
+var channel = fabric_client.newChannel('mychanneldl');
 var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -55,9 +56,9 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	var request = {
 		chaincodeId: 'fabdl',
 		fcn: 'AddBaseData2',
-		args: ["865219083334","Raj","Sanganeria","bhayandar","indian","8949716007","AB+"],
-		// args: [ id, relfname, rellname, pob, nationality, emerno, bg],
-		chainId: 'mychannel',
+		// args: ["865219083334","Raj","Sanganeria","bhayandar","indian","8949716007","AB+"],
+		args: [ id, relfname, rellname, pob, nationality, emerno, bg],
+		chainId: 'mychanneldl',
 		txId: tx_id
 	};
 

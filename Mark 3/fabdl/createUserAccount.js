@@ -1,20 +1,19 @@
 // Expecting the following args as variables in the code
-// id, firstname, lastname, gender, dob, age, contact_number, emailid, photohash, dochash
+// id, firstname, lastname, gender, dob, age, emailid, photohash, dochash
 
 'use strict';
 
 const fs = require('fs')
 let jsonData = JSON.parse(fs.readFileSync('f1.json', 'utf-8'))
-var id = jsonData.id  
-var firstname		= jsonData.firstname  
-var lastname		= jsonData.lastname  
-var gender		= jsonData.gender  
-var dob		= jsonData.dob  
-var age		= jsonData.age  
-var contact_number		= jsonData.contact_number  
-var emailid		= jsonData.emailid  
+var userid		 	= jsonData.id  
+var fname			= jsonData.firstname  
+var lname			= jsonData.lastname  
+var gender			= jsonData.gender  
+var dob				= jsonData.dob  
+var age				= jsonData.age  
+var emailid			= jsonData.email_id  
 var photohash		= jsonData.photohash  
-var dochash		= jsonData.dochash  
+var dochash			= jsonData.dochash  
 
 
 var Fabric_Client = require('fabric-client');
@@ -25,7 +24,7 @@ var os = require('os');
 var fabric_client = new Fabric_Client();
 
 // setup the fabric network
-var channel = fabric_client.newChannel('mychannel');
+var channel = fabric_client.newChannel('mychanneldl');
 var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -61,16 +60,15 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	var request = {
 		chaincodeId: 'fabdl',
 		fcn: 'CreateUserAccount',
-		args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com","sdasd","askdaskdn"],
-		// args: [userid,fname,lname,gender,dob,age,contactno,emailid,photohash, dochash],
-		chainId: 'mychannel',
+		// args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","sdkasbdkhab@gmail.com","sdasd","askdaskdn"],
+		args: ["12321", fname, lname, gender, dob, age, emailid, photohash, dochash],
+		chainId: 'mychanneldl',
 		txId: tx_id
 	};
 
 	return channel.sendTransactionProposal(request);
 
 }).then((results) => {
-	
 	var proposalResponses = results[0];
 	var proposal = results[1];
 	let isProposalGood = false;
