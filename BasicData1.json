@@ -1,0 +1,47 @@
+[
+    {
+        "First_Name": "Max",
+        "Last_Name": "Lown",
+        "UIDNo": "711238923201",
+        "Gender": "Male",
+        "DOB": "22/07/1993",
+        "ContactNumber": "1213905343",
+        "EmailID": "mlown0@exblog.jp"
+    },
+    {
+        "First_Name": "Skye",
+        "Last_Name": "Dale",
+        "UIDNo": "535608989467",
+        "Gender": "Male",
+        "DOB": "11/12/1998",
+        "ContactNumber": "3123654163",
+        "EmailID": "sdale1@sourceforge.net"
+    },
+    {
+        "First_Name": "Faulkner",
+        "Last_Name": "Easey",
+        "UIDNo": "541299020901",
+        "Gender": "Male",
+        "DOB": "18/12/1995",
+        "ContactNumber": "8752843671",
+        "EmailID": "feasey2@bloglines.com"
+    },
+    {
+        "First_Name": "Micheil",
+        "Last_Name": "Chatin",
+        "UIDNo": "683419078989",
+        "Gender": "Male",
+        "DOB": "21/08/1990",
+        "ContactNumber": "6894813678",
+        "EmailID": "mchatin3@addthis.com"
+    },
+    {
+        "First_Name": "Ardys",
+        "Last_Name": "Lattos",
+        "UIDNo": "350160164112",
+        "Gender": "Female",
+        "DOB": "15/09/1996",
+        "ContactNumber": "3197857083",
+        "EmailID": "alattos4@wikimedia.org"
+    }
+]
