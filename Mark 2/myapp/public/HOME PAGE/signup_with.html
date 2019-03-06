@@ -292,22 +292,22 @@
 
 
 
-    <script  src="signup_without.js"></script>
+    <script  src="js/signup_with.js"></script>
 <script>
-    webshim.setOptions('forms-ext', {
-        replaceUI: 'auto',
-        types: 'date',
-        date: {
-            startView: 2,
-            inlinePicker: true,
-            classes: 'hide-inputbtns'
-        }
-    });
-    webshim.setOptions('forms', {
-        lazyCustomMessages: true
-    });
-    //start polyfilling
-    webshim.polyfill('forms forms-ext');
+    // webshim.setOptions('forms-ext', {
+    //     replaceUI: 'auto',
+    //     types: 'date',
+    //     date: {
+    //         startView: 2,
+    //         inlinePicker: true,
+    //         classes: 'hide-inputbtns'
+    //     }
+    // });
+    // webshim.setOptions('forms', {
+    //     lazyCustomMessages: true
+    // });
+    // //start polyfilling
+    // webshim.polyfill('forms forms-ext');
 
     //only last example using format display
     $(function () {

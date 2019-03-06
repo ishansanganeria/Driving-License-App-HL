@@ -445,7 +445,7 @@ homeRouter.post('/', (req, res, next) => {
             console.error('Failed to invoke successfully :: ' + err);
         });
 
-        res.sendFile(path.join(__dirname, '../public/HOME PAGE', 'hello.html'));
+        res.sendFile(path.join(__dirname, '../public/HOME PAGE', 'submit.html'));
     }
     execution();
 });
