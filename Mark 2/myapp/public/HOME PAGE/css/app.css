@@ -1,0 +1,14 @@
+
+
+/* ---- particles.js container ---- */
+
+#particles-js{
+  position: absolute;
+  z-index: 2;
+  width: 80% !important;
+  height: 100%;
+  background-image: url('');
+  background-size: cover;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+}

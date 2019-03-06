@@ -1,21 +1,20 @@
 // Expecting the following args as variables in the code
-// id, firstname, lastname, gender, dob, age, contact_number, emailid, photohash, dochash
+// id, firstname, lastname, gender, dob, age, emailid, photohash, dochash
 
 'use strict';
 
 const fs = require('fs')
 let jsonData = JSON.parse(fs.readFileSync('f1.json', 'utf-8'))
-var id = jsonData.id  
-var firstname		= jsonData.firstname  
-var lastname		= jsonData.lastname  
-var gender		= jsonData.gender  
-var dob		= jsonData.dob  
-var age		= jsonData.age  
-var contact_number		= jsonData.contact_number  
-var emailid		= jsonData.emailid  
-var photohash		= jsonData.photohash  
-var dochash		= jsonData.dochash  
 
+let id = jsonData.id  
+let firstname		= jsonData.firstname  
+let lastname		= jsonData.lastname  
+let gender		= jsonData.gender  
+let dob		= jsonData.dob  
+let age		= jsonData.age  
+let emailid		= jsonData.email_id  
+let photohash		= jsonData.photohash  
+let dochash		= jsonData.dochash  
 
 var Fabric_Client = require('fabric-client');
 var path = require('path');
@@ -61,8 +60,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 	var request = {
 		chaincodeId: 'fabdl',
 		fcn: 'CreateUserAccount',
-		args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com","sdasd","askdaskdn"],
-		// args: [userid,fname,lname,gender,dob,age,contactno,emailid,photohash, dochash],
+		args: ["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","sdkasbdkhab@gmail.com","sdasd","askdaskdn"],
+		args: [ id.toString(),firstname.toString(),lastname.toString(),gender.toString(),dob.toString(),age.toString(),emailid.toString(),photohash.toString(), dochash.toString()],
 		chainId: 'mychannel',
 		txId: tx_id
 	};

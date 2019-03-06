@@ -2,14 +2,8 @@
 // id, relfname, rellname, pob, nationality, emerno, bg
 
 'use strict';
-
-// var id =
-// var relfname =
-// var rellname =
-// var pob =
-// var nationality =
-// var emerno =
-// var bg =
+const fs = require('fs')
+let jsonData = JSON.parse(fs.readFileSync('f1.json', 'utf-8'))
 
 var Fabric_Client = require('fabric-client');
 var path = require('path');
