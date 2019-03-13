@@ -18,7 +18,7 @@ type SimpleChainCode struct {
 
 }
 
-// SEPERATE DOC 1
+// SEPERATE DOCUMENT 1
 type UserDetails struct {
 	DocType      	string           `json:"objectType"`
 	ID           	string           `json:"id"`
