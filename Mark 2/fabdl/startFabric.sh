@@ -71,7 +71,6 @@ echo
 sleep 3
 node createUserAccount.js
 
-
 # echo
 # sleep 3
 # node addRTO.js 
