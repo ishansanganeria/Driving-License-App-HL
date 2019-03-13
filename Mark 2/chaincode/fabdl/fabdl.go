@@ -19,63 +19,63 @@ type SimpleChainCode struct {
 }
 
 // SEPERATE DOC 1
-type CardHoldersDetails struct {
-	DocType      string           `json:"objectType"`
-	ID           string           `json:"id"`
-	BasicData_1  basicData1       `json:"basicdata1"`
-	BasicData_2  basicData2       `json:"basicdata2"`
-	RTO_ID       string           `json:"rto"`
-	AddressData  Address          `json:"address"`
-	LicenseData  []LicenseInfo    `json:"licensedata"`
-	Tickets      []TicketInfo     `json:"tickets"`
-	VehiclesData []VehiclesOwned  `json:"vehiclesowned"`
+type UserDetails struct {
+	DocType      	string           `json:"objectType"`
+	ID           	string           `json:"id"`
+	BasicData_1  	basicData1       `json:"basicdata1"`
+	BasicData_2  	basicData2       `json:"basicdata2"`
+	RTO_ID       	string           `json:"rto"`
+	AddressData  	Address          `json:"address"`
+	LicenseData  	[]LicenseInfo    `json:"licensedata"`
+	Tickets      	[]TicketInfo     `json:"tickets"`
+	VehiclesData 	[]VehiclesOwned  `json:"vehiclesowned"`
 }
 
 type basicData1 struct {
-	First_Name    string          `json:"firstname"`
-	Last_Name     string          `json:"lastname"`
-	UIDNo         string          `json:"uid"`
-	Gender        string          `json:"gender"`
-	DOB           string          `json:"dob"`
-	Age           string          `json:"age"`
-	ContactNumber string          `json:"contact_number"`
-	EmailID       string          `json:"Email"`
-	PhotoHash	  string		  `json:"photohash"`	
-	DocumentHash  string		  `json:"dochash"`	
+	First_Name    	string  	      `json:"firstname"`
+	Last_Name     	string  	      `json:"lastname"`
+	UIDNo         	string  	      `json:"uid"`
+	Gender        	string  	      `json:"gender"`
+	DOB           	string  	      `json:"dob"`
+	Age           	string  	      `json:"age"`
+	ContactNumber 	string  	      `json:"contact_number"`
+	EmailID       	string  	      `json:"emailid"`
+	PhotoHash	  	string			  `json:"photohash"`	
+	DocumentHash  	string			  `json:"dochash"`	
 }
 
 type basicData2 struct {
-	RelFirstName    string `json:"relfname"`
-	RelLastName     string `json:"rellname"`
-	BirthPlace      string `json:"birthplace"`
-	Nationality     string `json:"nationality"`
-	EmergencyNumber string `json:"emergency_number"`
-	BloodGroup      string `json:"bloodgroup"`
+	RelFirstName    string 			  `json:"relfname"`
+	RelLastName     string 			  `json:"rellname"`
+	BirthPlace      string 			  `json:"birthplace"`
+	Nationality     string 			  `json:"nationality"`
+	EmergencyNumber string 			  `json:"emergency_number"`
+	BloodGroup      string 			  `json:"bloodgroup"`
 }
 
 type Address struct {
-	AddressLine1 string `json:"addressline1"`
-	AddressLine2 string `json:"addressline2"`
-	City         string `json:"city"`
-	Pin          string `json:"pincode"`
-	State        string `json:"state"`
+	AddressLine1 	string 			  `json:"addressline1"`
+	AddressLine2 	string 			  `json:"addressline2"`
+	City         	string 			  `json:"city"`
+	Pin          	string 			  `json:"pincode"`
+	State        	string 			  `json:"state"`
 }
 
 // SEPERATE DOC 2
 type RTOInfo struct {
-  	DocType       	string			`json:"objectType"`
-	RTOID         	string  		`json:"rtoid"`
-	AddressData   	Address 		`json:"address"`
-	ContactNumber 	string  		`json:"contactno"`
+  	DocType       	string			  `json:"objectType"`
+	RTOID         	string  		  `json:"rtoid"`
+	AddressData   	Address 		  `json:"address"`
+	ContactNumber 	string  		  `json:"contactno"`
 }
 
 type VehiclesOwned struct {
-	VehicleType  string `json:"vehicletype"` //2,3,4 wheeler, truck,etc
-	NumberPlate  string `json:"numberplate"`
-	CarCompany   string `json:"carcompany"` //Maruti,etc
-	CarMake      string `json:"carmake"`    //800,alto
-	CarColour    string `json:"carcolour"`
-	ChasisNumber string `json:"chasisnumber"`
+	VehicleType  	string			  `json:"vehicletype"` //2,3,4 wheeler, truck,etc
+	NumberPlate  	string			  `json:"numberplate"`
+	CarCompany   	string			  `json:"carcompany"` //Maruti,etc
+	CarMake      	string			  `json:"carmake"`    //800,alto
+	CarColour    	string			  `json:"carcolour"`
+	ChasisNumber 	string			  `json:"chasisnumber"`
 }
 
 type LicenseInfo struct {
@@ -114,10 +114,10 @@ type TestInfo struct {
 
 // SEPERATE DOC 3
 type OfficerInfo struct {
-	OfficerID           string			  `json:"id"`				//officer's phone number
-	DocType             string			  `json:"objectType"`
-	BasicData_1 	      basicData1		`json:"basicdata"`
-	RTO_ID			        string 			  `json:"rtoid"`
+	OfficerID          		string			  	`json:"id"`								//officer's phone number
+	DocType             	string				`json:"objectType"`
+	BasicData_1 	      	basicData1			`json:"basicdata"`
+	RTO_ID			        string 			  	`json:"rtoid"`
 }
 
 type FileStatusInfo struct {
@@ -209,7 +209,7 @@ func (t *SimpleChainCode) CreateUserAccount(stub shim.ChaincodeStubInterface, ar
 	photohash := args[8]
 	dochash := args[9]
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	baseData.ID = id
 	baseData.DocType = objectType
 	baseData.BasicData_1.First_Name = firstname
@@ -258,8 +258,8 @@ func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []
 		return shim.Error("This user doesn't exist: " + id)
 	}
 
-	var baseData CardHoldersDetails
-	// baseData := CardHoldersDetails{}
+	var baseData UserDetails
+	// baseData := UserDetails{}
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -314,7 +314,7 @@ func (t *SimpleChainCode) AddAddressData(stub shim.ChaincodeStubInterface, args 
 		return shim.Error("This user doesn't exist: " + id)
 	}
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -377,7 +377,7 @@ func (t *SimpleChainCode) AddVehicle(stub shim.ChaincodeStubInterface, args []st
 		return shim.Error("This user doesn't exist: " + id)
 	}
 	
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -554,7 +554,7 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 	
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -636,7 +636,7 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
  	   return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
  	} 
 
- 	var baseData CardHoldersDetails
+ 	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -725,7 +725,7 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 	date	:= args[4]
 	time	:= args[5]
 	licensenumber	:= string(filenumber[0]) + "L" + uid
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -812,7 +812,7 @@ func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []str
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -880,7 +880,7 @@ func (t *SimpleChainCode) PayFine(stub shim.ChaincodeStubInterface, args []strin
 
 	ticketid := args[1]
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -938,7 +938,7 @@ func (t *SimpleChainCode) SuspendLicense(stub shim.ChaincodeStubInterface, args 
 	licensenumber := args[1]
 	reason 	  := args[2]
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -992,7 +992,7 @@ func (t *SimpleChainCode) IsLicenseActive(stub shim.ChaincodeStubInterface, args
 
 	licensenumber := args[1]
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1040,7 +1040,7 @@ func (t *SimpleChainCode) IsFinePaid(stub shim.ChaincodeStubInterface, args []st
 	}
 
 	ticketid	  := args[2]
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1087,7 +1087,7 @@ func (t *SimpleChainCode) FetchListOfTickets(stub shim.ChaincodeStubInterface, a
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1123,7 +1123,7 @@ func (t *SimpleChainCode) FetchTestResults(stub shim.ChaincodeStubInterface, arg
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1171,7 +1171,7 @@ func (t *SimpleChainCode) UpdateStatus(stub shim.ChaincodeStubInterface, args []
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
@@ -1226,7 +1226,7 @@ func (t *SimpleChainCode) FetchStatus(stub shim.ChaincodeStubInterface, args []s
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData CardHoldersDetails
+	var baseData UserDetails
 	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
