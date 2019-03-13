@@ -18,24 +18,15 @@ type SimpleChainCode struct {
 }
 
 // SEPERATE DOCUMENT 1
-type UserDetails struct {
+type UIDAIDetails struct {
 	DocType      		    string             `json:"objectType"`
 	ID           		    string             `json:"id"`
-	BasicData_1  		    basicData1         `json:"basicdata1"`
-	BasicData_2  		    basicData2         `json:"basicdata2"`
+	BasicData_1  		    BasicInfo1         `json:"basicdata1"`
+	BasicData_2  		    BasicInfo2         `json:"basicdata2"`
 	AddressData  		    Address            `json:"address"`
 }
 
-// SEPERATE DOCUMENT 2
-type LicenseInfos struct {
-	DocType      			string              `json:"objectType"`
-	ID           			string              `json:"id"`					//REFERS UserDetails's ID(json:"id")
-	RTO_ID       			string              `json:"rto"`
-	LicenseData  			[]LicenseInfo       `json:"licensedata"`
-	VehiclesData 			[]VehiclesOwned     `json:"vehiclesowned"`
-}
-
-type basicData1 struct {
+type BasicInfo1 struct {
 	First_Name    			string		 	    `json:"firstname"`
 	Last_Name     			string		 	    `json:"lastname"`
 	UIDNo         			string		 	    `json:"uid"`
@@ -48,7 +39,7 @@ type basicData1 struct {
 	DocumentHash  			string			    `json:"dochash"`	
 }
 
-type basicData2 struct {
+type BasicInfo2 struct {
 	RelFirstName    		string	            `json:"relfname"`
 	RelLastName     		string	            `json:"rellname"`
 	BirthPlace      		string	            `json:"birthplace"`
@@ -65,12 +56,29 @@ type Address struct {
 	State        			string 			    `json:"state"`
 }
 
-// SEPERATE DOC 2
+// SEPERATE DOCUMENT 2.1
+type LicenseBase struct {
+	DocType      			string              `json:"objectType"`
+	ID           			string              `json:"id"`					//REFERS UIDAIDetails's ID(json:"id")
+	RTO_ID       			string              `json:"rto"`
+	LicenseData  			[]LicenseInfo       `json:"licensedata"`
+	VehiclesData 			[]VehiclesOwned     `json:"vehiclesowned"`
+}
+
+// SEPERATE DOCUMENT 2.2
 type RTOInfo struct {
   	DocType       			string		        `json:"objectType"`
 	RTOID         			string  	        `json:"rtoid"`
 	AddressData   			Address 	        `json:"address"`
 	ContactNumber 			string  	        `json:"contactno"`
+}
+
+// SEPERATE DOCUMENT 2.3
+type OfficerInfo struct {
+	OfficerID          		string			  	`json:"id"`								//officer's phone number
+	DocType             	string				`json:"objectType"`
+	BasicData_1 	      	BasicInfo1			`json:"basicdata"`
+	RTO_ID			        string 			  	`json:"rtoid"`
 }
 
 type VehiclesOwned struct {
@@ -117,14 +125,6 @@ type TestInfo struct {
 	Invigilator			    string				`json:"officerid"`
 }
 
-// SEPERATE DOC 3
-type OfficerInfo struct {
-	OfficerID          		string			  	`json:"id"`								//officer's phone number
-	DocType             	string				`json:"objectType"`
-	BasicData_1 	      	basicData1			`json:"basicdata"`
-	RTO_ID			        string 			  	`json:"rtoid"`
-}
-
 type FileStatusInfo struct {
 	Status					string				`json:"filestatus"`
 	Date					string				`json:"date"`
@@ -148,9 +148,9 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	if function == "CreateUserAccount" 			{ //CREATE A NEW ENTRY
 		return t.CreateUserAccount(stub, args)
-	} else if function == "AddBaseData2" 		{ //ADD ENTRIES of baseData2
+	} else if function == "AddBaseData2" 		{ //ADD ENTRIES of uidaiData2
 		return t.AddBaseData2(stub, args)
-	} else if function == "AddAddressData"  	{ //ADD ENTRIES of baseData2
+	} else if function == "AddAddressData"  	{ //ADD ENTRIES of uidaiData2
 		return t.AddAddressData(stub, args)
 	} else if function == "AddVehicle" 			{ //ADD USER'S VEHICLE 
 		return t.AddVehicle(stub, args)
@@ -214,21 +214,21 @@ func (t *SimpleChainCode) CreateUserAccount(stub shim.ChaincodeStubInterface, ar
 	photohash := args[8]
 	dochash := args[9]
 
-	var baseData UserDetails
-	baseData.ID = id
-	baseData.DocType = objectType
-	baseData.BasicData_1.First_Name = firstname
-	baseData.BasicData_1.Last_Name = lastname
-	baseData.BasicData_1.UIDNo = id
-	baseData.BasicData_1.Gender = gender
-	baseData.BasicData_1.DOB = dob
-	baseData.BasicData_1.Age = age
-	baseData.BasicData_1.ContactNumber = contact_number
-	baseData.BasicData_1.EmailID = emailid
-	baseData.BasicData_1.PhotoHash = photohash
-	baseData.BasicData_1.DocumentHash = dochash
+	var uidaiData UIDAIDetails
+	uidaiData.ID = id
+	uidaiData.DocType = objectType
+	uidaiData.BasicData_1.First_Name = firstname
+	uidaiData.BasicData_1.Last_Name = lastname
+	uidaiData.BasicData_1.UIDNo = id
+	uidaiData.BasicData_1.Gender = gender
+	uidaiData.BasicData_1.DOB = dob
+	uidaiData.BasicData_1.Age = age
+	uidaiData.BasicData_1.ContactNumber = contact_number
+	uidaiData.BasicData_1.EmailID = emailid
+	uidaiData.BasicData_1.PhotoHash = photohash
+	uidaiData.BasicData_1.DocumentHash = dochash
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -263,9 +263,8 @@ func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []
 		return shim.Error("This user doesn't exist: " + id)
 	}
 
-	var baseData UserDetails
-	// baseData := UserDetails{}
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -277,14 +276,14 @@ func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []
 	emerno := args[5]
 	bg := args[6]
 
-	baseData.BasicData_2.RelFirstName = relfname
-	baseData.BasicData_2.RelLastName = rellname
-	baseData.BasicData_2.BirthPlace = pob
-	baseData.BasicData_2.Nationality = nationality
-	baseData.BasicData_2.EmergencyNumber = emerno
-	baseData.BasicData_2.BloodGroup = bg
+	uidaiData.BasicData_2.RelFirstName = relfname
+	uidaiData.BasicData_2.RelLastName = rellname
+	uidaiData.BasicData_2.BirthPlace = pob
+	uidaiData.BasicData_2.Nationality = nationality
+	uidaiData.BasicData_2.EmergencyNumber = emerno
+	uidaiData.BasicData_2.BloodGroup = bg
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -319,8 +318,8 @@ func (t *SimpleChainCode) AddAddressData(stub shim.ChaincodeStubInterface, args 
 		return shim.Error("This user doesn't exist: " + id)
 	}
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -331,14 +330,13 @@ func (t *SimpleChainCode) AddAddressData(stub shim.ChaincodeStubInterface, args 
 	pincode := args[4]
 	state := args[5]
 
-	baseData.AddressData.AddressLine1 = addressline1
-	baseData.AddressData.AddressLine2 = addressline2
-	baseData.AddressData.City = city
-	baseData.AddressData.Pin = pincode
-  baseData.AddressData.State = state
-  baseData.RTO_ID = pincode
+	uidaiData.AddressData.AddressLine1 = addressline1
+	uidaiData.AddressData.AddressLine2 = addressline2
+	uidaiData.AddressData.City = city
+	uidaiData.AddressData.Pin = pincode
+  	uidaiData.AddressData.State = state
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -382,8 +380,8 @@ func (t *SimpleChainCode) AddVehicle(stub shim.ChaincodeStubInterface, args []st
 		return shim.Error("This user doesn't exist: " + id)
 	}
 	
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -396,9 +394,9 @@ func (t *SimpleChainCode) AddVehicle(stub shim.ChaincodeStubInterface, args []st
 	vehiclesdata.CarColour =   carcolour
 	vehiclesdata.ChasisNumber =chasisnumber
 	
-	baseData.VehiclesData = append(baseData.VehiclesData, vehiclesdata)
+	uidaiData.VehiclesData = append(uidaiData.VehiclesData, vehiclesdata)
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -559,8 +557,8 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 	
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -580,9 +578,9 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	status.Time    = time
 
 	filedata.FileStatus  = append(filedata.FileStatus, status)
-	baseData.LicenseData = append(baseData.LicenseData, filedata)
+	uidaiData.LicenseData = append(uidaiData.LicenseData, filedata)
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -641,8 +639,8 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
  	   return shim.Error("Not eligible for the test " + testtype + " since applying for learning license")
  	} 
 
- 	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+ 	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -650,8 +648,8 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 	var i int
 	flag := false
 	//FIND THE INDEX OF THE FILE OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
-	for i := range baseData.LicenseData {
-		if  baseData.LicenseData[i].FileNumber == filenumber {
+	for i := range uidaiData.LicenseData {
+		if  uidaiData.LicenseData[i].FileNumber == filenumber {
 			flag = true
 			break 
 		}  
@@ -661,9 +659,9 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 		return shim.Error("This file doesnt exist.")
 	}
 
-	if testtype == "Simulator" && baseData.LicenseData[i].IsPassWritten != "true" {
+	if testtype == "Simulator" && uidaiData.LicenseData[i].IsPassWritten != "true" {
  	   return shim.Error("Not eligible for the test " + testtype + ". Qualify written test first")
-	} else if testtype == "Practical" && (baseData.LicenseData[i].IsPassSim != "true" || baseData.LicenseData[i].IsPassWritten != "true") {
+	} else if testtype == "Practical" && (uidaiData.LicenseData[i].IsPassSim != "true" || uidaiData.LicenseData[i].IsPassWritten != "true") {
  	   return shim.Error("Not eligible for the test " + testtype + ". Qualify earlier tests first")
 	}
 
@@ -675,21 +673,21 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 	testdata.Invigilator     = officerid 
 	
 	if testtype == "Written" {
-		baseData.LicenseData[i].IsPassWritten = ispass
+		uidaiData.LicenseData[i].IsPassWritten = ispass
 	} else if testtype == "Simulator" {
-		baseData.LicenseData[i].IsPassSim = ispass
+		uidaiData.LicenseData[i].IsPassSim = ispass
 	} else if testtype == "Practical" {
-		baseData.LicenseData[i].IsPassPrac = ispass
+		uidaiData.LicenseData[i].IsPassPrac = ispass
 	}
 	var filestatus FileStatusInfo
 	filestatus.Status 	= status
 	filestatus.Date     = date
 	filestatus.Time     = time
 
-	baseData.LicenseData[i].FileStatus = append(baseData.LicenseData[i].FileStatus, filestatus)
-	baseData.LicenseData[i].TestData  = append(baseData.LicenseData[i].TestData, testdata)
+	uidaiData.LicenseData[i].FileStatus = append(uidaiData.LicenseData[i].FileStatus, filestatus)
+	uidaiData.LicenseData[i].TestData  = append(uidaiData.LicenseData[i].TestData, testdata)
  
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -730,41 +728,41 @@ func (t *SimpleChainCode) ApproveApplication(stub shim.ChaincodeStubInterface, a
 	date	:= args[4]
 	time	:= args[5]
 	licensenumber	:= string(filenumber[0]) + "L" + uid
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	//FIND THE INDEX OF THE FILE OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
 	var i int
-	for i := range baseData.LicenseData {
-		if  baseData.LicenseData[i].FileNumber == filenumber {
+	for i := range uidaiData.LicenseData {
+		if  uidaiData.LicenseData[i].FileNumber == filenumber {
 			break 
 		}  
 	}
 
-	if baseData.LicenseData[i].LicenseType == "Learning" && baseData.LicenseData[i].IsPassWritten != "true" {
+	if uidaiData.LicenseData[i].LicenseType == "Learning" && uidaiData.LicenseData[i].IsPassWritten != "true" {
 		return shim.Error("Cannot activate Learning License since Written test hasn't been cleared")
-	}	else if  baseData.LicenseData[i].LicenseType == "Permanent" && (baseData.LicenseData[i].IsPassWritten != "true" || baseData.LicenseData[i].IsPassSim != "true" || baseData.LicenseData[i].IsPassPrac != "true") {
+	}	else if  uidaiData.LicenseData[i].LicenseType == "Permanent" && (uidaiData.LicenseData[i].IsPassWritten != "true" || uidaiData.LicenseData[i].IsPassSim != "true" || uidaiData.LicenseData[i].IsPassPrac != "true") {
 		return shim.Error("Cannot activate Driving License since a test hasn't been cleared")
 	}
 
-	baseData.LicenseData[i].DateOfIssue 		 = dateofissue
-	baseData.LicenseData[i].DateOfExpiry 		 = dateofexpiry
-	baseData.LicenseData[i].IsActive	 		 = "true"
-	baseData.LicenseData[i].ReasonOfInactivity	 = ""
-	baseData.LicenseData[i].LicenseNumber		 = licensenumber
+	uidaiData.LicenseData[i].DateOfIssue 		 = dateofissue
+	uidaiData.LicenseData[i].DateOfExpiry 		 = dateofexpiry
+	uidaiData.LicenseData[i].IsActive	 		 = "true"
+	uidaiData.LicenseData[i].ReasonOfInactivity	 = ""
+	uidaiData.LicenseData[i].LicenseNumber		 = licensenumber
 
 	var filestatus FileStatusInfo
 	filestatus.Status 	= "Your Application has been granted. Your License number is " + licensenumber + ". It'll be dispatched shortly"
 	filestatus.Date     = date
 	filestatus.Time     = time
 
-	baseData.LicenseData[i].FileStatus = append(baseData.LicenseData[i].FileStatus, filestatus)
+	uidaiData.LicenseData[i].FileStatus = append(uidaiData.LicenseData[i].FileStatus, filestatus)
 	
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -817,15 +815,15 @@ func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []str
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 	
 	flag := false
-	for i := range baseData.LicenseData {
-		if  baseData.LicenseData[i].LicenseNumber == licensenumber {
+	for i := range uidaiData.LicenseData {
+		if  uidaiData.LicenseData[i].LicenseNumber == licensenumber {
 			flag = true
 			break 
 		}  
@@ -846,9 +844,9 @@ func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []str
 	ticket.IsPaid 			= ispaid
 	ticket.Amount			= amount
 	
-	baseData.Tickets = append(baseData.Tickets, ticket)
+	uidaiData.Tickets = append(uidaiData.Tickets, ticket)
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -885,27 +883,27 @@ func (t *SimpleChainCode) PayFine(stub shim.ChaincodeStubInterface, args []strin
 
 	ticketid := args[1]
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	//FIND THE INDEX OF THE TICKET OUT OF ALL THE USERS TICKETS
 	var i int
-	for i := range baseData.Tickets {
-		if  baseData.Tickets[i].TicketID == ticketid {
+	for i := range uidaiData.Tickets {
+		if  uidaiData.Tickets[i].TicketID == ticketid {
 			break 
 		}  
 	}
 
-	if baseData.Tickets[i].IsPaid == "true" {
+	if uidaiData.Tickets[i].IsPaid == "true" {
 		return shim.Error("Already Paid for the ticket")
 	} else {
-		baseData.Tickets[i].IsPaid = "true"
+		uidaiData.Tickets[i].IsPaid = "true"
 	}
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -943,24 +941,24 @@ func (t *SimpleChainCode) SuspendLicense(stub shim.ChaincodeStubInterface, args 
 	licensenumber := args[1]
 	reason 	  := args[2]
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	//FIND THE INDEX OF THE LICENSE OUT OF ALL THE USERS CURRENT OR PREVIOUS LICENSES
 	var i int
-	for i := range baseData.LicenseData {
-		if  baseData.LicenseData[i].LicenseNumber == licensenumber {
+	for i := range uidaiData.LicenseData {
+		if  uidaiData.LicenseData[i].LicenseNumber == licensenumber {
 			break 
 		}  
 	}
 	
-	baseData.LicenseData[i].IsActive 			 = "false"
-	baseData.LicenseData[i].ReasonOfInactivity   =  reason
+	uidaiData.LicenseData[i].IsActive 			 = "false"
+	uidaiData.LicenseData[i].ReasonOfInactivity   =  reason
 
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -997,21 +995,21 @@ func (t *SimpleChainCode) IsLicenseActive(stub shim.ChaincodeStubInterface, args
 
 	licensenumber := args[1]
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	//FIND THE INDEX OF THE LICENSE OUT OF ALL THE USERS CURRENT OR PREVIOUS LICENSES
 	var i int
-	for i := range baseData.LicenseData {
-		if  baseData.LicenseData[i].LicenseNumber == licensenumber {
+	for i := range uidaiData.LicenseData {
+		if  uidaiData.LicenseData[i].LicenseNumber == licensenumber {
 			break 
 		}  
 	}
 	
-	isactive := baseData.LicenseData[i].IsActive
+	isactive := uidaiData.LicenseData[i].IsActive
 
 	dataJSONasBytes, err := json.Marshal(isactive)
 	if err != nil {
@@ -1045,22 +1043,22 @@ func (t *SimpleChainCode) IsFinePaid(stub shim.ChaincodeStubInterface, args []st
 	}
 
 	ticketid	  := args[2]
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	//FIND THE INDEX OF THE LICENSE OUT OF ALL THE USERS CURRENT OR PREVIOUS LICENSES
 	var i int
-	for i := range baseData.Tickets {
-		if  baseData.Tickets[i].TicketID == ticketid {
+	for i := range uidaiData.Tickets {
+		if  uidaiData.Tickets[i].TicketID == ticketid {
 			fmt.Printf("%d",i)
 			break 
 		}  
 	}
 	
-	ispaid := baseData.Tickets[i].IsPaid
+	ispaid := uidaiData.Tickets[i].IsPaid
 
 	dataJSONasBytes, err := json.Marshal(ispaid)
 	if err != nil {
@@ -1092,13 +1090,13 @@ func (t *SimpleChainCode) FetchListOfTickets(stub shim.ChaincodeStubInterface, a
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
-	dataJSONasBytes, err := json.Marshal(baseData.Tickets)
+	dataJSONasBytes, err := json.Marshal(uidaiData.Tickets)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -1128,16 +1126,16 @@ func (t *SimpleChainCode) FetchTestResults(stub shim.ChaincodeStubInterface, arg
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	var testResults []TestInfo
-	for i := range baseData.LicenseData {
-		for j := range baseData.LicenseData[i].TestData{
-			testResults = append(testResults, baseData.LicenseData[i].TestData[j])
+	for i := range uidaiData.LicenseData {
+		for j := range uidaiData.LicenseData[i].TestData{
+			testResults = append(testResults, uidaiData.LicenseData[i].TestData[j])
 		}
 	}
 
@@ -1176,15 +1174,15 @@ func (t *SimpleChainCode) UpdateStatus(stub shim.ChaincodeStubInterface, args []
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	var i int
-	for i = range baseData.LicenseData {
-		if baseData.LicenseData[i].FileNumber == filenumber{
+	for i = range uidaiData.LicenseData {
+		if uidaiData.LicenseData[i].FileNumber == filenumber{
 			break
 		}
 	}
@@ -1193,9 +1191,9 @@ func (t *SimpleChainCode) UpdateStatus(stub shim.ChaincodeStubInterface, args []
 	filestatus.Status 	 = status
 	filestatus.Time 	 = time
 	filestatus.Date 	 = date
-	baseData.LicenseData[i].FileStatus = append(baseData.LicenseData[i].FileStatus, filestatus)
+	uidaiData.LicenseData[i].FileStatus = append(uidaiData.LicenseData[i].FileStatus, filestatus)
 	
-	dataJSONasBytes, err := json.Marshal(baseData)
+	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
@@ -1231,20 +1229,20 @@ func (t *SimpleChainCode) FetchStatus(stub shim.ChaincodeStubInterface, args []s
 		return shim.Error("This user doesn't exist: " + uid)
 	}
 
-	var baseData UserDetails
-	err = json.Unmarshal(dataAsBytes, &baseData) //unmarshal it aka JSON.parse()
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	var i int
-	for i = range baseData.LicenseData {
-		if baseData.LicenseData[i].FileNumber == filenumber{
+	for i = range uidaiData.LicenseData {
+		if uidaiData.LicenseData[i].FileNumber == filenumber{
 			break
 		}
 	}
 
-	dataJSONasBytes, err := json.Marshal(baseData.LicenseData[i].FileStatus)
+	dataJSONasBytes, err := json.Marshal(uidaiData.LicenseData[i].FileStatus)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
