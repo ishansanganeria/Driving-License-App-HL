@@ -15,67 +15,71 @@ import (
 )
 
 type SimpleChainCode struct {
-
 }
 
 // SEPERATE DOCUMENT 1
 type UserDetails struct {
-	DocType      	string           `json:"objectType"`
-	ID           	string           `json:"id"`
-	BasicData_1  	basicData1       `json:"basicdata1"`
-	BasicData_2  	basicData2       `json:"basicdata2"`
-	RTO_ID       	string           `json:"rto"`
-	AddressData  	Address          `json:"address"`
-	LicenseData  	[]LicenseInfo    `json:"licensedata"`
-	Tickets      	[]TicketInfo     `json:"tickets"`
-	VehiclesData 	[]VehiclesOwned  `json:"vehiclesowned"`
+	DocType      		    string             `json:"objectType"`
+	ID           		    string             `json:"id"`
+	BasicData_1  		    basicData1         `json:"basicdata1"`
+	BasicData_2  		    basicData2         `json:"basicdata2"`
+	AddressData  		    Address            `json:"address"`
+}
+
+// SEPERATE DOCUMENT 2
+type LicenseInfos struct {
+	DocType      			string              `json:"objectType"`
+	ID           			string              `json:"id"`					//REFERS UserDetails's ID(json:"id")
+	RTO_ID       			string              `json:"rto"`
+	LicenseData  			[]LicenseInfo       `json:"licensedata"`
+	VehiclesData 			[]VehiclesOwned     `json:"vehiclesowned"`
 }
 
 type basicData1 struct {
-	First_Name    	string  	      `json:"firstname"`
-	Last_Name     	string  	      `json:"lastname"`
-	UIDNo         	string  	      `json:"uid"`
-	Gender        	string  	      `json:"gender"`
-	DOB           	string  	      `json:"dob"`
-	Age           	string  	      `json:"age"`
-	ContactNumber 	string  	      `json:"contact_number"`
-	EmailID       	string  	      `json:"emailid"`
-	PhotoHash	  	string			  `json:"photohash"`	
-	DocumentHash  	string			  `json:"dochash"`	
+	First_Name    			string		 	    `json:"firstname"`
+	Last_Name     			string		 	    `json:"lastname"`
+	UIDNo         			string		 	    `json:"uid"`
+	Gender        			string		 	    `json:"gender"`
+	DOB           			string		 	    `json:"dob"`
+	Age           			string		 	    `json:"age"`
+	ContactNumber 			string		 	    `json:"contact_number"`
+	EmailID       			string		 	    `json:"emailid"`
+	PhotoHash	  			string			    `json:"photohash"`	
+	DocumentHash  			string			    `json:"dochash"`	
 }
 
 type basicData2 struct {
-	RelFirstName    string 			  `json:"relfname"`
-	RelLastName     string 			  `json:"rellname"`
-	BirthPlace      string 			  `json:"birthplace"`
-	Nationality     string 			  `json:"nationality"`
-	EmergencyNumber string 			  `json:"emergency_number"`
-	BloodGroup      string 			  `json:"bloodgroup"`
+	RelFirstName    		string	            `json:"relfname"`
+	RelLastName     		string	            `json:"rellname"`
+	BirthPlace      		string	            `json:"birthplace"`
+	Nationality     		string	            `json:"nationality"`
+	EmergencyNumber 		string	            `json:"emergency_number"`
+	BloodGroup      		string	            `json:"bloodgroup"`
 }
 
 type Address struct {
-	AddressLine1 	string 			  `json:"addressline1"`
-	AddressLine2 	string 			  `json:"addressline2"`
-	City         	string 			  `json:"city"`
-	Pin          	string 			  `json:"pincode"`
-	State        	string 			  `json:"state"`
+	AddressLine1 			string 			    `json:"addressline1"`
+	AddressLine2 			string 			    `json:"addressline2"`
+	City         			string 			    `json:"city"`
+	Pin          			string 			    `json:"pincode"`
+	State        			string 			    `json:"state"`
 }
 
 // SEPERATE DOC 2
 type RTOInfo struct {
-  	DocType       	string			  `json:"objectType"`
-	RTOID         	string  		  `json:"rtoid"`
-	AddressData   	Address 		  `json:"address"`
-	ContactNumber 	string  		  `json:"contactno"`
+  	DocType       			string		        `json:"objectType"`
+	RTOID         			string  	        `json:"rtoid"`
+	AddressData   			Address 	        `json:"address"`
+	ContactNumber 			string  	        `json:"contactno"`
 }
 
 type VehiclesOwned struct {
-	VehicleType  	string			  `json:"vehicletype"` //2,3,4 wheeler, truck,etc
-	NumberPlate  	string			  `json:"numberplate"`
-	CarCompany   	string			  `json:"carcompany"` //Maruti,etc
-	CarMake      	string			  `json:"carmake"`    //800,alto
-	CarColour    	string			  `json:"carcolour"`
-	ChasisNumber 	string			  `json:"chasisnumber"`
+	VehicleType  			string				`json:"vehicletype"`    //2,3,4 wheeler, truck,etc
+	NumberPlate  			string				`json:"numberplate"`    
+	CarCompany   			string				`json:"carcompany"`     //Maruti,etc
+	CarMake      			string				`json:"carmake"`        //800,alto
+	CarColour    			string				`json:"carcolour"`
+	ChasisNumber 			string				`json:"chasisnumber"`
 }
 
 type LicenseInfo struct {
@@ -90,6 +94,7 @@ type LicenseInfo struct {
 	IsPassSim			    string			  	`json:"ispass_sim"`
 	IsPassPrac			    string			  	`json:"ispass_prac"`
 	IsActive		  	    string				`json:"isactive"`
+	Tickets      			[]TicketInfo     	`json:"tickets"`
 	FileStatus				[]FileStatusInfo	`json:"filestatus"`	
 }
 
@@ -143,9 +148,9 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	if function == "CreateUserAccount" 			{ //CREATE A NEW ENTRY
 		return t.CreateUserAccount(stub, args)
-	} else if function == "AddBaseData2" 		{ //Add ENtries of baseData2
+	} else if function == "AddBaseData2" 		{ //ADD ENTRIES of baseData2
 		return t.AddBaseData2(stub, args)
-	} else if function == "AddAddressData"  	{ //Add ENtries of baseData2
+	} else if function == "AddAddressData"  	{ //ADD ENTRIES of baseData2
 		return t.AddAddressData(stub, args)
 	} else if function == "AddVehicle" 			{ //ADD USER'S VEHICLE 
 		return t.AddVehicle(stub, args)
