@@ -32,7 +32,7 @@ echo "#####################################################################"
 echo "#############          Creating Genesis Block      ##################"
 echo "#####################################################################"
 echo
-configtxgen -profile OneOrgOrdererGenesis -outputBlock ./config/genesis.block -channelID testchannel
+configtxgen -profile OrdererGenesis -outputBlock ./config/genesis.block -channelID testchannel
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate orderer genesis block..."
   exit 1
@@ -44,18 +44,30 @@ echo "######################################################################"
 echo "##### Generating channel configuration transaction 'channel.tx' ######"
 echo "######################################################################"
 echo
-configtxgen -profile OneOrgChannel -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
+configtxgen -profile Channel2Orgs -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
 
 echo
-echo "######################################################################"
-echo "################# Defining Anchor Peers for Orgdl ORG ###################"
-echo "######################################################################"
+echo "############################################################################"
+echo "################# Defining Anchor Peers for Orguidai ORG ###################"
+echo "############################################################################"
 echo
-configtxgen -profile OneOrgChannel -outputAnchorPeersUpdate ./config/OrgdlMSPanchors.tx -channelID $CHANNEL_NAME -asOrg OrgdlMSP
+configtxgen -profile Channel2Orgs -outputAnchorPeersUpdate ./config/OrguidaiMSPanchors.tx -channelID $CHANNEL_NAME -asOrg OrguidaiMSP
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate anchor peer update for OrgdlMSP..."
+  exit 1
+fi
+echo
+
+echo
+echo "#########################################################################"
+echo "################# Defining Anchor Peers for Orgdl ORG ###################"
+echo "#########################################################################"
+echo
+configtxgen -profile Channel2Orgs -outputAnchorPeersUpdate ./config/OrgdlMSPanchors.tx -channelID $CHANNEL_NAME -asOrg OrgdlMSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for OrgdlMSP..."
   exit 1

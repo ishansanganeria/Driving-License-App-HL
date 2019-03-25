@@ -40,9 +40,7 @@ rm -rf ./hfc-key-store
 
 cd ../basic-network
 ./start.sh
-
-echo
-docker-compose -f ./docker-compose.yml up -d cli
+exit 0
 echo
 
 echo

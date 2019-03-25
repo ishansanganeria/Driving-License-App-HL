@@ -1,110 +1,27 @@
-# Organizations:
-#     - &OrdererOrg
-#         Name: OrdererOrg
-#         ID: OrdererMSP
-#         MSPDir: crypto-config/ordererOrganizations/example.com/msp
-#     - &Orgdl
-#         Name: OrgdlMSP
-#         ID: OrgdlMSP
-#         MSPDir: crypto-config/peerOrganizations/orgdl.example.com/msp
-#         AnchorPeers:
-#             - Host: peer0.orgdl.example.com
-#               Port: 7051
-
-# Application: &ApplicationDefaults
-#     Organizations:
-
-# Orderer: &OrdererDefaults
-#     OrdererType: solo
-#     Addresses:
-#         - orderer.example.com:7050
-#     BatchTimeout: 2s
-#     BatchSize:
-#         MaxMessageCount: 10
-#         AbsoluteMaxBytes: 99 MB
-#         PreferredMaxBytes: 512 KB
-#     Kafka:
-#         Brokers:
-#             - 127.0.0.1:9092
-#     Organizations:
-
-# Profiles:
-#     OneOrgOrdererGenesis:
-#         Orderer:
-#             <<: *OrdererDefaults
-#             Organizations:
-#                 - *OrdererOrg
-#         Consortiums:
-#             SampleConsortium:
-#                 Organizations:
-#                     - *Orgdl
-#     OneOrgChannel:
-#         Consortium: SampleConsortium
-#         Application:
-#             <<: *ApplicationDefaults
-#             Organizations:
-#                 - *Orgdl
-
 Organizations:
     - &OrdererOrg
         Name: OrdererOrg
         ID: OrdererMSP
         MSPDir: crypto-config/ordererOrganizations/example.com/msp
-        Policies:
-            Readers:
-                Type: Signature
-                Rule: "OR('OrdererMSP.member')"
-            Writers:
-                Type: Signature
-                Rule: "OR('OrdererMSP.member')"
-            Admins:
-                Type: Signature
-                Rule: "OR('OrdererMSP.admin')"
+
+    - &Orguidai
+        Name: OrguidaiMSP
+        ID: OrguidaiMSP
+        MSPDir: crypto-config/peerOrganizations/orguidai.example.com/msp
+        AnchorPeers:
+            - Host: peer0.orguidai.example.com
+              Port: 7051
 
     - &Orgdl
         Name: OrgdlMSP
         ID: OrgdlMSP
         MSPDir: crypto-config/peerOrganizations/orgdl.example.com/msp
-        Policies:
-            Readers:
-                Type: Signature
-                Rule: "OR('OrgdlMSP.admin', 'OrgdlMSP.peer', 'OrgdlMSP.client')"
-            Writers:
-                Type: Signature
-                Rule: "OR('OrgdlMSP.admin', 'OrgdlMSP.client')"
-            Admins:
-                Type: Signature
-                Rule: "OR('OrgdlMSP.admin')"
         AnchorPeers:
             - Host: peer0.orgdl.example.com
               Port: 7051
 
-    
-Capabilities:
-    Channel: &ChannelCapabilities
-        V1_3: true
-
-    Orderer: &OrdererCapabilities
-        V1_1: true
-
-    Application: &ApplicationCapabilities
-        V1_3: true
-        V1_2: false
-        V1_1: false
-
 Application: &ApplicationDefaults
     Organizations:
-
-    Policies:
-        Readers:
-            Type: ImplicitMeta
-            Rule: "ANY Readers"
-        Writers:
-            Type: ImplicitMeta
-            Rule: "ANY Writers"
-        Admins:
-            Type: ImplicitMeta
-            Rule: "MAJORITY Admins"
 
 Orderer: &OrdererDefaults
     OrdererType: solo
@@ -115,56 +32,28 @@ Orderer: &OrdererDefaults
         MaxMessageCount: 10
         AbsoluteMaxBytes: 99 MB
         PreferredMaxBytes: 512 KB
+
     Kafka:
         Brokers:
             - 127.0.0.1:9092
     Organizations:
-    Policies:
-        Readers:
-            Type: ImplicitMeta
-            Rule: "ANY Readers"
-        Writers:
-            Type: ImplicitMeta
-            Rule: "ANY Writers"
-        Admins:
-            Type: ImplicitMeta
-            Rule: "MAJORITY Admins"
-        BlockValidation:
-            Type: ImplicitMeta
-            Rule: "ANY Writers"
-
-Channel: &ChannelDefaults
-    Policies:
-        Readers:
-            Type: ImplicitMeta
-            Rule: "ANY Readers"
-        Writers:
-            Type: ImplicitMeta
-            Rule: "ANY Writers"
-        Admins:
-            Type: ImplicitMeta
-            Rule: "MAJORITY Admins"
-    Capabilities:
-        <<: *ChannelCapabilities
 
 Profiles:
-    OneOrgOrdererGenesis:
-        <<: *ChannelDefaults
+    OrdererGenesis:
         Orderer:
             <<: *OrdererDefaults
             Organizations:
                 - *OrdererOrg
-            Capabilities:
-                <<: *OrdererCapabilities
         Consortiums:
             SampleConsortium:
                 Organizations:
+                    - *Orguidai
                     - *Orgdl
-    OneOrgChannel:
+                    
+    Channel2Orgs:
         Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
+                - *Orguidai
                 - *Orgdl
-            Capabilities:
-                <<: *ApplicationCapabilities
