@@ -104,12 +104,13 @@ services:
     environment:
       - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_LOGGING_LEVEL=debug
+      - CORE_LOGGING_LEVEL=info
       - CORE_PEER_ID=cliuidai
       - CORE_PEER_ADDRESS=peer0.orguidai.example.com:7051
       - CORE_PEER_LOCALMSPID=OrguidaiMSP
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp
       - CORE_CHAINCODE_KEEPALIVE=10
+      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
@@ -186,12 +187,13 @@ services:
     environment:
       - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_LOGGING_LEVEL=debug
+      - CORE_LOGGING_LEVEL=info
       - CORE_PEER_ID=clidl
       - CORE_PEER_ADDRESS=peer0.orgdl.example.com:7051
       - CORE_PEER_LOCALMSPID=OrgdlMSP
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp
       - CORE_CHAINCODE_KEEPALIVE=10
+      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:

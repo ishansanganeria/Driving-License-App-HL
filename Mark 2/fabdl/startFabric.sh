@@ -40,34 +40,52 @@ rm -rf ./hfc-key-store
 
 cd ../basic-network
 ./start.sh
-exit 0
+echo
+
+
+echo
+echo "######################################################################"
+echo "############## Installing chaincode on peer0 of orgdl ################"
+echo "######################################################################"
+echo
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode install -n fabdl -v 1.0 -p "$CC_SRC_PATH" -l "$LANGUAGE"
 echo
 
 echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode install -n fabdl -v 1.0 -p "$CC_SRC_PATH" -l "$LANGUAGE"
+echo "######################################################################"
+echo "############ Installing chaincode on peer0 of orguidai  ##############"
+echo "######################################################################"
+echo
+docker exec -e "CORE_PEER_LOCALMSPID=OrguidaiMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp" cliuidai peer chaincode install -n fabuidai -v 1.0 -p "$CC_SRC_PATH" -l "$LANGUAGE"
 echo
 
 echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cli peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabdl -l "$LANGUAGE" -v 1.0 -c '{"Args":[""]}' -P "OR ('OrgdlMSP.member','Org2MSP.member')"
+echo "######################################################################"
+echo "##################  Instantaiting the chaincode   ####################"
+echo "######################################################################"
+echo
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode instantiate -o orderer.example.com:7050 -C mychannel -n fabdl -l "$LANGUAGE" -v 1.0 -c '{"Args":[""]}' -P "OR ('OrgdlMSP.member','Org2MSP.member')"
 echo
 
 sleep 5
 
-cd ../fabdl
-node enrollAdmin.js
+docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" cliuidai peer chaincode invoke -o orderer.example.com:7050 -C mychannel -n fabdl -c '{"function":"CreateBaseRecord","Args":["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com"]}'
 
-echo
-sleep 3
-node registerUser.js
+# cd ../fabdl
+# node enrollAdmin.js
+
+# echo
+# sleep 3
+# node registerUser.js
 
 # echo
 # sleep 3
 # node createUserAccountDummy.js
 
-set -e
-echo
-sleep 3
-node createUserAccount.js
+# set -e
+# echo
+# sleep 3
+# node createUserAccount.js
 
 # echo
 # sleep 3
