@@ -1,7 +1,7 @@
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
-CHANNEL_BOTH=channelboth
 
+CHANNEL_BOTH=channelboth
 CHANNEL_UIDAI=channeluidai
 
 # remove previous crypto material and config transactions

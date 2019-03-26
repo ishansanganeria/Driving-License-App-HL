@@ -9,13 +9,14 @@ fi
 
 # set -e
 LANGUAGE=${1:-"golang"}
-CC_SRC_PATH=github.com/fabdl
+CC_UIDAI_PATH=github.com/fabuidai
+CC_BOTH_PATH=github.com/fabboth
 
 docker rm -f $(docker ps -aq) > /dev/null 2>&1
 docker network prune -f
 
 function clearContainers() {
-  CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /dev-peer0.*.fabdl.*/) {print $1}')
+  CONTAINER_IDS=$(docker ps -a | awk '($2 ~ /dev-peer0.*.fab*.*/) {print $1}')
   if [ -z "$CONTAINER_IDS" -o "$CONTAINER_IDS" == " " ]; then
     echo "---- No containers available for deletion ----"
   else
@@ -24,7 +25,7 @@ function clearContainers() {
 }
 
 function removeUnwantedImages() {
-  DOCKER_IMAGE_IDS=$(docker images | awk '($1 ~ /dev-peer0.*.fabdl.*/) {print $3}')
+  DOCKER_IMAGE_IDS=$(docker images | awk '($1 ~ /dev-peer0.*.fab*.*/) {print $3}')
   if [ -z "$DOCKER_IMAGE_IDS" -o "$DOCKER_IMAGE_IDS" == " " ]; then
     echo "---- No images available for deletion ----"
   else
@@ -40,33 +41,49 @@ rm -rf ./hfc-key-store
 
 cd ../basic-network
 ./start.sh
+echo
+
+
+echo
+echo "###############################################################################"
+echo "############ Installing chaincode fabuidai on peer0.orguidai  ##############"
+echo "###############################################################################"
+echo
+docker exec cliuidai peer chaincode install -n fabuidai -v 1.0 -p "$CC_UIDAI_PATH" -l "$LANGUAGE"
+echo
+
+
+echo
+echo "###############################################################################"
+echo "############ Installing chaincode fabboth on peer0.orguidai  ##############"
+echo "###############################################################################"
+echo
+docker exec cliuidai peer chaincode install -n fabboth -v 1.0 -p "$CC_BOTH_PATH" -l "$LANGUAGE"
+echo
+
+echo
+echo "###############################################################################"
+echo "############ Installing chaincode fabboth on peer0.orgdl  ##############"
+echo "###############################################################################"
+echo
+docker exec clidl peer chaincode install -n fabboth -v 1.0 -p "$CC_BOTH_PATH" -l "$LANGUAGE"
+echo
+
+echo
+echo "######################################################################"
+echo "##################  Instantaiting the chaincode on channel 'channelboth'   ####################"
+echo "######################################################################"
+echo
+docker exec cliuidai peer chaincode instantiate -o orderer.example.com:7050 -C channelboth -n fabboth -l "$LANGUAGE" -v 1.0 -c '{"Args":[""]}' -P "OR ('OrgdlMSP.member','OrguidaiMSP.member')"
+echo
 exit
-echo
-
 
 echo
 echo "######################################################################"
-echo "############## Installing chaincode on peer0 of orgdl ################"
+echo "##################  Instantaiting the chaincode on channel 'channeluidai'   ####################"
 echo "######################################################################"
 echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode install -n fabdl -v 1.0 -p "$CC_SRC_PATH" -l "$LANGUAGE"
-echo
-
-echo
-echo "######################################################################"
-echo "############ Installing chaincode on peer0 of orguidai  ##############"
-echo "######################################################################"
-echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrguidaiMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp" cliuidai peer chaincode install -n fabuidai -v 1.0 -p "$CC_SRC_PATH" -l "$LANGUAGE"
-echo
-
-echo
-echo "######################################################################"
-echo "##################  Instantaiting the chaincode   ####################"
-echo "######################################################################"
-echo
-docker exec -e "CORE_PEER_LOCALMSPID=OrgdlMSP" -e "CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp" clidl peer chaincode instantiate -o orderer.example.com:7050 -C channelboth
- -n fabdl -l "$LANGUAGE" -v 1.0 -c '{"Args":[""]}' -P "OR ('OrgdlMSP.member','Org2MSP.member')"
+docker exec cliuidai peer chaincode instantiate -o orderer.example.com:7050 -C channeluidai -n fabuidai -l "$LANGUAGE" -v 1.0 -c '{"Args":[""]}' -P "OR ('OrguidaiMSP.member')"
 echo
 
 sleep 5
