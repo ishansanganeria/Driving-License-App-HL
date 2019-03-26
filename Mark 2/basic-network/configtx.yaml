@@ -20,9 +20,6 @@ Organizations:
             - Host: peer0.orgdl.example.com
               Port: 7051
 
-Application: &ApplicationDefaults
-    Organizations:
-
 Orderer: &OrdererDefaults
     OrdererType: solo
     Addresses:
@@ -38,6 +35,9 @@ Orderer: &OrdererDefaults
             - 127.0.0.1:9092
     Organizations:
 
+Application: &ApplicationDefaults
+    Organizations:
+
 Profiles:
     OrdererGenesis:
         Orderer:
@@ -50,10 +50,18 @@ Profiles:
                     - *Orguidai
                     - *Orgdl
                     
-    Channel2Orgs:
+    ChannelOrgUidai:
+        Consortium: SampleConsortium
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Orguidai
+
+    ChannelBothOrgs:
         Consortium: SampleConsortium
         Application:
             <<: *ApplicationDefaults
             Organizations:
                 - *Orguidai
                 - *Orgdl
+

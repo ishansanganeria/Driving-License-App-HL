@@ -47,29 +47,22 @@ services:
       container_name: peer0.orguidai.example.com
       image: hyperledger/fabric-peer
       environment:
-        - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
         - CORE_PEER_ID=peer0.orguidai.example.com
+        - CORE_PEER_ADDRESS=peer0.orguidai.example.com:7051
+        - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orguidai.example.com:7051
+        - CORE_PEER_LOCALMSPID=OrguidaiMSP
+        - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+        - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
         - CORE_LOGGING_PEER=debug
         - CORE_CHAINCODE_LOGGING_LEVEL=debug
-        - CORE_PEER_LOCALMSPID=OrguidaiMSP
         - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
-        - CORE_PEER_ADDRESS=peer0.orguidai.example.com:7051
         - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orgdl.example.com:7051
-
-        # # the following setting starts chaincode containers on the same
-        # # bridge network as the peers
-        # # https://docs.docker.com/compose/networking/
-        - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
         - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
         - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb_uidai:5984
-        # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
-        # provide the credentials for ledger to connect to CouchDB.  The username and password must
-        # match the username and password set for the associated CouchDB.
         - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
         - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
       working_dir: /opt/gopath/src/github.com/hyperledger/fabric
       command: peer node start
-      # command: peer node start --peer-chaincodedev=true
       ports:
         - 7051:7051
         - 7053:7053
@@ -87,8 +80,6 @@ services:
   couchdb_uidai:
       container_name: couchdb_uidai
       image: hyperledger/fabric-couchdb
-      # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
-      # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
       environment:
         - COUCHDB_USER=
         - COUCHDB_PASSWORD=
@@ -130,24 +121,18 @@ services:
     container_name: peer0.orgdl.example.com
     image: hyperledger/fabric-peer
     environment:
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_PEER_ID=peer0.orgdl.example.com
+      - CORE_PEER_ADDRESS=peer0.orgdl.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orgdl.example.com:7051
+      - CORE_PEER_LOCALMSPID=OrgdlMSP
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_LOGGING_PEER=debug
       - CORE_CHAINCODE_LOGGING_LEVEL=debug
-      - CORE_PEER_LOCALMSPID=OrgdlMSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
-      - CORE_PEER_ADDRESS=peer0.orgdl.example.com:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orguidai.example.com:7051
-
-      # # the following setting starts chaincode containers on the same
-      # # bridge network as the peers
-      # # https://docs.docker.com/compose/networking/
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_basic
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb_dl:5984
-      # The CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME and CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD
-      # provide the credentials for ledger to connect to CouchDB.  The username and password must
-      # match the username and password set for the associated CouchDB.
       - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
       - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
@@ -170,8 +155,6 @@ services:
   couchdb_dl:
     container_name: couchdb_dl
     image: hyperledger/fabric-couchdb
-    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
-    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
       - COUCHDB_USER=
       - COUCHDB_PASSWORD=

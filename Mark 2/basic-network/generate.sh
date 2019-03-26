@@ -1,12 +1,8 @@
-#!/bin/sh
-#
-# Copyright IBM Corp All Rights Reserved
-#
-# SPDX-License-Identifier: Apache-2.0
-#
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
 export FABRIC_CFG_PATH=${PWD}
-CHANNEL_NAME=mychannel
+CHANNEL_BOTH=channelboth
+
+CHANNEL_UIDAI=channeluidai
 
 # remove previous crypto material and config transactions
 rm -fr config/*
@@ -21,11 +17,11 @@ echo "#############  Generating Cryptographic Materials  ##################"
 echo "#####################################################################"
 echo
 cryptogen generate --config=./crypto-config.yaml
-
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate crypto material..."
   exit 1
 fi
+sleep 2
 
 echo
 echo "#####################################################################"
@@ -38,36 +34,50 @@ if [ "$?" -ne 0 ]; then
   exit 1
 fi
 echo
+sleep 2
 
 echo
-echo "######################################################################"
-echo "##### Generating channel configuration transaction 'channel.tx' ######"
-echo "######################################################################"
+echo "###########################################################################"
+echo "##### Generating channel configuration transaction 'channeluidai.tx' ######"
+echo "###########################################################################"
 echo
-configtxgen -profile Channel2Orgs -outputCreateChannelTx ./config/channel.tx -channelID $CHANNEL_NAME
+configtxgen -profile ChannelOrgUidai -outputCreateChannelTx ./config/channeluidai.tx -channelID $CHANNEL_UIDAI
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
 fi
+sleep 2
+
+echo
+echo "###########################################################################"
+echo "##### Generating channel configuration transaction 'channelboth.tx' ######"
+echo "###########################################################################"
+echo
+configtxgen -profile ChannelBothOrgs -outputCreateChannelTx ./config/channelboth.tx -channelID $CHANNEL_BOTH
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate channel configuration transaction..."
+  exit 1
+fi
+sleep 2
 
 echo
 echo "############################################################################"
 echo "################# Defining Anchor Peers for Orguidai ORG ###################"
 echo "############################################################################"
 echo
-configtxgen -profile Channel2Orgs -outputAnchorPeersUpdate ./config/OrguidaiMSPanchors.tx -channelID $CHANNEL_NAME -asOrg OrguidaiMSP
+configtxgen -profile ChannelBothOrgs -outputAnchorPeersUpdate ./config/OrguidaiMSPanchors.tx -channelID $CHANNEL_BOTH -asOrg OrguidaiMSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for OrgdlMSP..."
   exit 1
 fi
-echo
+sleep 2
 
 echo
 echo "#########################################################################"
 echo "################# Defining Anchor Peers for Orgdl ORG ###################"
 echo "#########################################################################"
 echo
-configtxgen -profile Channel2Orgs -outputAnchorPeersUpdate ./config/OrgdlMSPanchors.tx -channelID $CHANNEL_NAME -asOrg OrgdlMSP
+configtxgen -profile ChannelBothOrgs -outputAnchorPeersUpdate ./config/OrgdlMSPanchors.tx -channelID $CHANNEL_BOTH -asOrg OrgdlMSP
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate anchor peer update for OrgdlMSP..."
   exit 1

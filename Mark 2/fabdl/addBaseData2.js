@@ -19,7 +19,8 @@ var os = require('os');
 var fabric_client = new Fabric_Client();
 
 // setup the fabric network
-var channel = fabric_client.newChannel('mychannel');
+var channel = fabric_client.newChannel('channelboth
+');
 var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -57,7 +58,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		fcn: 'AddBaseData2',
 		args: ["865219083334","Raj","Sanganeria","bhayandar","indian","8949716007","AB+"],
 		// args: [ id, relfname, rellname, pob, nationality, emerno, bg],
-		chainId: 'mychannel',
+		chainId: 'channelboth
+',
 		txId: tx_id
 	};
 

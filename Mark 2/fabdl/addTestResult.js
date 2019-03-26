@@ -21,7 +21,8 @@ var os = require('os');
 var fabric_client = new Fabric_Client();
 
 // setup the fabric network
-var channel = fabric_client.newChannel('mychannel');
+var channel = fabric_client.newChannel('channelboth
+');
 var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -59,7 +60,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		fcn: 'AddTestResult',
 		args: ["865219083334","Written","74","100","45","9876951796","L865219083334", "date", "time"],
 		// args: [uid, testtype, score, maxmarks, passingmarks, officerid, filenumber, date, time],
-		chainId: 'mychannel',
+		chainId: 'channelboth
+',
 		txId: tx_id
 	};
 

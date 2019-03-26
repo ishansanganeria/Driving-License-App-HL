@@ -22,7 +22,8 @@ var os = require('os');
 var fabric_client = new Fabric_Client();
 
 // setup the fabric network
-var channel = fabric_client.newChannel('mychannel');
+var channel = fabric_client.newChannel('channelboth
+');
 var peer = fabric_client.newPeer('grpc://localhost:7051');
 channel.addPeer(peer);
 var order = fabric_client.newOrderer('grpc://localhost:7050')
@@ -60,7 +61,8 @@ Fabric_Client.newDefaultKeyValueStore({ path: store_path
 		fcn: 'AddTicket',
 		args: ["0001","865219083334","LL865219083334","9876951796","Rash Driving","05/11/1987","7 AM","Kings Cross", "false","100"],
 		// args: [ticketid, uid, licensenumber , ticketissuer, reason, dateofissue, timeofissue, place, ispaid, amount],
-		chainId: 'mychannel',
+		chainId: 'channelboth
+',
 		txId: tx_id
 	};
 
