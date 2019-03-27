@@ -3,6 +3,7 @@ export FABRIC_CFG_PATH=${PWD}
 
 CHANNEL_BOTH=channelboth
 CHANNEL_UIDAI=channeluidai
+CHANNEL_DL=channeldl
 
 # remove previous crypto material and config transactions
 rm -fr config/*
@@ -42,6 +43,18 @@ echo "##### Generating channel configuration transaction 'channeluidai.tx' #####
 echo "###########################################################################"
 echo
 configtxgen -profile ChannelOrgUidai -outputCreateChannelTx ./config/channeluidai.tx -channelID $CHANNEL_UIDAI
+if [ "$?" -ne 0 ]; then
+  echo "Failed to generate channel configuration transaction..."
+  exit 1
+fi
+sleep 2
+
+echo
+echo "###########################################################################"
+echo "##### Generating channel configuration transaction 'channeldl.tx' ######"
+echo "###########################################################################"
+echo
+configtxgen -profile ChannelOrgDl -outputCreateChannelTx ./config/channeldl.tx -channelID $CHANNEL_DL
 if [ "$?" -ne 0 ]; then
   echo "Failed to generate channel configuration transaction..."
   exit 1
