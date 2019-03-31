@@ -68,6 +68,8 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.FetchAccountDetails(stub, args)
 	} else if function == "ReturnAccountDetails" 			{ //CREATE A NEW ENTRY
 		return t.ReturnAccountDetails(stub, args)
+	} else if function == "DeleteAccountDetails" 			{ //CREATE A NEW ENTRY
+		return t.DeleteAccountDetails(stub, args)
 	} 
 	
     fmt.Println("Function not found: " + function)
@@ -89,7 +91,7 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 	}
 	var s [2]string
 	s[0] = "ReturnAccountDetails"
-	s[1] = "865219083334"
+	s[1] = args[0]
 
 	bargs := make([][]byte, len(s))
 	for i, arg := range s {
@@ -112,4 +114,16 @@ func (t *SimpleChainCode) ReturnAccountDetails(stub shim.ChaincodeStubInterface,
 	}
 	detailsAsBytes, _ := stub.GetState(args[0])
 	return shim.Success(detailsAsBytes)
+}
+
+func (t *SimpleChainCode) DeleteAccountDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	err := stub.DelState(args[0])
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	return shim.Success(nil)
 }

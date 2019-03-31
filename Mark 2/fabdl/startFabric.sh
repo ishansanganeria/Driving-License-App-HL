@@ -77,13 +77,13 @@ echo
 docker exec clidl peer chaincode instantiate -o orderer.example.com:7050 -C channelboth -n fabboth -l golang -v 1.0 -c '{"Args":[""]}' -P "OR ('OrgdlMSP.member','OrguidaiMSP.member')"
 echo
 
-# echo
-# echo "###############################################################################################"
-# echo "##################  Instantaiting the chaincode on channel 'channeldl'   ####################"
-# echo "###############################################################################################"
-# echo
-# docker exec clidl peer chaincode instantiate -o orderer.example.com:7050 -C channeldl -n fabdl -l golang -v 1.0 -c '{"Args":[""]}' -P "OR ('OrgdlMSP.member')"
-# echo
+echo
+echo "###############################################################################################"
+echo "##################  Instantaiting the chaincode on channel 'channeldl'   ####################"
+echo "###############################################################################################"
+echo
+docker exec clidl peer chaincode instantiate -o orderer.example.com:7050 -C channeldl -n fabdl -l golang -v 1.0 -c '{"Args":[""]}' -P "OR ('OrgdlMSP.member')"
+echo
 
 echo
 echo "################################################################################################"
@@ -95,14 +95,15 @@ echo
 sleep 5
 
 docker exec cliuidai peer chaincode invoke -o orderer.example.com:7050 -C channeluidai -n fabuidai -c '{"function":"CreateUserAccount","Args":["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com","dssd","sasa"]}'
-echo
 
 sleep 5
 docker exec cliuidai peer chaincode invoke -o orderer.example.com:7050 -C channelboth -n fabboth -c '{"function":"FetchAccountDetails","Args":["865219083334"]}'
 
 sleep 5
-docker exec clidl peer chaincode invoke -o orderer.example.com:7050 -C channeluidai -n fabdl -c '{"function":"FetchAccountDetails","Args":["865219083334"]}'
+docker exec clidl peer chaincode invoke -o orderer.example.com:7050 -C channeldl -n fabdl -c '{"function":"FetchAccountDetails","Args":["865219083334"]}'
 
+sleep 5
+docker exec clidl peer chaincode invoke -o orderer.example.com:7050 -C channelboth -n fabboth -c '{"function":"DeleteAccountDetails","Args":["865219083334"]}'
 # sleep 5
 # docker exec cliuidai peer chaincode invoke -o orderer.example.com:7050 -C channelboth -n fabboth -c '{"function":"FetchAccountDetails","Args":["865219083334"]}'
 

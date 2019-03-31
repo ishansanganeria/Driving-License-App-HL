@@ -141,7 +141,10 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	if function == "FetchAccountDetails" 			{ //CREATE A NEW ENTRY
 		return t.FetchAccountDetails(stub, args)
-	}
+	} 
+	// else if  function == "DeleteAccountDetails" 			{ //CREATE A NEW ENTRY
+	// 	return t.DeleteAccountDetails(stub, args)
+	// } 
 	
     fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
@@ -160,9 +163,10 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 			return shim.Error(ERR)
 		}
 	}
+
 	var s [2]string
 	s[0] = "ReturnAccountDetails"
-	s[1] = "865219083334"
+	s[1] = args[0]
 
 	bargs := make([][]byte, len(s))
 	for i, arg := range s {
@@ -170,6 +174,9 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 	}
 	
 	dataJSONasBytes := stub.InvokeChaincode("fabboth",bargs, "channelboth")
+	if dataJSONasBytes.Status != 200 {
+		return shim.Error(dataJSONasBytes.Message)
+	}
 
 	err := stub.PutState(s[1], dataJSONasBytes.Payload)
 	if err != nil {
@@ -179,3 +186,34 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 	return shim.Success(nil)
 }
 
+// func (t *SimpleChainCode) DeleteAccountDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+// 	if len(args) != 1 {
+// 		return shim.Error("Incorrect number of arguments. Expecting 1")
+// 	}
+
+// 	for i := 0; i < 1; i++ {
+// 		if len(args[i]) <= 0 {
+// 			ERR := "Argument " + string(i) + " should be non empty"
+// 			return shim.Error(ERR)
+// 		}
+// 	}
+
+// 	var s [2]string
+// 	s[0] = "DeleteAccountDetails"
+// 	s[1] = args[0]
+
+// 	bargs := make([][]byte, len(s))
+
+// 	bargs = make([][]byte, 2)
+// 	for i, arg := range s {
+// 		bargs[i] = []byte(arg)
+// 	}
+	
+// 	dataJSONasBytes := stub.InvokeChaincode("fabboth",bargs, "channelboth")
+// 	if dataJSONasBytes.Status != 200 {
+// 		return shim.Error(dataJSONasBytes.Message)
+// 	}
+// 	return shim.Success(nil)
+
+// }
