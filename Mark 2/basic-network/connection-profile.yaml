@@ -1,0 +1,63 @@
+name: "Orguidai Client"
+version: "1.0"
+
+client:
+  organization: Orguidai
+  credentialStore:
+    path: "../Mark 2/nodeserver/nodejsfiles/hfc-key-store"
+    cryptoStore:
+      path: "../Mark 2/nodeserver/nodejsfiles/hfc-key-store"
+      
+channels:
+  channelboth:
+    orderers:
+      - orderer.example.com
+    peers:
+      peer0.orguidai.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+organizations:
+  Orguidai:
+    mspid: OrguidaiMSP
+    peers:
+      - peer0.orguidai.example.com
+    certificateAuthorities:
+      - ca.example.com
+    adminPrivateKey:
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/9347bb9ea9b4df799e27aae51aa4ab46371c3dc5bbccf792c8d9c7411b4cc3a3_sk
+    signedCert:
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
+
+orderers:
+  orderer.example.com:
+    url: grpc://localhost:7050
+    # grpcOptions:
+    #   ssl-target-name-override: orderer.example.com
+    #   grpc-max-send-message-length: 15
+    # tlsCACerts:
+    #   path: crypto-config/ordererOrganizations/example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+
+peers:
+  peer0.orguidai.example.com:
+    url: grpc://localhost:7051
+    eventUrl: grpc://localhost:7053
+    # grpcOptions:
+    #   ssl-target-name-override: peer0.orguidai.example.com
+    #   grpc.keepalive_time_ms: 600000
+    # tlsCACerts:
+    #   path: crypto-config/peerOrganizations/orguidai.example.com/peers/peer0.orguidai.example.com/msp/tlscacerts/tlsca.orguidai.example.com-cert.pem
+
+certificateAuthorities:
+  ca.orguidai.example.com:
+    url: http://localhost:7054
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/ca/ca.orguidai.example.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+    caName: ca-orguidai

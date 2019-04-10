@@ -6,6 +6,7 @@ var os = require('os');
 // CONVERT var TO const
 
 var fabric_client = new Fabric_Client();
+fabric_client.loadFromConfig('../basic-network/connection-profile.yaml')
 
 obj = JSON.parse(fs.readFileSync('./count.json', 'utf8'));
 obj.uidai = 500000000000;
@@ -23,22 +24,20 @@ function modifyCountUidai(obj, amount) {
 };
 
 function createUIDAI(basicInfo1) {
-  var uid = obj.uidai
-  var fname = basicInfo1.firstname
-  var lname = basicInfo1.lastname
-  var gender = basicInfo1.gender
-  var dob = basicInfo1.dob
-  var age = basicInfo1.age
-  var contact_number = basicInfo1.contact_number
-  var emailid = basicInfo1.emailid
-  var photohash = basicInfo1.photohash
-  var dochash = basicInfo1.dochash
+  var uid =  toString(obj.uidai)
+  var fname = toString(basicInfo1.firstname)
+  var lname = toString(basicInfo1.lastname)
+  var gender = toString(basicInfo1.gender)
+  var dob = toString(basicInfo1.dob)
+  var age = toString(basicInfo1.age)
+  var contact_number = toString(basicInfo1.contact_number)
+  var emailid = toString(basicInfo1.emailid)
+  var photohash = toString(basicInfo1.photohash)
+  var dochash = toString(basicInfo1.dochash)
 
   var channel = fabric_client.getChannel('channelboth');
-  var peer = fabric_client.getPeer('grpc://localhost:7051');
-  // channel.addPeer(peer);
-  var order = fabric_client.getOrderer('grpc://localhost:7050')
-  // channel.addOrderer(order);
+  var peer = fabric_client.getPeer('peer0.orguidai.example.com');
+  var order = fabric_client.getOrderer('orderer.example.com')
 
   var member_user = null;
   var store_path = path.join(__dirname, '/nodejsfiles/hfc-key-store/OrguidaiMSP');
