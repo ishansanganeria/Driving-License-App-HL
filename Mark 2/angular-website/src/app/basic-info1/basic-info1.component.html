@@ -1,0 +1,18 @@
+<h1>Please fill the form Part-1</h1>
+
+<div>
+  <form [formGroup]="form" method="POST" action="/sendData">
+    First Name : <input formControlName="firstname" type="text"><br><br><br>
+    Last Name: <input formControlName="lastname" type="text"><br><br><br>
+    
+    Gender : 
+              Male: <input formControlName="gender" type="radio" value="male">
+              Female: <input formControlName="gender" type="radio" value="female"><br><br><br>
+    
+    Date Of Birth: <input formControlName="dob" type="date"><br><br><br>
+    Contact Number: <input formControlName="contact_number" type="number"><br><br><br>
+    Email ID: <input formControlName="emailid" type="email"><br><br><br>
+    <button type="submit" (click)="fillbd1()" >Submit</button><br><br><br>
+    Form Status: {{form.status}}
+  </form>
+</div>

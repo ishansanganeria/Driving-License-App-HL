@@ -22,7 +22,6 @@ type UIDAIDetails struct {
 type BasicInfo1 struct {
 	First_Name    			string		 	    `json:"firstname"`
 	Last_Name     			string		 	    `json:"lastname"`
-	UIDNo         			string		 	    `json:"uid"`
 	Gender        			string		 	    `json:"gender"`
 	DOB           			string		 	    `json:"dob"`
 	Age           			string		 	    `json:"age"`

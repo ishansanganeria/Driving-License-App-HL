@@ -1,13 +1,12 @@
-Mark 1/nohup.out
-Mark 1/crypto-config
-nohup.out
-Mark 1/channel-artifacts
+*crypto-config*
+*channel-artifacts*
+*node_modules*
+*nohup.out*
+*hfc-key-store*
+*configtxlator*
 
-Mark 2/basic-network/crypto-config
-Mark 2/basic-network/channel-artifacts
 Mark 2/chaincode/fabdl/fabdl
 
-Mark 2/bin/configtxlator
 
 Mark 2/bin/discover
 
@@ -24,11 +23,8 @@ Mark 2/bin/peer
 Mark 2/basic-network/config/
 
 
-Mark 3/basic-network/crypto-config
-Mark 3/basic-network/channel-artifacts
 Mark 3/chaincode/fabdl/fabdl
 
-Mark 3/bin/configtxlator
 
 Mark 3/bin/discover
 
@@ -45,5 +41,3 @@ Mark 3/bin/peer
 Mark 3/basic-network/config/
 Mark 3/bin/configtxgen
 Mark 3/bin/cryptogen
-
-Mark 2/fabdl/nodejsfiles/node_modules

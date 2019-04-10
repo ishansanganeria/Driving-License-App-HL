@@ -1,0 +1,13 @@
+<h1>Do you have an AADHAR card</h1>
+
+<div>
+  <form [formGroup]="form">
+    <!-- <p *ngIf="choice.invalid">Please select</p> -->
+    <input type="radio" formControlName="choice" value="yes">Yes
+    <input type="radio" formControlName="choice" value="no">No
+    <br>    <br>    <br>
+    <button type="submit" (click)="p()" [disabled]="!form.valid">Submit</button>
+  </form>
+  <br>    <br>    <br>
+  Form Status: {{form.status}}
+</div>
