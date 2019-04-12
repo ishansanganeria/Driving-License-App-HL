@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup,  Validators } from '@angular/forms'
-import { PutStateService} from '../put-state.service'
+import { FormControl, FormGroup, Validators } from '@angular/forms'
+import { PutStateService } from '../put-state.service'
 import { stringify } from 'querystring';
 
 @Component({
@@ -10,26 +10,31 @@ import { stringify } from 'querystring';
 })
 export class BasicInfo1Component implements OnInit {
 
-  constructor( private putStateService: PutStateService) { }
+  constructor(private putStateService: PutStateService) { }
+  
+  
 
   ngOnInit() {
   }
 
   form = new FormGroup({
-    firstname       : new FormControl('',Validators.required),
-    lastname        : new FormControl('',Validators.required),
-    gender          : new FormControl('',Validators.required),
-    dob             : new FormControl('',Validators.required),
-    age             : new FormControl(''),
-    contact_number  : new FormControl('',Validators.required),      
-    emailid         : new FormControl('',Validators.required),    
-    photo           : new FormControl(''),    
-    doc             : new FormControl(''),  
+    firstname: new FormControl('', Validators.required),
+    lastname: new FormControl('', Validators.required),
+    gender: new FormControl('', Validators.required),
+    dob: new FormControl('', Validators.required),
+    age: new FormControl(''),
+    contact_number: new FormControl('', Validators.required),
+    emailid: new FormControl('', Validators.required),
+    photo: new FormControl(''),
+    doc: new FormControl(''),
   })
 
   fillbd1() {
-    var response = this.putStateService.createUIDAI(this.form.value);
-    console.log(response);
+    this.putStateService.createUIDAI(this.form.value)
+      .then((res) => {
+        let response = res
+        console.log("working" + res);
+      });
   }
 }
 
