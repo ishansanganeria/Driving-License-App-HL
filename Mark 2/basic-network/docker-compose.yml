@@ -9,15 +9,49 @@ services:
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
       - FABRIC_CA_SERVER_CA_NAME=ca.example.com
-      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.orgdl.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.example.com-cert.pem
       - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/*_sk
     ports:
       - "7054:7054"
     command: sh -c 'fabric-ca-server start -b admin:adminpw'
     volumes:
+      - ./crypto-config/ordererOrganizations/example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/ordererOrganizations/example.com/ca/:/etc/hyperledger/fabric-ca-server/msp/keystore
+    container_name: ca.example.com
+    networks:
+      - basic
+
+  ca.orguidai.example.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.orguidai.example.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.orguidai.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/*_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw'
+    volumes:
+      - ./crypto-config/peerOrganizations/orguidai.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/orguidai.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp/keystore
+    container_name: ca.orguidai.example.com
+    networks:
+      - basic
+
+  ca.orgdl.example.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.orgdl.example.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.orgdl.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/*_sk
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw'
+    volumes:
       - ./crypto-config/peerOrganizations/orgdl.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
       - ./crypto-config/peerOrganizations/orgdl.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp/keystore
-    container_name: ca.example.com
+    container_name: ca.orgdl.example.com
     networks:
       - basic
 

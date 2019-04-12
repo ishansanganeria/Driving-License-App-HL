@@ -5,6 +5,7 @@ var util = require('util');
 var os = require('os');
 // CONVERT var TO const
 
+let errorMessage;
 var fabric_client = new Fabric_Client();
 fabric_client.loadFromConfig('../basic-network/connection-profile.yaml')
 
@@ -17,25 +18,27 @@ function readF() {
   return JSON.parse(fs.readFileSync('./count.json', 'utf8'));
 };
 
-function modifyCountUidai(obj, amount) {
-  obj.uidai = obj.uidai + amount;
+function incrementCountUidai() {
+  obj.uidai = obj.uidai + 1;
   let data = JSON.stringify(obj);
   fs.writeFileSync('./count.json', data);
 };
 
-function createUIDAI(basicInfo1) {
-  var uid =  toString(obj.uidai)
-  var fname = toString(basicInfo1.firstname)
-  var lname = toString(basicInfo1.lastname)
-  var gender = toString(basicInfo1.gender)
-  var dob = toString(basicInfo1.dob)
-  var age = toString(basicInfo1.age)
-  var contact_number = toString(basicInfo1.contact_number)
-  var emailid = toString(basicInfo1.emailid)
-  var photohash = toString(basicInfo1.photohash)
-  var dochash = toString(basicInfo1.dochash)
+async function createUIDAI(basicInfo1) {
+  var uid = obj.uidai.toString()
+  var fname = basicInfo1.firstname.toString()
+  var lname = basicInfo1.lastname.toString()
+  var gender = basicInfo1.gender.toString()
+  var dob = basicInfo1.dob.toString()
+  var age = (parseInt(dob.substring(0, 5), 10) - (new Date().getFullYear())).toString()
+  var contact_number = basicInfo1.contact_number.toString()
+  var emailid = basicInfo1.emailid.toString()
+  // var photohash = basicInfo1.photohash.toString()
+  var photohash = "basicInfo1.photohash.toString()"
+  // var dochash = basicInfo1.dochash.toString()
+  var dochash = "basicInfo1.dochash.toString()"
 
-  var channel = fabric_client.getChannel('channelboth');
+  var channel = fabric_client.getChannel('channeluidai');
   var peer = fabric_client.getPeer('peer0.orguidai.example.com');
   var order = fabric_client.getOrderer('orderer.example.com')
 
@@ -44,9 +47,10 @@ function createUIDAI(basicInfo1) {
   console.log('Store path:' + store_path);
   var tx_id = null;
 
-  Fabric_Client.newDefaultKeyValueStore({
-    path: store_path
-  }).then((state_store) => {
+  try {
+    const state_store = await Fabric_Client.newDefaultKeyValueStore({
+      path: store_path
+    });
 
     fabric_client.setStateStore(state_store);
     var crypto_suite = Fabric_Client.newCryptoSuite();
@@ -55,9 +59,7 @@ function createUIDAI(basicInfo1) {
     });
     crypto_suite.setCryptoKeyStore(crypto_store);
     fabric_client.setCryptoSuite(crypto_suite);
-    return fabric_client.getUserContext('userOrguidai', true);
-
-  }).then((user_from_store) => {
+    const user_from_store = await fabric_client.getUserContext('userOrguidai', true);
 
     if (user_from_store && user_from_store.isEnrolled()) {
       console.log('Successfully loaded user from persistence');
@@ -72,23 +74,22 @@ function createUIDAI(basicInfo1) {
       chaincodeId: 'fabuidai',
       fcn: 'CreateUserAccount',
       // args: ["865219083234", "Ishan", "Sanganeria", "Male", "05/11/1998", "20", "8108152250", "sdkasbdkhab@gmail.com", "sdasd", "askdaskdn"],
-      args: [uid,fname,lname,gender,dob,age,contact_number,emailid,photohash, dochash],
-      chainId: 'channelboth',
+      args: [uid, fname, lname, gender, dob, age, contact_number, emailid, photohash, dochash],
+      chainId: 'channeluidai',
       txId: tx_id
     };
 
-    return channel.sendTransactionProposal(request);
+    const results1 = await channel.sendTransactionProposal(request);
 
-  }).then((results) => {
-
-    var proposalResponses = results[0];
-    var proposal = results[1];
+    var proposalResponses = results1[0];
+    var proposal = results1[1];
     let isProposalGood = false;
-    if (proposalResponses && proposalResponses[0].response &&
-      proposalResponses[0].response.status === 200) {
+    if (proposalResponses && proposalResponses[0].response && proposalResponses[0].response.status === 200) {
       isProposalGood = true;
       console.log('Transaction proposal was good');
     } else {
+      errorMessage = "\nERROR: " + proposalResponses[0].message + "\n"
+      console.log(errorMessage);
       console.error('Transaction proposal was bad');
     }
     if (isProposalGood) {
@@ -105,60 +106,47 @@ function createUIDAI(basicInfo1) {
       var promises = [];
 
       var sendPromise = channel.sendTransaction(request);
-      promises.push(sendPromise); //we want the send transaction first, so that we know where to check status
-
-      // get an eventhub once the fabric client has a user assigned. The user
-      // is required bacause the event registration must be signed
+      promises.push(sendPromise);
       let event_hub = channel.newChannelEventHub(peer);
-
-      // using resolve the promise so that result status may be processed
-      // under the then clause rather than having the catch clause process
-      // the status
       let txPromise = new Promise((resolve, reject) => {
         let handle = setTimeout(() => {
           event_hub.unregisterTxEvent(transaction_id_string);
           event_hub.disconnect();
           resolve({
             event_status: 'TIMEOUT'
-          }); //we could use reject(new Error('Trnasaction did not complete within 30 seconds'));
+          });
         }, 3000);
         event_hub.registerTxEvent(transaction_id_string, (tx, code) => {
-            // this is the callback for transaction event status
-            // first some clean up of event listener
-            clearTimeout(handle);
+          clearTimeout(handle);
 
-            // now let the application know what happened
-            var return_status = {
-              event_status: code,
-              tx_id: transaction_id_string
-            };
-            if (code !== 'VALID') {
-              console.error('The transaction was invalid, code = ' + code);
-              resolve(return_status); // we could use reject(new Error('Problem with the tranaction, event status ::'+code));
-            } else {
-              console.log('The transaction has been committed on peer ' + event_hub.getPeerAddr());
-              resolve(return_status);
-            }
-          }, (err) => {
-            //this is the callback if something goes wrong with the event registration or processing
-            reject(new Error('There was a problem with the eventhub ::' + err));
-          }, {
-            disconnect: true
-          } //disconnect when complete
-        );
+          var return_status = {
+            event_status: code,
+            tx_id: transaction_id_string
+          };
+          if (code !== 'VALID') {
+            console.error('The transaction was invalid, code = ' + code);
+            resolve(return_status);
+          } else {
+            console.log('The transaction has been committed on peer ' + event_hub.getPeerAddr());
+            resolve(return_status);
+          }
+        }, (err) => {
+          reject(new Error('There was a problem with the eventhub ::' + err));
+        }, {
+          disconnect: true
+        });
         event_hub.connect();
 
       });
       promises.push(txPromise);
 
-      return Promise.all(promises);
+      var results = await Promise.all(promises);
     } else {
       console.error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
       throw new Error('Failed to send Proposal or receive valid response. Response null or status is not 200. exiting...');
     }
-  }).then((results) => {
+
     console.log('Send transaction promise and event listener promise have completed');
-    // check the results in the order the promises were added to the promise all list
     if (results && results[0] && results[0].status === 'SUCCESS') {
       console.log('Successfully sent transaction to the orderer.');
     } else {
@@ -167,16 +155,25 @@ function createUIDAI(basicInfo1) {
 
     if (results && results[1] && results[1].event_status === 'VALID') {
       console.log('Successfully committed the change to the ledger by the peer');
+      incrementCountUidai();
+      return ({
+        status: "success",
+        message: "Basic data 1 stored successfully"
+      })
     } else {
       console.log('Transaction failed to be committed to the ledger due to ::' + results[1].event_status);
     }
-  }).catch((err) => {
+  } catch (err) {
     console.error('Failed to invoke successfully :: ' + err);
-  });
+    return ({
+      status: "failed",
+      message: errorMessage
+    })
+  };
 }
 
 module.exports = {
-  modifyCountUidai,
+  incrementCountUidai,
   readF,
   createUIDAI
 };

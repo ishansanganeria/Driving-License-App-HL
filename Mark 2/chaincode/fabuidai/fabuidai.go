@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"bytes"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
@@ -88,8 +89,12 @@ func (t *SimpleChainCode) CreateUserAccount(stub shim.ChaincodeStubInterface, ar
 
 	for i := 0; i < 10; i++ {
 		if len(args[i]) <= 0 {
+			var b bytes.Buffer
 			ERR := "Argument " + string(i) + " should be non empty"
-			return shim.Error(ERR)
+			fmt.Println(ERR)
+			fmt.Println(i)
+			b.WriteString(ERR)
+			return shim.Error(b.String())
 		}
 	}
 

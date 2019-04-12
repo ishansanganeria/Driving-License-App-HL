@@ -23,12 +23,13 @@ export class BasicInfo1Component implements OnInit {
     age             : new FormControl(''),
     contact_number  : new FormControl('',Validators.required),      
     emailid         : new FormControl('',Validators.required),    
-    photohash       : new FormControl(''),    
-    dochash         : new FormControl(''),  
+    photo           : new FormControl(''),    
+    doc             : new FormControl(''),  
   })
 
   fillbd1() {
-    this.putStateService.createUIDAI(this.form.value);
+    var response = this.putStateService.createUIDAI(this.form.value);
+    console.log(response);
   }
 }
 

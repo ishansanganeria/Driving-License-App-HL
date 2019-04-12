@@ -1,6 +1,40 @@
 name: "Orguidai Client"
 version: "1.0"
 
+certificateAuthorities:
+  ca.example.com:
+    url: http://localhost:7054
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/ordererOrganizations/example.com/ca/ca.example.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+    caName: ca-orgorderer
+  
+  ca.orguidai.example.com:
+    url: http://localhost:7054
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/ca/ca.orguidai.example.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+    caName: ca-orguidai
+
+  ca.orgdl.example.com:
+    url: http://localhost:7054
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orgdl.example.com/ca/ca.orgdl.example.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+    caName: ca-orgdl
+
 client:
   organization: Orguidai
   credentialStore:
@@ -19,15 +53,25 @@ channels:
         ledgerQuery: true
         eventSource: true
 
+  channeluidai:
+    orderers:
+      - orderer.example.com
+    peers:
+      peer0.orguidai.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
 organizations:
   Orguidai:
     mspid: OrguidaiMSP
     peers:
       - peer0.orguidai.example.com
     certificateAuthorities:
-      - ca.example.com
+      - ca.orguidai.example.com
     adminPrivateKey:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/9347bb9ea9b4df799e27aae51aa4ab46371c3dc5bbccf792c8d9c7411b4cc3a3_sk
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/7fc2aff6849f288dd704585d02ed9ad8f9cd03390ca8fb3279f9bb4d647bb890_sk
     signedCert:
       path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
 
@@ -49,15 +93,4 @@ peers:
     #   grpc.keepalive_time_ms: 600000
     # tlsCACerts:
     #   path: crypto-config/peerOrganizations/orguidai.example.com/peers/peer0.orguidai.example.com/msp/tlscacerts/tlsca.orguidai.example.com-cert.pem
-
-certificateAuthorities:
-  ca.orguidai.example.com:
-    url: http://localhost:7054
-    httpOptions:
-      verify: false
-    tlsCACerts:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/ca/ca.orguidai.example.com-cert.pem
-    registrar:
-      - enrollId: admin
-        enrollSecret: adminpw
-    caName: ca-orguidai
+    

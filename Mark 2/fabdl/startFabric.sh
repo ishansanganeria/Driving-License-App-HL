@@ -78,7 +78,7 @@ echo
 
 echo
 echo "###############################################################################################"
-echo "##################  Instantaiting the chaincode on channel 'channeldl'   ####################"
+echo "##################   Instantaiting the chaincode on channel 'channeldl'   #####################"
 echo "###############################################################################################"
 echo
 docker exec clidl peer chaincode instantiate -o orderer.example.com:7050 -C channeldl -n fabdl -l golang -v 1.0 -c '{"Args":[""]}' -P "OR ('OrgdlMSP.member')"

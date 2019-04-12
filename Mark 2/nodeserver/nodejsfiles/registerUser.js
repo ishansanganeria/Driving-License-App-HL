@@ -8,6 +8,14 @@ if (orgname === "Orguidai") {
 } else {
     var affiliation = 'org2.department1'
 }
+let caName = 'ca.' + orgname.toLowerCase() + '.example.com'
+let caport;
+if (orgname === "Orguidai") {
+    caport = "8054"
+} else {
+    caport = "9054"
+}
+let caUrl = 'http://localhost:' + caport
 
 var Fabric_Client = require('fabric-client');
 var Fabric_CA_Client = require('fabric-ca-client');
@@ -39,7 +47,7 @@ Fabric_Client.newDefaultKeyValueStore({
         verify: false
     };
 
-    fabric_ca_client = new Fabric_CA_Client('http://localhost:7054', null, '', crypto_suite);
+    fabric_ca_client = new Fabric_CA_Client(caUrl, null, '', crypto_suite);
 
     return fabric_client.getUserContext('admin', true);
 }).then((user_from_store) => {

@@ -7,11 +7,12 @@ const supplements = require('./supplements.js')
 app.use(cors());
 
 app.route('/api/uid/:data')
-  .get((req, res) => {
+  .get(async (req, res) => {
     let data = JSON.parse(req.params['data'])
     console.log(data);
-    supplements.createUIDAI(data);
-    res.json()
+    let response = await supplements.createUIDAI(data);
+    console.log("response: " + response)
+    res.json(response)
   });
 
 // app.get("/api/uid", function(req, res) {

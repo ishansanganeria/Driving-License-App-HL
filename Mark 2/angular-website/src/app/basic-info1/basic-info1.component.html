@@ -12,7 +12,9 @@
     Date Of Birth: <input formControlName="dob" type="date"><br><br><br>
     Contact Number: <input formControlName="contact_number" type="number"><br><br><br>
     Email ID: <input formControlName="emailid" type="email"><br><br><br>
-    <button type="submit" (click)="fillbd1()" >Submit</button><br><br><br>
+    <!-- Upload Photo: <input type="file" formControlName="photo" ><br><br><br> -->
+    <button type="submit" (click)="fillbd1()" [disabled]="!form.valid">Submit</button><br><br><br>
     Form Status: {{form.status}}
   </form>
+  <p>{{response}}</p>
 </div>

@@ -2,7 +2,14 @@
 
 let mspid = process.argv[2];
 let orgname = mspid.substring(0, mspid.length - 3)
-
+let caName = 'ca.' + orgname.toLowerCase() + '.example.com'
+let caport;
+if (orgname === "Orguidai") {
+    caport = "8054"
+} else {
+    caport = "9054"
+}
+let caUrl = 'http://localhost:' + caport
 let username = 'admin';
 
 var Fabric_Client = require('fabric-client');
@@ -35,7 +42,7 @@ Fabric_Client.newDefaultKeyValueStore({
         verify: false
     };
 
-    fabric_ca_client = new Fabric_CA_Client('http://localhost:7054', tlsOptions, 'ca.example.com', crypto_suite);
+    fabric_ca_client = new Fabric_CA_Client(caUrl , tlsOptions, caName , crypto_suite);
 
     return fabric_client.getUserContext(username, true);
 }).then((user_from_store) => {
