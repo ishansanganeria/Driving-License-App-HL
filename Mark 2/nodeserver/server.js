@@ -15,11 +15,12 @@ app.route('/api/uid/:data')
     res.json(response)
   });
 
-// app.get("/api/uid", function(req, res) {
-//   console.log("Request");
-// });
-
-
-app.listen(8000, () => {
-  console.log('Server started!')
-})
+supplements.fetchValues()
+  .then(() => {
+    supplements.readConnectionConfig()
+  })
+  .then(() => {
+    app.listen(8000, () => {
+      console.log('Server started!')
+    })
+  });

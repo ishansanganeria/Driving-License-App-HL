@@ -3,16 +3,40 @@ var Fabric_Client = require('fabric-client');
 var path = require('path');
 var util = require('util');
 var os = require('os');
+const exec = util.promisify(require('child_process').exec);
+let obj, errorMessage;
+var fabric_client = new Fabric_Client();
 // CONVERT var TO const
 
-let errorMessage;
-var fabric_client = new Fabric_Client();
-fabric_client.loadFromConfig('../basic-network/connection-profile.yaml')
+async function fetchValues() {
+  var uidaiAdminPath = 'ls "/root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark\ 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore"';
+  const {
+    stdout,
+    stderr
+  } = await exec(uidaiAdminPath);
+  newkey = stdout.substring(0, stdout.length - 1)
+  if (stderr) {
+    console.log('stderr:', stderr);
+  }
+  obj = JSON.parse(fs.readFileSync('./count.json', 'utf8'));
+  oldkey = obj.uidaiAdminKey;
+  obj.uidai = 500000000000;
+  obj.uidaiAdminKey = newkey.toString();
+  let data = JSON.stringify(obj);
+  fs.writeFileSync('./count.json', data);
 
-obj = JSON.parse(fs.readFileSync('./count.json', 'utf8'));
-obj.uidai = 500000000000;
-let data = JSON.stringify(obj);
-fs.writeFileSync('./count.json', data);
+  let connection_profile = fs.readFileSync('../basic-network/connection-profile.yaml', 'utf8');
+  connection_profile = connection_profile.replace(oldkey, newkey)
+  fs.writeFileSync('../basic-network/connection-profile.yaml', connection_profile)
+
+}
+
+async function readConnectionConfig() {
+  fabric_client.loadFromConfig('../basic-network/connection-profile.yaml')
+}
+// fabric_client.loadFromConfig('../basic-network/connection-profile.yaml')
+
+// /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/4b4ad2afaa1715a0994f4f4b71fe428b111ef7e76267c61e6492f3f9c1e2699a_sk
 
 function readF() {
   return JSON.parse(fs.readFileSync('./count.json', 'utf8'));
@@ -175,5 +199,7 @@ async function createUIDAI(basicInfo1) {
 module.exports = {
   incrementCountUidai,
   readF,
-  createUIDAI
+  createUIDAI,
+  fetchValues,
+  readConnectionConfig
 };
