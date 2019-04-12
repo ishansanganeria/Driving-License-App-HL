@@ -1,4 +1,5 @@
 service docker status > /dev/null 2>&1
+
 if [ $? -ne 0 ] 
 then
    echo
@@ -99,6 +100,10 @@ node enrollAdmin.js OrguidaiMSP
 node enrollAdmin.js OrgdlMSP
 node registerUser.js OrguidaiMSP
 node registerUser.js OrgdlMSP
+
+cd ..
+node server.js
+
 
 # docker exec cliuidai peer chaincode invoke -o orderer.example.com:7050 -C channeluidai -n fabuidai -c '{"function":"CreateUserAccount","Args":["865219083334","Ishan","Sanganeria","Male","05/11/1998","20","8108152250","sdkasbdkhab@gmail.com","dssd","sasa"]}'
 

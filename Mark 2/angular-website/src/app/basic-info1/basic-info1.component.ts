@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { PutStateService } from '../put-state.service'
+import { Fabric_Response } from '../../assets/data_structures'
 import { stringify } from 'querystring';
 
 @Component({
@@ -10,11 +11,11 @@ import { stringify } from 'querystring';
 })
 export class BasicInfo1Component implements OnInit {
 
+  response: Fabric_Response;
   constructor(private putStateService: PutStateService) { }
   
-  
-
   ngOnInit() {
+    
   }
 
   form = new FormGroup({
@@ -31,37 +32,12 @@ export class BasicInfo1Component implements OnInit {
 
   fillbd1() {
     this.putStateService.createUIDAI(this.form.value)
-      .then((res) => {
-        let response = res
-        console.log("working" + res);
+      .then((res: Fabric_Response) => {
+        console.log("working" + JSON.stringify(res));
+        this.response = res
+        if (res.status === "") {
+          
+        }
       });
   }
 }
-
-
-// First_Name    			string		 	    `json:"firstname"`
-// Last_Name     			string		 	    `json:"lastname"`
-// Gender        			string		 	    `json:"gender"`
-// DOB           			string		 	    `json:"dob"`
-// Age           			string		 	    `json:"age"`
-// ContactNumber 			string		 	    `json:"contact_number"`
-// EmailID       			string		 	    `json:"emailid"`
-// PhotoHash	  			string			    `json:"photohash"`	
-// DocumentHash  			string			    `json:"dochash"`	
-
-// type BasicInfo2 struct {
-// 	RelFirstName    		string	            `json:"relfname"`
-// 	RelLastName     		string	            `json:"rellname"`
-// 	BirthPlace      		string	            `json:"birthplace"`
-// 	Nationality     		string	            `json:"nationality"`
-// 	EmergencyNumber 		string	            `json:"emergency_number"`
-// 	BloodGroup      		string	            `json:"bloodgroup"`
-// }
-
-// type Address struct {
-// 	AddressLine1 			string 			    `json:"addressline1"`
-// 	AddressLine2 			string 			    `json:"addressline2"`
-// 	City         			string 			    `json:"city"`
-// 	Pin          			string 			    `json:"pincode"`
-// 	State        			string 			    `json:"state"`
-// }

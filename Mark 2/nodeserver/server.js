@@ -11,7 +11,7 @@ app.route('/api/uid/:data')
     let data = JSON.parse(req.params['data'])
     console.log(data);
     let response = await supplements.createUIDAI(data);
-    console.log("response: " + response)
+    console.log("response: " + JSON.stringify(response))
     res.json(response)
   });
 
