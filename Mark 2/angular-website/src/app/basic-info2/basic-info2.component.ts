@@ -4,7 +4,6 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Fabric_Response } from 'src/assets/data_structures';
 import { PutStateService } from '../put-state.service'
 
-
 @Component({
   selector: 'app-basic-info2',
   templateUrl: './basic-info2.component.html',

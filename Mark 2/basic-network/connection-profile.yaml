@@ -71,7 +71,7 @@ organizations:
     certificateAuthorities:
       - ca.orguidai.example.com
     adminPrivateKey:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/65c61eb4e146b714c817bab268057eea8861386ef8377378fdcaab6a7e2fab1e_sk
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/9f9a6306fa3dccece792ed76ce2dbf5be97482b30879a9fb76600dd0f6c48aeb_sk
     signedCert:
       path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
 

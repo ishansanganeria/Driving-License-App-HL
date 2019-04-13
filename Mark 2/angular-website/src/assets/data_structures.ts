@@ -3,6 +3,16 @@ export class Fabric_Response {
     message: string;
 }
 
+export class UIDAIDetails {
+	objectType : string
+	id : string
+	basicdata1 : Basic_Info_1
+	basicdata2 : Basic_Info_2
+	address : Basic_Info_3
+	isactive : string
+}
+
+
 export class Basic_Info_1 {
     firstname: string;
     lastname: string;
@@ -31,3 +41,4 @@ export class Basic_Info_3 {
     Pin: string;
     State: string;
 }
+

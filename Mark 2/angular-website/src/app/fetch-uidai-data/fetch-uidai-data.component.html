@@ -1,3 +1,7 @@
-<p>
-  fetch-uidai-data works!
-</p>
+<div *ngIf = "true">
+  <h3>Please enter your aadhar number</h3> <br>
+  <input type="number" size="15" [(ngModel)]="uid" #model="ngModel" required /> <br><br>
+  <button type="submit" (click)="fetchData()" >Fetch Data</button>
+</div>
+
+<!-- *ngIf = "model.invalid == 'false'" -->

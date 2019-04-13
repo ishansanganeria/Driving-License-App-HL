@@ -1,9 +1,6 @@
 import { Injectable } from '@angular/core'
-import { Observable } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
 import { Basic_Info_1, Basic_Info_2, Basic_Info_3, Fabric_Response } from '../assets/data_structures'
-import { resolve } from 'url';
-import { reject } from 'q';
 
 @Injectable({
   providedIn: 'root'

@@ -22,7 +22,7 @@ export class AadharBoolComponent implements OnInit{
       this.router.navigateByUrl('/uidai/part1')
     }
     else {
-      
+      this.router.navigateByUrl('/dl/fetchData')
     }
   }
 }
