@@ -11,6 +11,7 @@ import { AadharBoolComponent } from './aadhar-bool/aadhar-bool.component';
 import { BasicInfo1Component } from './basic-info1/basic-info1.component';
 import { BasicInfo2Component } from './basic-info2/basic-info2.component';
 import { BasicInfo3Component } from './basic-info3/basic-info3.component';
+import { FetchUidaiDataComponent } from './fetch-uidai-data/fetch-uidai-data.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { BasicInfo3Component } from './basic-info3/basic-info3.component';
     AadharBoolComponent,
     BasicInfo1Component,
     BasicInfo2Component,
-    BasicInfo3Component
+    BasicInfo3Component,
+    FetchUidaiDataComponent
   ],
   imports: [
     BrowserModule,

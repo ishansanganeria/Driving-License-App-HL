@@ -19,6 +19,7 @@ type UIDAIDetails struct {
 	BasicData_1  		    BasicInfo1         `json:"basicdata1"`
 	BasicData_2  		    BasicInfo2         `json:"basicdata2"`
 	AddressData  		    Address            `json:"address"`
+	IsActive				string			   `json:"isactive"`
 }
 
 type BasicInfo1 struct {
@@ -69,6 +70,8 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.CreateUserAccount(stub, args)
 	} else if  function == "AddBaseData2" 			{
 		return t.AddBaseData2(stub, args)
+	} else if  function == "AddBaseData3" 			{
+		return t.AddBaseData3(stub, args)
 	} else if  function == "ReturnAccountDetails" 			{
 		return t.ReturnAccountDetails(stub, args)
 	}
@@ -185,6 +188,59 @@ func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []
 		return shim.Error(err.Error())
 	}
 
+	err = stub.PutState(id, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+// id, addressline1, addressline2, city, pincode, state
+func (t *SimpleChainCode) AddBaseData3(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
+	}
+
+	for i := 0; i < 6; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	id := args[0]
+	dataAsBytes, err := stub.GetState(id)
+	if err != nil {
+		return shim.Error("Failed to get user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + id)
+	}
+
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	addressline1 := args[1]
+	addressline2 := args[2]
+	city := args[3]
+	pincode := args[4]
+	state := args[5]
+
+	uidaiData.AddressData.AddressLine1 = addressline1
+	uidaiData.AddressData.AddressLine2 = addressline2
+	uidaiData.AddressData.City = city
+	uidaiData.AddressData.Pin = pincode
+  	uidaiData.AddressData.State = state
+	uidaiData.IsActive = "true"
+
+	dataJSONasBytes, err := json.Marshal(uidaiData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
 	err = stub.PutState(id, dataJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())

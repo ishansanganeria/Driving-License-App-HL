@@ -18,7 +18,6 @@ export class AadharBoolComponent implements OnInit{
   }
 
   p(){
-    console.log(this.form.controls['choice'].value)
     if(this.form.controls['choice'].value == 'no') {
       this.router.navigateByUrl('/uidai/part1')
     }

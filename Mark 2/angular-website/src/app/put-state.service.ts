@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core'
 import { Observable } from 'rxjs'
 import { HttpClient } from '@angular/common/http'
-import { Basic_Info_1, Basic_Info_2, Fabric_Response } from '../assets/data_structures'
+import { Basic_Info_1, Basic_Info_2, Basic_Info_3, Fabric_Response } from '../assets/data_structures'
 import { resolve } from 'url';
 import { reject } from 'q';
 
@@ -27,6 +27,17 @@ export class PutStateService {
     let uidString = uid.toString();
     return new Promise((resolve,reject) => {
       this.http.get<any>('http://localhost:8000/api/uidai/part2/'+ uid + "/"+ datastring)
+        .subscribe((data: Fabric_Response) => {
+          resolve(data)
+        })
+    });
+  }
+
+  createUIDAI3(uid: number, data: Basic_Info_3): Promise<Fabric_Response> {
+    let datastring = JSON.stringify(data)
+    let uidString = uid.toString();
+    return new Promise((resolve,reject) => {
+      this.http.get<any>('http://localhost:8000/api/uidai/part3/'+ uid + "/"+ datastring)
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })

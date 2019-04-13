@@ -17,11 +17,20 @@ app.route('/api/uidai/part1/:data')
 
 app.route('/api/uidai/part2/:uid/:data')
   .get(async (req, res) => {
-    let uid  = req.params['uid']
+    let uid = req.params['uid']
+    let data = JSON.parse(req.params['data'])
+    let response = await supplements.createUIDAI2(uid, data);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/uidai/part3/:uid/:data')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
     let data = JSON.parse(req.params['data'])
     console.log(uid, req.params['data']);
     console.log(data);
-    let response = await supplements.createUIDAI2(uid, data);
+    let response = await supplements.createUIDAI3(uid, data);
     console.log("response: " + JSON.stringify(response))
     res.json(response)
   });
@@ -32,6 +41,6 @@ supplements.fetchValues()
   })
   .then(() => {
     app.listen(8000, () => {
-      console.log('Server started!')
+      console.log('\nServer started!')
     })
   });

@@ -24,7 +24,7 @@ export class Basic_Info_2 {
     BloodGroup: string;
 }
 
-export class Address {
+export class Basic_Info_3 {
     AddressLine1: string;
     AddressLine2: string;
     City: string;

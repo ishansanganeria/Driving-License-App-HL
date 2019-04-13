@@ -13,10 +13,12 @@
     Contact Number: <input formControlName="contact_number" type="number"><br><br><br>
     Email ID: <input formControlName="emailid" type="email"><br><br>
     <!-- Upload Photo: <input type="file" formControlName="photo" ><br><br><br> -->
-    <button *ngIf="response?.status != 'success'" type="submit" (click)="fillbd1()" [disabled]="!form.valid || submitButton">
-      Submit
-    </button><br><br>
-    Form Status: {{form.status}} <br><br>
+    <div *ngIf="response?.status != 'success'">
+      <button *ngIf="response?.status != 'success'" type="submit" (click)="fillbd1()" [disabled]="!form.valid || submitButton">
+        Submit
+      </button><br><br>
+      Form Status: {{form.status}} <br><br>
+    </div>
     <h4>{{response?.message}}</h4>
     <button *ngIf="response?.status == 'success'" type="submit" [routerLink]="['/uidai/part2', uid]">Next</button>
   </form>
