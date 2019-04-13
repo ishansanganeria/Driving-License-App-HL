@@ -1,23 +1,36 @@
 <h1>Please fill the Part-2 of UIDAI form </h1>
 
 <div>
+  <h3>
+    UIDAI Number : {{uid}}
+  </h3>
   <form [formGroup]="form" method="POST" action="/sendData">
-    First Name : <input formControlName="firstname" type="text"><br><br><br>
-    Last Name: <input formControlName="lastname" type="text"><br><br><br>
+    Relative's First Name: <input formControlName="relfname" type="text"> <br><br><br>
+    Relative's Last Name: <input formControlName="rellname" type="text"> <br><br><br>
+    Birth Place: <input formControlName="birthplace" type="text"> <br><br><br>
+    Nationality: <select formControlName="nationality" name="---">
+      <option value="" disabled selected hidden>-------</option>
+      <option value="Indian">Indian</option>
+      <option value="USA">USA</option>
+      <option value="UK">UK</option>
+      <option value="Russian">Russian</option>
+    </select><br><br><br>
+    Emergency Number:<input formControlName="emergency_number" type="number"> <br><br><br>
+    Blood Group:<select formControlName="bloodgroup" aria-placeholder="---">
+      <option value="" disabled selected hidden>-------</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+    </select><br><br><br>
 
-    Gender :
-    Male: <input formControlName="gender" type="radio" value="male">
-    Female: <input formControlName="gender" type="radio" value="female"><br><br><br>
 
-    Date Of Birth: <input formControlName="dob" type="date"><br><br><br>
-    Contact Number: <input formControlName="contact_number" type="number"><br><br><br>
-    Email ID: <input formControlName="emailid" type="email"><br><br>
-    <!-- Upload Photo: <input type="file" formControlName="photo" ><br><br><br> -->
-    <button *ngIf="response?.status != 'success'" type="submit" (click)="fillbd1()" [disabled]="!form.valid || submitButton">
+    <button *ngIf="response?.status != 'success'" type="submit" (click)="fillbd2()"
+      [disabled]="!form.valid || submitButton">
       Submit
     </button><br><br>
     Form Status: {{form.status}} <br><br>
     <h4>{{response?.message}}</h4>
-    <button *ngIf="response?.status == 'success'" type="submit" [routerLink]="[ '/uidai/part2',uid]">Next</button>
+    <button *ngIf="response?.status == 'success'" type="submit" [routerLink]="[ '/uidai/part3',uid]">Next</button>
   </form>
 </div>

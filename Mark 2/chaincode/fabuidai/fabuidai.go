@@ -67,7 +67,9 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 
 	if function == "CreateUserAccount" 			{ //CREATE A NEW ENTRY
 		return t.CreateUserAccount(stub, args)
-	} else if  function == "ReturnAccountDetails" 			{ //CREATE A NEW ENTRY
+	} else if  function == "AddBaseData2" 			{
+		return t.AddBaseData2(stub, args)
+	} else if  function == "ReturnAccountDetails" 			{
 		return t.ReturnAccountDetails(stub, args)
 	}
 	
@@ -129,6 +131,61 @@ func (t *SimpleChainCode) CreateUserAccount(stub shim.ChaincodeStubInterface, ar
 	}
 
 	err = stub.PutState(string(id), dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+// uid, relfname, rellname, pob, nationality, emerno, bg
+func (t *SimpleChainCode) AddBaseData2(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 7 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
+	}
+
+	for i := 0; i < 7; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	id := args[0]
+	dataAsBytes, err := stub.GetState(id)
+	if err != nil {
+		return shim.Error("Failed to get user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + id)
+	}
+
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytes, &uidaiData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	relfname := args[1]
+	rellname := args[2]
+	pob := args[3]
+	nationality := args[4]
+	emerno := args[5]
+	bg := args[6]
+
+	uidaiData.BasicData_2.RelFirstName = relfname
+	uidaiData.BasicData_2.RelLastName = rellname
+	uidaiData.BasicData_2.BirthPlace = pob
+	uidaiData.BasicData_2.Nationality = nationality
+	uidaiData.BasicData_2.EmergencyNumber = emerno
+	uidaiData.BasicData_2.BloodGroup = bg
+
+	dataJSONasBytes, err := json.Marshal(uidaiData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(id, dataJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}

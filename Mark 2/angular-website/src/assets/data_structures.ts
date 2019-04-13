@@ -15,7 +15,7 @@ export class Basic_Info_1 {
     dochash: string;
 }
 
-export class BasicInfo2 {
+export class Basic_Info_2 {
     RelFirstName: string;
     RelLastName: string;
     BirthPlace: string;

@@ -6,11 +6,22 @@ const supplements = require('./supplements.js')
 
 app.use(cors());
 
-app.route('/api/uid/:data')
+app.route('/api/uidai/part1/:data')
   .get(async (req, res) => {
     let data = JSON.parse(req.params['data'])
     console.log(data);
     let response = await supplements.createUIDAI(data);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/uidai/part2/:uid/:data')
+  .get(async (req, res) => {
+    let uid  = req.params['uid']
+    let data = JSON.parse(req.params['data'])
+    console.log(uid, req.params['data']);
+    console.log(data);
+    let response = await supplements.createUIDAI2(uid, data);
     console.log("response: " + JSON.stringify(response))
     res.json(response)
   });

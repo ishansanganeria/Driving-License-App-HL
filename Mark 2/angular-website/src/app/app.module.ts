@@ -10,13 +10,15 @@ import { AppComponent } from './app.component';
 import { AadharBoolComponent } from './aadhar-bool/aadhar-bool.component';
 import { BasicInfo1Component } from './basic-info1/basic-info1.component';
 import { BasicInfo2Component } from './basic-info2/basic-info2.component';
+import { BasicInfo3Component } from './basic-info3/basic-info3.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AadharBoolComponent,
     BasicInfo1Component,
-    BasicInfo2Component
+    BasicInfo2Component,
+    BasicInfo3Component
   ],
   imports: [
     BrowserModule,
