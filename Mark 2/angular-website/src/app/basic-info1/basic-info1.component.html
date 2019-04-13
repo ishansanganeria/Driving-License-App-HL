@@ -1,20 +1,23 @@
-<h1>Please fill the form Part-1</h1>
+<h1>Please fill the Part-1 of UIDAI form </h1>
 
 <div>
   <form [formGroup]="form" method="POST" action="/sendData">
     First Name : <input formControlName="firstname" type="text"><br><br><br>
     Last Name: <input formControlName="lastname" type="text"><br><br><br>
-    
-    Gender : 
-              Male: <input formControlName="gender" type="radio" value="male">
-              Female: <input formControlName="gender" type="radio" value="female"><br><br><br>
-    
+
+    Gender :
+    Male: <input formControlName="gender" type="radio" value="male">
+    Female: <input formControlName="gender" type="radio" value="female"><br><br><br>
+
     Date Of Birth: <input formControlName="dob" type="date"><br><br><br>
     Contact Number: <input formControlName="contact_number" type="number"><br><br><br>
-    Email ID: <input formControlName="emailid" type="email"><br><br><br>
+    Email ID: <input formControlName="emailid" type="email"><br><br>
     <!-- Upload Photo: <input type="file" formControlName="photo" ><br><br><br> -->
-    <button type="submit" (click)="fillbd1()" [disabled]="!form.valid">Submit</button><br><br><br>
-    Form Status: {{form.status}}
+    <button *ngIf="response?.status != 'success'" type="submit" (click)="fillbd1()" [disabled]="!form.valid || submitButton">
+      Submit
+    </button><br><br>
+    Form Status: {{form.status}} <br><br>
+    <h4>{{response?.message}}</h4>
+    <button *ngIf="response?.status == 'success'" type="submit" [routerLink]="[ '/uidai/part2',uid]">Next</button>
   </form>
-  <h4>{{response?.message}}</h4>
 </div>

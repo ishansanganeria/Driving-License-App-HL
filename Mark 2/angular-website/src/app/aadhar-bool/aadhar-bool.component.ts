@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup,  Validators } from '@angular/forms'
+import { Router } from '@angular/router'
 
 @Component({
   selector: 'app-aadhar-bool',
@@ -7,7 +8,8 @@ import { FormControl, FormGroup,  Validators } from '@angular/forms'
   styleUrls: ['./aadhar-bool.component.css']
 })
 export class AadharBoolComponent implements OnInit{
-  
+
+  constructor (private router: Router) {}
   form = new FormGroup({
     choice: new FormControl('',Validators.required),
   });
@@ -17,5 +19,11 @@ export class AadharBoolComponent implements OnInit{
 
   p(){
     console.log(this.form.controls['choice'].value)
+    if(this.form.controls['choice'].value == 'no') {
+      this.router.navigateByUrl('/uidai/part1')
+    }
+    else {
+      
+    }
   }
 }

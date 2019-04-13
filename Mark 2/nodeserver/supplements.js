@@ -182,7 +182,7 @@ async function createUIDAI(basicInfo1) {
       incrementCountUidai();
       return ({
         status: "success",
-        message: "Basic data 1 stored successfully"
+        message: uid 
       })
     } else {
       console.log('Transaction failed to be committed to the ledger due to ::' + results[1].event_status);

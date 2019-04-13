@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms'
 import { PutStateService } from '../put-state.service'
 import { Fabric_Response } from '../../assets/data_structures'
-import { stringify } from 'querystring';
 
 @Component({
   selector: 'app-basic-info1',
@@ -12,11 +11,12 @@ import { stringify } from 'querystring';
 export class BasicInfo1Component implements OnInit {
 
   response: Fabric_Response;
-  constructor(private putStateService: PutStateService) { }
+  submitButton: Boolean = false;
+  uid: number;
   
-  ngOnInit() {
-    
-  }
+  constructor(private putStateService: PutStateService) { }
+
+  ngOnInit() {  }
 
   form = new FormGroup({
     firstname: new FormControl('', Validators.required),
@@ -31,11 +31,15 @@ export class BasicInfo1Component implements OnInit {
   })
 
   fillbd1() {
+    this.submitButton = true;
+    this.response = { status: "Processing", message: "PROCESSING SUBMISSION..." }
+
     this.putStateService.createUIDAI(this.form.value)
       .then((res: Fabric_Response) => {
-        console.log("working" + JSON.stringify(res));
+        this.uid = parseInt(res.message)
+        res.message = "Basic data 1 stored successfully." + "The aadhar number alloted is " + this.uid + ".\n Please note it"
         this.response = res
-        if (res.status === "") {
+        if (res.status === "success") {
           
         }
       });
