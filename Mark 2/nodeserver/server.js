@@ -43,6 +43,22 @@ app.route('/api/uidai/fetchData/:uid')
     res.json(response)
   });
 
+app.route('/api/dl/fetchDataPart1/:uid')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let response = await supplements.fetchDataUidaiFromCommonChannel(uid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/dl/fetchDataPart2/:uid')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let response = await supplements.fetchDataUidaiFromDlChannel(uid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
 supplements.fetchValues()
   .then(() => {
     supplements.readConnectionConfig()

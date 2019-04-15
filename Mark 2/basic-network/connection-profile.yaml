@@ -63,6 +63,16 @@ channels:
         ledgerQuery: true
         eventSource: true
 
+  channeldl:
+    orderers:
+      - orderer.example.com
+    peers:
+      peer0.orgdl.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
 organizations:
   Orguidai:
     mspid: OrguidaiMSP
@@ -71,7 +81,18 @@ organizations:
     certificateAuthorities:
       - ca.orguidai.example.com
     adminPrivateKey:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/9f9a6306fa3dccece792ed76ce2dbf5be97482b30879a9fb76600dd0f6c48aeb_sk
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/b4618f80ba9231a2b799e2c6408aa55630bcc3803acf91ca0aafc31114892df8_sk
+    signedCert:
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
+
+  Orgdl:
+    mspid: OrgdlMSP
+    peers:
+      - peer0.orgdl.example.com
+    certificateAuthorities:
+      - ca.orgdl.example.com
+    adminPrivateKey:
+      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/320d510dfdd15b69829ff761121083157261698f4d0703e646a944f068bbc7c2_sk
     signedCert:
       path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
 
@@ -93,4 +114,7 @@ peers:
     #   grpc.keepalive_time_ms: 600000
     # tlsCACerts:
     #   path: crypto-config/peerOrganizations/orguidai.example.com/peers/peer0.orguidai.example.com/msp/tlscacerts/tlsca.orguidai.example.com-cert.pem
+  peer0.orgdl.example.com:
+    url: grpc://localhost:8051
+    eventUrl: grpc://localhost:8053
     

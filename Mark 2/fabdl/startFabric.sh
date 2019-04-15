@@ -94,11 +94,43 @@ docker exec cliuidai peer chaincode instantiate -o orderer.example.com:7050 -C c
 echo
 sleep 5
 
+echo
+echo "################################################################################################"
+echo "#####################    Running a blank code to invoke remaining CCs    #######################"
+echo "################################################################################################"
+echo
+
+docker exec cliuidai peer chaincode invoke -o orderer.example.com:7050 -C channeluidai -n fabuidai -c '{"function":"BlankRun","Args":[""]}'
+
 cd /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark\ 2/nodeserver/nodejsfiles
 rm -rf hfc-key-store
+
+echo
+echo "################################################################################################"
+echo "#######################  Enrolling admin for organization Orguidai    #########################"
+echo "################################################################################################"
+echo
 node enrollAdmin.js OrguidaiMSP
+
+echo
+echo "################################################################################################"
+echo "#######################  Enrolling admin for organization  Orgdl       #########################"
+echo "################################################################################################"
+echo
 node enrollAdmin.js OrgdlMSP
+
+echo
+echo "################################################################################################"
+echo "########################  Enrolling user for organization  Orguidai   ##########################"
+echo "################################################################################################"
+echo
 node registerUser.js OrguidaiMSP
+
+echo
+echo "################################################################################################"
+echo "########################  Enrolling user for organization    Orgdl    ##########################"
+echo "################################################################################################"
+echo
 node registerUser.js OrgdlMSP
 
 cd ..

@@ -8,7 +8,6 @@ import (
 	pb "github.com/hyperledger/fabric/protos/peer"
 )
 
-
 type SimpleChainCode struct {
 }
 
@@ -66,7 +65,9 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	fmt.Println("The function being invoked is: " + function)
 
-	if function == "CreateUserAccount" 			{ //CREATE A NEW ENTRY
+	if function == "BlankRun"{
+		return t.BlankRun(stub)
+	} else if function == "CreateUserAccount" 			{ //CREATE A NEW ENTRY
 		return t.CreateUserAccount(stub, args)
 	} else if  function == "AddBaseData2" 			{
 		return t.AddBaseData2(stub, args)
@@ -83,6 +84,10 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	}
     fmt.Println(strin)
 	return shim.Error("Received unknown function invocation")
+}
+
+func (t *SimpleChainCode) BlankRun(stub shim.ChaincodeStubInterface) pb.Response {
+	return shim.Success(nil)
 }
 
 // id, firstname, lastname, gender, dob, age, contact_number, emailid, photohash, dochash
@@ -127,6 +132,7 @@ func (t *SimpleChainCode) CreateUserAccount(stub shim.ChaincodeStubInterface, ar
 	uidaiData.BasicData_1.EmailID = emailid
 	uidaiData.BasicData_1.PhotoHash = photohash
 	uidaiData.BasicData_1.DocumentHash = dochash
+	uidaiData.IsActive = "false"
 
 	dataJSONasBytes, err := json.Marshal(uidaiData)
 	if err != nil {
@@ -253,6 +259,12 @@ func (t *SimpleChainCode) ReturnAccountDetails(stub shim.ChaincodeStubInterface,
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
-	detailsAsBytes, _ := stub.GetState(args[0])
+	detailsAsBytes, err := stub.GetState(args[0])
+	if err != nil {
+		return shim.Error("Failed to get user details: " + err.Error())
+	} else if detailsAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + args[0])
+	}
+
 	return shim.Success(detailsAsBytes)
 }

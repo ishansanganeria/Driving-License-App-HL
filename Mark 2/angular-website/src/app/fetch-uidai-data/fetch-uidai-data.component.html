@@ -1,7 +1,37 @@
-<div *ngIf = "true">
+<div *ngIf="!IsSuccess">
   <h3>Please enter your aadhar number</h3> <br>
-  <input type="number" size="15" [(ngModel)]="uid" #model="ngModel" required /> <br><br>
-  <button type="submit" (click)="fetchData()" >Fetch Data</button>
+  <form [formGroup]="form" method="POST">
+
+    <input formControlName="uid" type="number" size="15"> <br><br>
+    <button type="submit" (click)="fetchData()" [disabled]="fetchDataButtonDisabled || !form.valid">Fetch Data</button>
+
+    <h3>{{message}}</h3>
+  </form>
 </div>
 
+<div *ngIf="IsSuccess">
+  <h1>The following data was fetched</h1>
+  <h2>Basic Info - 1</h2><hr>
+  First Name : {{uidData.basicdata1.firstname}} <br><br>
+  Last Name: {{uidData.basicdata1.lastname}} <br><br>
+  Gender : {{uidData.basicdata1.gender}} <br><br>
+  Date Of Birth: {{uidData.basicdata1.dob}} <br><br>
+  Contact Number: {{uidData.basicdata1.contact_number}} <br><br>
+  Email ID: {{uidData.basicdata1.emailid}} <br><br>
+  <h2>Basic Info - 2</h2><hr>
+  Relative's First Name:    {{uidData.basicdata2.relfname}} <br><br>
+  Relative's Last Name:    {{uidData.basicdata2.rellname}} <br><br>
+  Birth Place:    {{uidData.basicdata2.birthplace}} <br><br>
+  Nationality:    {{uidData.basicdata2.nationality}} <br><br>
+  Emergency Number:    {{uidData.basicdata2.emergency_number}} <br><br>
+  Blood Group: {{uidData.basicdata2.bloodgroup}} <br><br>
+  <h2>Address Data</h2><hr>
+  Address Line 1: {{uidData.address.addressline1}} <br> <br>
+  Address Line 2: {{uidData.address.addressline2}} <br> <br>
+  City: {{uidData.address.city}} <br> <br>
+  Pin: {{uidData.address.pincode}} <br> <br>
+  State: {{uidData.address.state}} <br> <br>
+
+  <button type="submit" [routerLink]="['']">Next</button>
+</div>
 <!-- *ngIf = "model.invalid == 'false'" -->

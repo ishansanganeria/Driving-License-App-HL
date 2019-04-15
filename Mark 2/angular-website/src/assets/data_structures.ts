@@ -3,6 +3,11 @@ export class Fabric_Response {
     message: string;
 }
 
+export class Fabric_Response_UIDAIDetails {
+    status: string;
+    message: string;
+}
+
 export class UIDAIDetails {
 	objectType : string
 	id : string
@@ -26,19 +31,19 @@ export class Basic_Info_1 {
 }
 
 export class Basic_Info_2 {
-    RelFirstName: string;
-    RelLastName: string;
-    BirthPlace: string;
-    Nationality: string;
-    EmergencyNumber: string;
-    BloodGroup: string;
+    relfname: string;
+    rellname: string;
+    birthplace: string;
+    nationality: string;
+    emergency_number: string;
+    bloodgroup: string;
 }
 
 export class Basic_Info_3 {
-    AddressLine1: string;
-    AddressLine2: string;
-    City: string;
-    Pin: string;
-    State: string;
+    addressline1: string;
+    addressline2: string;
+    city: string;
+    pincode: string;
+    state: string;
 }
 

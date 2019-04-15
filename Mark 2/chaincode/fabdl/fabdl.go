@@ -17,6 +17,7 @@ type UIDAIDetails struct {
 	BasicData_1  		    BasicInfo1         `json:"basicdata1"`
 	BasicData_2  		    BasicInfo2         `json:"basicdata2"`
 	AddressData  		    Address            `json:"address"`
+	IsActive				string			   `json:"isactive"`
 }
 
 type BasicInfo1 struct {
@@ -138,9 +139,13 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	function, args := stub.GetFunctionAndParameters()
 	fmt.Println("The function being invoked is: " + function)
 
-	if function == "FetchAccountDetails" 			{ //CREATE A NEW ENTRY
+	if function == "BlankRun" {
+		return t.BlankRun(stub)
+	} else 	if function == "FetchAccountDetails" 			{ //CREATE A NEW ENTRY
 		return t.FetchAccountDetails(stub, args)
-	} 
+	} else 	if function == "ReadUidaiData" 			{ //CREATE A NEW ENTRY
+		return t.ReadUidaiData(stub, args)
+	}
 	// else if  function == "DeleteAccountDetails" 			{ //CREATE A NEW ENTRY
 	// 	return t.DeleteAccountDetails(stub, args)
 	// } 
@@ -149,7 +154,12 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Error("Received unknown function invocation")
 }
 
-// id, firstname, lastname, gender, dob, age, contact_number, emailid, photohash, dochash
+func (t *SimpleChainCode) BlankRun(stub shim.ChaincodeStubInterface) pb.Response {
+	return shim.Success(nil)
+}
+
+
+// uid, firstname, lastname, gender, dob, age, contact_number, emailid, photohash, dochash
 func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 1 {
@@ -174,17 +184,33 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 	
 	dataJSONasBytes := stub.InvokeChaincode("fabboth",bargs, "channelboth")
 	if dataJSONasBytes.Status != 200 {
+		fmt.Println(dataJSONasBytes.Message);
 		return shim.Error(dataJSONasBytes.Message)
 	}
 
 	err := stub.PutState(s[1], dataJSONasBytes.Payload)
 	if err != nil {
+		fmt.Println(err);
 		return shim.Error(err.Error())
 	}
 
 	return shim.Success(nil)
 }
 
+// uid
+func (t *SimpleChainCode) ReadUidaiData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+	detailsAsBytes, err := stub.GetState(args[0])
+	if err != nil {
+		return shim.Error("Failed to get user details: " + err.Error())
+	} else if detailsAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + args[0])
+	}
+
+	return shim.Success(detailsAsBytes)
+}
 // func (t *SimpleChainCode) DeleteAccountDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 // 	if len(args) != 1 {

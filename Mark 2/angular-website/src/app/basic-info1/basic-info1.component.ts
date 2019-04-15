@@ -10,26 +10,27 @@ import { Fabric_Response } from '../../assets/data_structures'
 })
 export class BasicInfo1Component implements OnInit {
 
+  form : FormGroup;
   response: Fabric_Response;
   submitButton: Boolean = false;
   uid: number;
-  
+
   constructor(private putStateService: PutStateService) { }
 
-  ngOnInit() {  }
+  ngOnInit() {
 
-  form = new FormGroup({
-    firstname: new FormControl('', Validators.required),
-    lastname: new FormControl('', Validators.required),
-    gender: new FormControl('', Validators.required),
-    dob: new FormControl('', Validators.required),
-    age: new FormControl(''),
-    contact_number: new FormControl('', Validators.required),
-    emailid: new FormControl('', Validators.required),
-    photo: new FormControl(''),
-    doc: new FormControl(''),
-  })
-
+    this.form = new FormGroup({
+      firstname: new FormControl('', Validators.required),
+      lastname: new FormControl('', Validators.required),
+      gender: new FormControl('', Validators.required),
+      dob: new FormControl('', Validators.required),
+      age: new FormControl(''),
+      contact_number: new FormControl('', Validators.required),
+      emailid: new FormControl('', Validators.required),
+      photo: new FormControl(''),
+      doc: new FormControl(''),
+    })
+  }
   fillbd1() {
     this.submitButton = true;
     this.response = { status: "Processing", message: "PROCESSING SUBMISSION..." }
@@ -40,7 +41,7 @@ export class BasicInfo1Component implements OnInit {
         res.message = "Basic data 1 stored successfully." + "The aadhar number alloted is " + this.uid + ".\n Please note it"
         this.response = res
         if (res.status === "success") {
-          
+
         }
       });
   }
