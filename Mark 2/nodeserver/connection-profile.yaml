@@ -7,7 +7,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/ordererOrganizations/example.com/ca/ca.example.com-cert.pem
+      path: ../basic-network/crypto-config/ordererOrganizations/example.com/ca/ca.example.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -18,7 +18,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/ca/ca.orguidai.example.com-cert.pem
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/ca/ca.orguidai.example.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -29,7 +29,7 @@ certificateAuthorities:
     httpOptions:
       verify: false
     tlsCACerts:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orgdl.example.com/ca/ca.orgdl.example.com-cert.pem
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/ca/ca.orgdl.example.com-cert.pem
     registrar:
       - enrollId: admin
         enrollSecret: adminpw
@@ -38,9 +38,9 @@ certificateAuthorities:
 client:
   organization: Orguidai
   credentialStore:
-    path: "../Mark 2/nodeserver/nodejsfiles/hfc-key-store"
+    path: "../nodeserver/nodejsfiles/hfc-key-store"
     cryptoStore:
-      path: "../Mark 2/nodeserver/nodejsfiles/hfc-key-store"
+      path: "../nodeserver/nodejsfiles/hfc-key-store"
       
 channels:
   channelboth:
@@ -81,9 +81,9 @@ organizations:
     certificateAuthorities:
       - ca.orguidai.example.com
     adminPrivateKey:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/b4618f80ba9231a2b799e2c6408aa55630bcc3803acf91ca0aafc31114892df8_sk
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/cde545ef086fb90dff3bfcb82e28e16c755088690afda51482d5adddbdcfc6fb_sk
     signedCert:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
 
   Orgdl:
     mspid: OrgdlMSP
@@ -92,9 +92,9 @@ organizations:
     certificateAuthorities:
       - ca.orgdl.example.com
     adminPrivateKey:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/320d510dfdd15b69829ff761121083157261698f4d0703e646a944f068bbc7c2_sk
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/508f42d6ba6deb1ccca9e89fb5959d1e3bb20f032d5a02539af832a2d225fec4_sk
     signedCert:
-      path: /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
 
 orderers:
   orderer.example.com:

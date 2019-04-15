@@ -100,9 +100,9 @@ echo "#####################    Running a blank code to invoke remaining CCs    #
 echo "################################################################################################"
 echo
 
-docker exec cliuidai peer chaincode invoke -o orderer.example.com:7050 -C channeluidai -n fabuidai -c '{"function":"BlankRun","Args":[""]}'
+docker exec cliuidai peer chaincode invoke -o orderer.example.com:7050 -C channelboth -n fabboth -c '{"function":"BlankRun","Args":[""]}'
 
-cd /root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark\ 2/nodeserver/nodejsfiles
+cd ../nodeserver/nodejsfiles
 rm -rf hfc-key-store
 
 echo

@@ -10,14 +10,14 @@ var fabric_client = new Fabric_Client();
 
 async function fetchValues() {
 
-   var uidaiAdminPath = 'ls "/root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark\ 2/basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore"';
+   var uidaiAdminPath = 'ls "../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore"';
    obj = await exec(uidaiAdminPath);
    newUidaiAdminKey = obj.stdout.substring(0, obj.stdout.length - 1)
    if (obj.stderr) {
       console.log('stderr:', stderr);
    }
 
-   var dlAdminPath = 'ls "/root/MEGA/Projects/HyperLedger/Smart-India-Hackathon/Mark\ 2/basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore"';
+   var dlAdminPath = 'ls "../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore"';
    obj = await exec(dlAdminPath);
    newDlAdminKey = obj.stdout.substring(0, obj.stdout.length - 1)
    if (obj.stderr) {
@@ -36,15 +36,15 @@ async function fetchValues() {
    let data = JSON.stringify(obj);
    fs.writeFileSync('./count.json', data);
 
-   let connection_profile = fs.readFileSync('../basic-network/connection-profile.yaml', 'utf8');
+   let connection_profile = fs.readFileSync('./connection-profile.yaml', 'utf8');
    connection_profile = connection_profile.replace(oldUidaiAdminKey, newUidaiAdminKey)
    connection_profile = connection_profile.replace(oldDlAdminKey, newDlAdminKey)
-   fs.writeFileSync('../basic-network/connection-profile.yaml', connection_profile)
+   fs.writeFileSync('./connection-profile.yaml', connection_profile)
 
 }
 
 async function readConnectionConfig() {
-   fabric_client.loadFromConfig('../basic-network/connection-profile.yaml')
+   fabric_client.loadFromConfig('./connection-profile.yaml')
 }
 
 function incrementCountUidai() {

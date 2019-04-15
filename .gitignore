@@ -22,22 +22,4 @@ Mark 2/bin/peer
 
 Mark 2/basic-network/config/
 
-
-Mark 3/chaincode/fabdl/fabdl
-
-
-Mark 3/bin/discover
-
-Mark 3/bin/fabric-ca-client
-
-Mark 3/bin/get-docker-images\.sh
-
-Mark 3/bin/idemixgen
-
-Mark 3/bin/orderer
-
-Mark 3/bin/peer
-
-Mark 3/basic-network/config/
-Mark 3/bin/configtxgen
-Mark 3/bin/cryptogen
+# Mark 2/nodeserver/count.json
