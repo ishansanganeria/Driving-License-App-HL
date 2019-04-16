@@ -8,6 +8,15 @@ export class Fabric_Response_UIDAIDetails {
     message: string;
 }
 
+export class LicenseBase {
+    objectType: string
+    id: string              				//REFERS UIDAIDetails's ID(json:"id")
+    rto: string
+    uidaidata: UIDAIDetails;
+    licensedata: LicenseInfo[];
+    vehiclesowned: VehiclesOwned[];
+}
+
 export class UIDAIDetails {
     objectType: string
     id: string
@@ -16,7 +25,6 @@ export class UIDAIDetails {
     address: Basic_Info_3
     isactive: string
 }
-
 
 export class Basic_Info_1 {
     firstname: string;
@@ -52,4 +60,56 @@ export class RTOInfo {
     rtoid: string
     address: Basic_Info_3
     contactno: string
+}
+
+export class LicenseInfo {
+    filenumber: string
+    licensetype: string								//Learner, Permanent
+    licensenumber: string
+    dateofissue: string
+    dateofexpiry: string
+    reason: string
+    testdata: TestInfo[]
+    ispass_written: string
+    ispass_sim: string
+    ispass_prac: string
+    isactive: string
+    tickets: TicketInfo[]
+    filestatus: FileStatusInfo[]
+
+}
+
+export class VehiclesOwned {
+    vehicletype: string    //2,3,4 wheeler, truck,etc
+    numberplate: string
+    carcompany: string     //Maruti,etc
+    carmake: string        //800,alto
+    carcolour: string
+    chasisnumber: string
+}
+
+export class TestInfo {
+    TestType: string										//(written, simulated, practical)
+    Score: string
+    MaxMarks: string
+    PassingMarks: string
+    Invigilator: string
+
+}
+
+export class TicketInfo {
+    ticketissuer: string					    			//Issuer cops id number
+    ticketid: string								      	//Gotta figure out
+    reason: string
+    dateofissue: string
+    timeofissue: string
+    place: string
+    ispaid: string
+    amount: string
+}
+
+export class FileStatusInfo {
+    filestatus: string
+    date: string
+    string: string
 }

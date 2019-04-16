@@ -11,6 +11,16 @@ import (
 type SimpleChainCode struct {
 }
 
+// SEPERATE DOCUMENT 2.1
+type LicenseBase struct {
+	DocType      			string              `json:"objectType"`
+	ID           			string              `json:"id"`					//REFERS UIDAIDetails's ID(json:"id")
+	RTO_ID       			string              `json:"rto"`
+	UIDAIData				UIDAIDetails		`json:"uidaidata"`
+	LicenseData  			[]LicenseInfo       `json:"licensedata"`
+	VehiclesData 			[]VehiclesOwned     `json:"vehiclesowned"`
+}
+
 type UIDAIDetails struct {
 	DocType      		    string             `json:"objectType"`
 	ID           		    string             `json:"id"`
@@ -47,31 +57,6 @@ type Address struct {
 	City         			string 			    `json:"city"`
 	Pin          			string 			    `json:"pincode"`
 	State        			string 			    `json:"state"`
-}
-
-// SEPERATE DOCUMENT 2.1
-type LicenseBase struct {
-	DocType      			string              `json:"objectType"`
-	ID           			string              `json:"id"`					//REFERS UIDAIDetails's ID(json:"id")
-	RTO_ID       			string              `json:"rto"`
-	LicenseData  			[]LicenseInfo       `json:"licensedata"`
-	VehiclesData 			[]VehiclesOwned     `json:"vehiclesowned"`
-}
-
-// SEPERATE DOCUMENT 2.2
-type RTOInfo struct {
-  	DocType       			string		        `json:"objectType"`
-	RTOID         			string  	        `json:"rtoid"`
-	AddressData   			Address 	        `json:"address"`
-	ContactNumber 			string  	        `json:"contactno"`
-}
-
-// SEPERATE DOCUMENT 2.3
-type OfficerInfo struct {
-	OfficerID          		string			  	`json:"id"`								//officer's phone number
-	DocType             	string				`json:"objectType"`
-	BasicData_1 	      	BasicInfo1			`json:"basicdata"`
-	RTO_ID			        string 			  	`json:"rtoid"`
 }
 
 type VehiclesOwned struct {
@@ -124,6 +109,22 @@ type FileStatusInfo struct {
 	Time					string				`json:"string"`
 }
 
+// SEPERATE DOCUMENT 2.2
+type RTOInfo struct {
+	DocType       			string		        `json:"objectType"`
+  RTOID         			string  	        `json:"rtoid"`
+  AddressData   			Address 	        `json:"address"`
+  ContactNumber 			string  	        `json:"contactno"`
+}
+
+// SEPERATE DOCUMENT 2.3
+type OfficerInfo struct {
+  OfficerID          		string			  	`json:"id"`								//officer's phone number
+  DocType             	string				`json:"objectType"`
+  BasicData_1 	      	BasicInfo1			`json:"basicdata"`
+  RTO_ID			        string 			  	`json:"rtoid"`
+}
+
 func main() {
 	err := shim.Start(new(SimpleChainCode))
 	if err != nil {
@@ -150,9 +151,6 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 	} else if function == "AddOfficer" 			{ //REGISTER A OFFICER TO THE SYSTEM
 		return t.AddOfficer(stub, args)
 	} 
-	// else if  function == "DeleteAccountDetails" 			{ //CREATE A NEW ENTRY
-	// 	return t.DeleteAccountDetails(stub, args)
-	// } 
 	
     fmt.Println("Function not found: " + function)
 	return shim.Error("Received unknown function invocation")
@@ -163,7 +161,7 @@ func (t *SimpleChainCode) BlankRun(stub shim.ChaincodeStubInterface) pb.Response
 }
 
 
-// uid, firstname, lastname, gender, dob, age, contact_number, emailid, photohash, dochash
+// uid
 func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 	if len(args) != 1 {
@@ -192,7 +190,21 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 		return shim.Error(dataJSONasBytes.Message)
 	}
 
-	err := stub.PutState(s[1], dataJSONasBytes.Payload)
+	var uidaiData UIDAIDetails
+	err := json.Unmarshal(dataJSONasBytes.Payload, &uidaiData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	var licensebase LicenseBase
+	licensebase.UIDAIData = uidaiData
+
+	licensedataJSONasBytes, err := json.Marshal(licensebase)
+	if err != nil {
+		return shim.Error("1" + err.Error())
+	}
+
+	err = stub.PutState(args[0], licensedataJSONasBytes)
 	if err != nil {
 		fmt.Println(err);
 		return shim.Error(err.Error())
@@ -206,6 +218,7 @@ func (t *SimpleChainCode) ReadUidaiData(stub shim.ChaincodeStubInterface, args [
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
+
 	detailsAsBytes, err := stub.GetState(args[0])
 	if err != nil {
 		return shim.Error("Failed to get user details: " + err.Error())
@@ -213,6 +226,19 @@ func (t *SimpleChainCode) ReadUidaiData(stub shim.ChaincodeStubInterface, args [
 		return shim.Error("This user doesn't exist: " + args[0])
 	}
 
+	var licensebase LicenseBase;
+	err = json.Unmarshal(detailsAsBytes, &licensebase);
+	if err != nil {
+		fmt.Println("1" + err.Error());
+		return shim.Error(err.Error())
+	}
+	
+	detailsAsBytes, err = json.Marshal(licensebase.UIDAIData)
+	if err != nil {
+		fmt.Println("2" + err.Error());
+		return shim.Error(err.Error())
+	}
+	
 	return shim.Success(detailsAsBytes)
 }
 
@@ -350,35 +376,3 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 
 	return shim.Success(nil)
 }
-
-// func (t *SimpleChainCode) DeleteAccountDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
-
-// 	if len(args) != 1 {
-// 		return shim.Error("Incorrect number of arguments. Expecting 1")
-// 	}
-
-// 	for i := 0; i < 1; i++ {
-// 		if len(args[i]) <= 0 {
-// 			ERR := "Argument " + string(i) + " should be non empty"
-// 			return shim.Error(ERR)
-// 		}
-// 	}
-
-// 	var s [2]string
-// 	s[0] = "DeleteAccountDetails"
-// 	s[1] = args[0]
-
-// 	bargs := make([][]byte, len(s))
-
-// 	bargs = make([][]byte, 2)
-// 	for i, arg := range s {
-// 		bargs[i] = []byte(arg)
-// 	}
-	
-// 	dataJSONasBytes := stub.InvokeChaincode("fabboth",bargs, "channelboth")
-// 	if dataJSONasBytes.Status != 200 {
-// 		return shim.Error(dataJSONasBytes.Message)
-// 	}
-// 	return shim.Success(nil)
-
-// }
