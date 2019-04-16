@@ -31,6 +31,7 @@ export class BasicInfo1Component implements OnInit {
       doc: new FormControl(''),
     })
   }
+  
   fillbd1() {
     this.submitButton = true;
     this.response = { status: "Processing", message: "PROCESSING SUBMISSION..." }

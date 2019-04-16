@@ -9,12 +9,12 @@ export class Fabric_Response_UIDAIDetails {
 }
 
 export class UIDAIDetails {
-	objectType : string
-	id : string
-	basicdata1 : Basic_Info_1
-	basicdata2 : Basic_Info_2
-	address : Basic_Info_3
-	isactive : string
+    objectType: string
+    id: string
+    basicdata1: Basic_Info_1
+    basicdata2: Basic_Info_2
+    address: Basic_Info_3
+    isactive: string
 }
 
 
@@ -47,3 +47,9 @@ export class Basic_Info_3 {
     state: string;
 }
 
+export class RTOInfo {
+    objectType: string
+    rtoid: string
+    address: Basic_Info_3
+    contactno: string
+}

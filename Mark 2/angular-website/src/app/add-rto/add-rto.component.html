@@ -1,0 +1,19 @@
+<h1>Please fill the form to add an RTO office </h1>
+
+<form [formGroup]="form" method="POST">
+  Address Line 1 : <input formControlName="addressline1" type="text"><br><br><br>
+  Address Line 2 : <input formControlName="addressline2" type="text"><br><br><br>
+  City : <input formControlName="city" type="text"><br><br><br>
+  Pin-Code : <input formControlName="pincode" type="number"><br><br><br>
+  State : <input formControlName="state" type="text"><br><br><br>
+  Contact Number: <input formControlName="contactno" type="number"><br><br><br>
+
+  <div *ngIf="response?.status != 'success'">
+    <button type="submit" (click)="fillRto()" [disabled]="!form.valid || submitButton">
+      Submit
+    </button><br><br>
+    Form Status: {{form.status}} <br><br>
+  </div>
+
+  <h4>{{response?.message}}</h4>
+</form>

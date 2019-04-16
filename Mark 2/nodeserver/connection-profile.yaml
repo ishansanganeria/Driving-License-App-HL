@@ -1,4 +1,4 @@
-name: "Orguidai Client"
+# name: "Orguidai Client"
 version: "1.0"
 
 certificateAuthorities:
@@ -36,11 +36,16 @@ certificateAuthorities:
     caName: ca-orgdl
 
 client:
-  organization: Orguidai
-  credentialStore:
-    path: "../nodeserver/nodejsfiles/hfc-key-store"
-    cryptoStore:
+  - organization: Orguidai
+    credentialStore:
       path: "../nodeserver/nodejsfiles/hfc-key-store"
+      cryptoStore:
+        path: "../nodeserver/nodejsfiles/hfc-key-store"
+  - organization: Orgdl
+    credentialStore:
+      path: "../nodeserver/nodejsfiles/hfc-key-store"
+      cryptoStore:
+        path: "../nodeserver/nodejsfiles/hfc-key-store"
       
 channels:
   channelboth:
@@ -81,7 +86,7 @@ organizations:
     certificateAuthorities:
       - ca.orguidai.example.com
     adminPrivateKey:
-      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/cde545ef086fb90dff3bfcb82e28e16c755088690afda51482d5adddbdcfc6fb_sk
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/cb11cd84a292f7ed9f9e0e56a20b1352830890fed3d2cd0a0591d2c363c7cc18_sk
     signedCert:
       path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
 
@@ -92,9 +97,9 @@ organizations:
     certificateAuthorities:
       - ca.orgdl.example.com
     adminPrivateKey:
-      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/508f42d6ba6deb1ccca9e89fb5959d1e3bb20f032d5a02539af832a2d225fec4_sk
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/02c7b8d27ed53fede71ac9c017758ad0d8e178967ca77b49dcc5b8666b93a710_sk
     signedCert:
-      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/signcerts/Admin@orgdl.example.com-cert.pem
 
 orderers:
   orderer.example.com:

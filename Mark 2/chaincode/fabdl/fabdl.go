@@ -1,7 +1,7 @@
 package main
 
 import (
-	// "encoding/json"
+	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
@@ -145,7 +145,11 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.FetchAccountDetails(stub, args)
 	} else 	if function == "ReadUidaiData" 			{ //CREATE A NEW ENTRY
 		return t.ReadUidaiData(stub, args)
-	}
+	} else if function == "AddRTO" 				{ //ADD A NEW RTO TO THE SYSTEM
+		return t.AddRTO(stub, args)
+	} else if function == "AddOfficer" 			{ //REGISTER A OFFICER TO THE SYSTEM
+		return t.AddOfficer(stub, args)
+	} 
 	// else if  function == "DeleteAccountDetails" 			{ //CREATE A NEW ENTRY
 	// 	return t.DeleteAccountDetails(stub, args)
 	// } 
@@ -211,6 +215,142 @@ func (t *SimpleChainCode) ReadUidaiData(stub shim.ChaincodeStubInterface, args [
 
 	return shim.Success(detailsAsBytes)
 }
+
+// id, addline1, addline2, city, state, contactno
+func (t *SimpleChainCode) AddRTO(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
+	}
+
+	for i := 0; i < 6; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	id := args[0]
+	dataAsBytes, err := stub.GetState(id)
+	if err != nil {
+		return shim.Error("Failed to get rto details: " + err.Error())
+	} else if dataAsBytes != nil {
+		return shim.Error("There already exists an RTO in this pincode: " + id)
+	}
+
+	var rtodata RTOInfo
+	doctype 		:= 		"RTO_Info"
+	rtoid 			:= 		"RTO" + id				//PIN CODE
+	addline1 		:= 		args[1]
+	addline2 		:= 		args[2]
+	city 			:= 		args[3]
+	pincode 		:= 		id
+	state 			:= 		args[4]
+	contactno 		:= 		args[5]
+
+	rtodata.DocType 					= 	doctype
+	rtodata.RTOID 						= 	rtoid
+	rtodata.AddressData.AddressLine1 	= 	addline1
+	rtodata.AddressData.AddressLine2 	= 	addline2
+	rtodata.AddressData.City 			= 	city
+	rtodata.AddressData.Pin 			= 	pincode
+	rtodata.AddressData.State 			= 	state
+	rtodata.ContactNumber 				= 	contactno
+
+	dataJSONasBytes, err := json.Marshal(rtodata)
+	if err != nil {
+		return shim.Error("1" + err.Error())
+	}
+
+	err = stub.PutState(rtoid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error("2" + err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+// uid, rtoid
+func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	for i := 0; i < 2; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	uid 				 	:= 		args[0]				//UIDAI
+	dataAsBytesUID, err 	:= 		stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to get officer's UIDAI info: " + err.Error())
+	} else if dataAsBytesUID == nil {
+		return shim.Error("This officer doesnt have an aadhar card: " + uid)
+	}
+
+	rtoid				:= 		args[1]
+	dataAsBytes, err 	:= 		stub.GetState(rtoid)
+	if err != nil {
+		return shim.Error("Failed to get rto info: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This rto doesnt exist: " + rtoid)
+	}
+
+	fmt.Printf("%s %s ", uid, rtoid);
+	dataAsBytes, err 	= 		stub.GetState("OFF" + uid)
+	if err != nil {
+		return shim.Error("Failed to get rto info: " + err.Error())
+	} else if dataAsBytes != nil {
+		return shim.Error("This officer already exists: " + rtoid)
+	}
+
+	var uidaiData UIDAIDetails
+	err = json.Unmarshal(dataAsBytesUID, &uidaiData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		fmt.Println("1" + err.Error());
+		return shim.Error(err.Error())
+	}
+	var officerdata OfficerInfo
+	doctype 		:= 		"Officer_Info"
+	firstname 		:= 		uidaiData.BasicData_1.First_Name
+	lastname 		:= 		uidaiData.BasicData_1.Last_Name
+	gender 			:= 		uidaiData.BasicData_1.Gender
+	dob 			:= 		uidaiData.BasicData_1.DOB
+	age 			:= 		uidaiData.BasicData_1.Age
+	contact_number	:=		uidaiData.BasicData_1.ContactNumber
+	Email			:=		uidaiData.BasicData_1.EmailID
+	
+
+	officerdata.OfficerID 					= 	"OFF" + uid
+	officerdata.DocType 					= 	doctype
+	officerdata.BasicData_1.First_Name	 	= 	firstname
+	officerdata.BasicData_1.Last_Name	 	= 	lastname
+	officerdata.BasicData_1.Gender	 		= 	gender
+	officerdata.BasicData_1.DOB	 			= 	dob
+	officerdata.BasicData_1.Age				= 	age
+	officerdata.BasicData_1.ContactNumber	=	contact_number
+	officerdata.BasicData_1.EmailID			=	Email
+	officerdata.RTO_ID						=	rtoid
+
+	dataJSONasBytes, err := json.Marshal(officerdata)
+	if err != nil {
+		fmt.Println("2" + err.Error());
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(officerdata.OfficerID, dataJSONasBytes)
+	if err != nil {
+		fmt.Println("3" + err.Error());
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
 // func (t *SimpleChainCode) DeleteAccountDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
 // 	if len(args) != 1 {

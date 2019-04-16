@@ -59,7 +59,25 @@ app.route('/api/dl/fetchDataPart2/:uid')
     res.json(response)
   });
 
-supplements.fetchValues()
+app.route('/api/dl/addRto/:data')
+  .get(async (req, res) => {
+    let data = req.params['data']
+    console.log(data);
+    let response = await supplements.addRto(data);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+  app.route('/api/dl/addOfficer/:uid/:rtoid')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let rtoid = req.params['rtoid']
+    let response = await supplements.addOfficer(uid,rtoid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+  supplements.fetchValues()
   .then(() => {
     supplements.readConnectionConfig()
   })

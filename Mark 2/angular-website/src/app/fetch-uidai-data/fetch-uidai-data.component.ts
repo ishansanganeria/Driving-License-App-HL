@@ -46,7 +46,6 @@ export class FetchUidaiDataComponent implements OnInit {
 							this.getStateService.fetchUidaiDataFromDl(this.form.value.uid)
 								.then( (res: Fabric_Response_UIDAIDetails) => {
 									this.IsSuccess = true
-									console.log("fetchUidaiDataFromDl" + JSON.stringify(res));
 									this.uidData = JSON.parse(res.message);
 									// console.log(this.uidData);
 								})

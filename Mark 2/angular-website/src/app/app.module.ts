@@ -12,6 +12,8 @@ import { BasicInfo1Component } from './basic-info1/basic-info1.component';
 import { BasicInfo2Component } from './basic-info2/basic-info2.component';
 import { BasicInfo3Component } from './basic-info3/basic-info3.component';
 import { FetchUidaiDataComponent } from './fetch-uidai-data/fetch-uidai-data.component';
+import { AddRtoComponent } from './add-rto/add-rto.component';
+import { AddOfficerComponent } from './add-officer/add-officer.component';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,9 @@ import { FetchUidaiDataComponent } from './fetch-uidai-data/fetch-uidai-data.com
     BasicInfo1Component,
     BasicInfo2Component,
     BasicInfo3Component,
-    FetchUidaiDataComponent
+    FetchUidaiDataComponent,
+    AddRtoComponent,
+    AddOfficerComponent
   ],
   imports: [
     BrowserModule,
