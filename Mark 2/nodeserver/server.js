@@ -68,16 +68,16 @@ app.route('/api/dl/addRto/:data')
     res.json(response)
   });
 
-  app.route('/api/dl/addOfficer/:uid/:rtoid')
+app.route('/api/dl/addOfficer/:uid/:rtoid')
   .get(async (req, res) => {
     let uid = req.params['uid']
     let rtoid = req.params['rtoid']
-    let response = await supplements.addOfficer(uid,rtoid);
+    let response = await supplements.addOfficer(uid, rtoid);
     console.log("response: " + JSON.stringify(response))
     res.json(response)
   });
 
-  supplements.fetchValues()
+supplements.fetchValues()
   .then(() => {
     supplements.readConnectionConfig()
   })
