@@ -14,6 +14,8 @@ import { BasicInfo3Component } from './basic-info3/basic-info3.component';
 import { FetchUidaiDataComponent } from './fetch-uidai-data/fetch-uidai-data.component';
 import { AddRtoComponent } from './add-rto/add-rto.component';
 import { AddOfficerComponent } from './add-officer/add-officer.component';
+import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
+import { ApplyLicenseComponent } from './apply-license/apply-license.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +26,9 @@ import { AddOfficerComponent } from './add-officer/add-officer.component';
     BasicInfo3Component,
     FetchUidaiDataComponent,
     AddRtoComponent,
-    AddOfficerComponent
+    AddOfficerComponent,
+    AddVehicleComponent,
+    ApplyLicenseComponent
   ],
   imports: [
     BrowserModule,

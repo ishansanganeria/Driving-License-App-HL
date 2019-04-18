@@ -18,7 +18,8 @@ export class BasicInfo2Component implements OnInit {
   constructor(private activatedRoute: ActivatedRoute, private putStateService: PutStateService) { }
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(event => {
+    this.activatedRoute.params
+      .subscribe(event => {
       this.uid = event.uid;
     });
   }

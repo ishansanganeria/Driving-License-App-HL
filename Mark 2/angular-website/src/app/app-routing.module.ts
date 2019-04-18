@@ -7,6 +7,8 @@ import { BasicInfo3Component } from './basic-info3/basic-info3.component';
 import { FetchUidaiDataComponent } from './fetch-uidai-data/fetch-uidai-data.component';
 import { AddRtoComponent } from './add-rto/add-rto.component';
 import { AddOfficerComponent } from './add-officer/add-officer.component';
+import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
+import { ApplyLicenseComponent } from './apply-license/apply-license.component';
 
 const routes: Routes = [
   {
@@ -37,6 +39,14 @@ const routes: Routes = [
   {
     path: 'dl/addOfficer',
     component: AddOfficerComponent
+  },
+  {
+    path: 'dl/addVehicles',
+    component: AddVehicleComponent
+  },
+  {
+    path: 'dl/applyLicense/:userData',
+    component: ApplyLicenseComponent
   }
 
 ];

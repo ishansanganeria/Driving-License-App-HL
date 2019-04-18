@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GetStateService } from '../get-state.service'
-import { Fabric_Response, UIDAIDetails, Fabric_Response_UIDAIDetails } from 'src/assets/data_structures';
+import { Fabric_Response, UIDAIDetails, Fabric_Response_UIDAIDetails, LicenseBase } from 'src/assets/data_structures';
 import { async, delay } from 'q';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -13,6 +13,8 @@ export class FetchUidaiDataComponent implements OnInit {
 
 	form: FormGroup;
 	message: string;
+	userData: LicenseBase;
+	userDataString: string;
 	uidData: UIDAIDetails;
 	fetchDataButtonDisabled: Boolean = false;
 	IsFailed:  Boolean = false;
@@ -46,8 +48,9 @@ export class FetchUidaiDataComponent implements OnInit {
 							this.getStateService.fetchUidaiDataFromDl(this.form.value.uid)
 								.then( (res: Fabric_Response_UIDAIDetails) => {
 									this.IsSuccess = true
-									this.uidData = JSON.parse(res.message);
-									// console.log(this.uidData);
+									this.userData = JSON.parse(res.message);
+									this.userDataString = JSON.stringify(this.userData) 
+									this.uidData = this.userData.uidaidata;
 								})
 						})
 				}

@@ -547,7 +547,7 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	licensetype := args[1]
 	date		:= args[2]
 	time		:= args[3]
-	filenumber 	:= string(args[1][0]) + uid
+	filenumber 	:= string(licensetype[0]) + uid
 		
 	dataAsBytes, err := stub.GetState(uid)
 	if err != nil {

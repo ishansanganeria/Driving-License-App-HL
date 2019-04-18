@@ -9,12 +9,14 @@ export class Fabric_Response_UIDAIDetails {
 }
 
 export class LicenseBase {
-    objectType: string
-    id: string              				//REFERS UIDAIDetails's ID(json:"id")
-    rto: string
+    objectType: string;
+    id: string;            				//REFERS UIDAIDetails's ID(json:"id")
+    rto: string;
     uidaidata: UIDAIDetails;
     licensedata: LicenseInfo[];
     vehiclesowned: VehiclesOwned[];
+    nextprocess: string;
+    activefile: string;
 }
 
 export class UIDAIDetails {
@@ -109,6 +111,7 @@ export class TicketInfo {
 }
 
 export class FileStatusInfo {
+    number: string
     filestatus: string
     date: string
     string: string

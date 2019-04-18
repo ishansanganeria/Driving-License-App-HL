@@ -908,7 +908,7 @@ async function fetchDataUidaiFromDlChannel(uid) {
 
       const request = {
          chaincodeId: 'fabdl',
-         fcn: 'ReadUidaiData',
+         fcn: 'ReturnUserData',
          args: [uid]
       };
 

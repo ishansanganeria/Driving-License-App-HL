@@ -19,6 +19,9 @@ type LicenseBase struct {
 	UIDAIData				UIDAIDetails		`json:"uidaidata"`
 	LicenseData  			[]LicenseInfo       `json:"licensedata"`
 	VehiclesData 			[]VehiclesOwned     `json:"vehiclesowned"`
+	NextProcess				string				`json:"nextprocess"`
+	CurrentFile				string				`json:"currentfile"`
+	ActiveFile				string				`json:"activefile"`
 }
 
 type UIDAIDetails struct {
@@ -104,6 +107,7 @@ type TestInfo struct {
 }
 
 type FileStatusInfo struct {
+	Number					string				`json:"number"`
 	Status					string				`json:"filestatus"`
 	Date					string				`json:"date"`
 	Time					string				`json:"string"`
@@ -144,12 +148,14 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.BlankRun(stub)
 	} else 	if function == "FetchAccountDetails" 			{ //CREATE A NEW ENTRY
 		return t.FetchAccountDetails(stub, args)
-	} else 	if function == "ReadUidaiData" 			{ //CREATE A NEW ENTRY
-		return t.ReadUidaiData(stub, args)
+	} else 	if function == "ReturnUserData" 			{ //CREATE A NEW ENTRY
+		return t.ReturnUserData(stub, args)
 	} else if function == "AddRTO" 				{ //ADD A NEW RTO TO THE SYSTEM
 		return t.AddRTO(stub, args)
 	} else if function == "AddOfficer" 			{ //REGISTER A OFFICER TO THE SYSTEM
 		return t.AddOfficer(stub, args)
+	} else if function == "LicenseApply" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.LicenseApply(stub, args)
 	} 
 	
     fmt.Println("Function not found: " + function)
@@ -198,6 +204,7 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 
 	var licensebase LicenseBase
 	licensebase.UIDAIData = uidaiData
+	licensebase.NextProcess = "learning"
 
 	licensedataJSONasBytes, err := json.Marshal(licensebase)
 	if err != nil {
@@ -214,7 +221,7 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 }
 
 // uid
-func (t *SimpleChainCode) ReadUidaiData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+func (t *SimpleChainCode) ReturnUserData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 	if len(args) != 1 {
 		return shim.Error("Incorrect number of arguments. Expecting 1")
 	}
@@ -233,7 +240,7 @@ func (t *SimpleChainCode) ReadUidaiData(stub shim.ChaincodeStubInterface, args [
 		return shim.Error(err.Error())
 	}
 	
-	detailsAsBytes, err = json.Marshal(licensebase.UIDAIData)
+	detailsAsBytes, err = json.Marshal(licensebase)
 	if err != nil {
 		fmt.Println("2" + err.Error());
 		return shim.Error(err.Error())
@@ -371,6 +378,73 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 	err = stub.PutState(officerdata.OfficerID, dataJSONasBytes)
 	if err != nil {
 		fmt.Println("3" + err.Error());
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+// uid, licensetype,  date, time,
+func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 4 {
+		return shim.Error("Incorrect number of arguments. Expecting 4")
+	}
+
+	for i := 0; i < 4; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	uid 		:= args[0]
+	licensetype := args[1]
+	date		:= args[2]
+	time		:= args[3]
+	filenumber 	:= string(licensetype[0]) + uid
+		
+	dataAsBytes, err := stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+	
+	var licenseData LicenseBase
+	err = json.Unmarshal(dataAsBytes, &licenseData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	licenseData.NextProcess = "nil"
+	licenseData.CurrentFile = filenumber
+	
+	var filedata LicenseInfo
+	filedata.FileNumber            = filenumber 
+	filedata.LicenseType           = licensetype
+	filedata.IsActive              = "false"
+	filedata.ReasonOfInactivity    = "Under Process for Initial Approval"
+	filedata.IsPassWritten		   = "false"
+	filedata.IsPassSim		 	   = "false"
+	filedata.IsPassPrac     	   = "false"
+	
+	var status FileStatusInfo
+	status.Status  = "Under Process for Initial Approval"
+	status.Date    = date
+	status.Time    = time
+	status.Number  = "1"
+
+	filedata.FileStatus  = append(filedata.FileStatus, status)
+	licenseData.LicenseData = append(licenseData.LicenseData, filedata)
+
+	dataJSONasBytes, err := json.Marshal(licenseData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
 		return shim.Error(err.Error())
 	}
 
