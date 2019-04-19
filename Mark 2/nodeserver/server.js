@@ -77,6 +77,14 @@ app.route('/api/dl/addOfficer/:uid/:rtoid')
     res.json(response)
   });
 
+app.route('/api/dl/applyLicense/:uid')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let response = await supplements.applyLicnese(uid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
 supplements.fetchValues()
   .then(() => {
     supplements.readConnectionConfig()

@@ -59,4 +59,13 @@ export class PutStateService {
         })
     });
   }
+
+  applyLicense(uid: string): Promise<Fabric_Response> {
+    return new Promise((resolve, reject) => {
+      this.http.get<any>('http://localhost:8000/api/dl/applyLicense/' + uid)
+        .subscribe((data: Fabric_Response) => {
+          resolve(data)
+        })
+    });
+  }
 }

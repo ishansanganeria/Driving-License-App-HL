@@ -6,6 +6,7 @@ import (
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 	// "github.com/hyperledger/fabric/common/util"
+	"strings"
 )
 
 type SimpleChainCode struct {
@@ -207,7 +208,7 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 	licensebase.ID = uidaiData.ID;
 	licensebase.UIDAIData = uidaiData
 	licensebase.NextProcess = "learning"
-	licensebase.RTO_ID = uidaiData.AddressData.Pin
+	licensebase.RTO_ID = "RTO" + uidaiData.AddressData.Pin
 
 	licensedataJSONasBytes, err := json.Marshal(licensebase)
 	if err != nil {
@@ -387,25 +388,21 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 	return shim.Success(nil)
 }
 
-// uid, licensetype,  date, time,
+// uid, date, time,
 func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []string) pb.Response {
 
-	if len(args) != 4 {
-		return shim.Error("Incorrect number of arguments. Expecting 4")
+	if len(args) != 3 {
+		return shim.Error("Incorrect number of arguments. Expecting 3")
 	}
 
-	for i := 0; i < 4; i++ {
+	for i := 0; i < 3; i++ {
 		if len(args[i]) <= 0 {
 			ERR := "Argument " + string(i) + " should be non empty"
 			return shim.Error(ERR)
 		}
 	}
 
-	uid 		:= args[0]
-	licensetype := args[1]
-	date		:= args[2]
-	time		:= args[3]
-	filenumber 	:= string(licensetype[0]) + uid
+	uid := args[0]
 		
 	dataAsBytes, err := stub.GetState(uid)
 	if err != nil {
@@ -420,6 +417,12 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 		return shim.Error(err.Error())
 	}
 
+	
+	date		:= args[1]
+	time		:= args[2]
+	licensetype	:= licenseData.NextProcess
+	filenumber 	:= strings.ToUpper(string(licensetype[0])) + uid
+
 	licenseData.NextProcess = "nil"
 	licenseData.CurrentFile = filenumber
 	
@@ -433,7 +436,7 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	filedata.IsPassPrac     	   = "false"
 	
 	var status FileStatusInfo
-	status.Status  = "Under Process for Initial Approval"
+	status.Status  = "Waiting to complete Written Test"
 	status.Date    = date
 	status.Time    = time
 	status.Number  = "1"

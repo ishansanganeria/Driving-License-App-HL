@@ -1,1 +1,13 @@
-<p>apply license</p>
+<div *ngIf="!hasApplied">
+  <p>
+    User's Aadhar ID: {{userData.uidaidata.id}}
+  </p><br><br>
+
+  <button type="button" *ngIf="canApplyButton" (click)="applyForLicense()">Apply for
+    {{userData.nextprocess | titlecase}} License</button><br><br>
+  <h4>{{response?.message}}</h4>
+</div>
+
+<div *ngIf="hasApplied">
+  <h4>{{response?.message}}</h4>
+</div>
