@@ -9,10 +9,11 @@ import { AddRtoComponent } from './add-rto/add-rto.component';
 import { AddOfficerComponent } from './add-officer/add-officer.component';
 import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { ApplyLicenseComponent } from './apply-license/apply-license.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'askAadhar',
     component: AadharBoolComponent,
     pathMatch: 'full'
   },
@@ -47,6 +48,10 @@ const routes: Routes = [
   {
     path: 'dl/applyLicense/:userData',
     component: ApplyLicenseComponent
+  },
+  {
+    path: 'dl/dashboard',
+    component: UserDashboardComponent
   }
 
 ];

@@ -21,7 +21,7 @@ type LicenseBase struct {
 	VehiclesData 			[]VehiclesOwned     `json:"vehiclesowned"`
 	NextProcess				string				`json:"nextprocess"`
 	CurrentFile				string				`json:"currentfile"`
-	ActiveFile				string				`json:"activefile"`
+	ActiveLicense			string				`json:"activelicense"`
 }
 
 type UIDAIDetails struct {
@@ -116,7 +116,7 @@ type FileStatusInfo struct {
 // SEPERATE DOCUMENT 2.2
 type RTOInfo struct {
 	DocType       			string		        `json:"objectType"`
-  RTOID         			string  	        `json:"rtoid"`
+  RTO_ID         			string  	        `json:"rtoid"`
   AddressData   			Address 	        `json:"address"`
   ContactNumber 			string  	        `json:"contactno"`
 }
@@ -203,8 +203,11 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 	}
 
 	var licensebase LicenseBase
+	licensebase.DocType = "licensebase"
+	licensebase.ID = uidaiData.ID;
 	licensebase.UIDAIData = uidaiData
 	licensebase.NextProcess = "learning"
+	licensebase.RTO_ID = uidaiData.AddressData.Pin
 
 	licensedataJSONasBytes, err := json.Marshal(licensebase)
 	if err != nil {
@@ -282,7 +285,7 @@ func (t *SimpleChainCode) AddRTO(stub shim.ChaincodeStubInterface, args []string
 	contactno 		:= 		args[5]
 
 	rtodata.DocType 					= 	doctype
-	rtodata.RTOID 						= 	rtoid
+	rtodata.RTO_ID 						= 	rtoid
 	rtodata.AddressData.AddressLine1 	= 	addline1
 	rtodata.AddressData.AddressLine2 	= 	addline2
 	rtodata.AddressData.City 			= 	city

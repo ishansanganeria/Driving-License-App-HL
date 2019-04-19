@@ -16,6 +16,7 @@ import { AddRtoComponent } from './add-rto/add-rto.component';
 import { AddOfficerComponent } from './add-officer/add-officer.component';
 import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { ApplyLicenseComponent } from './apply-license/apply-license.component';
+import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { ApplyLicenseComponent } from './apply-license/apply-license.component';
     AddRtoComponent,
     AddOfficerComponent,
     AddVehicleComponent,
-    ApplyLicenseComponent
+    ApplyLicenseComponent,
+    UserDashboardComponent
   ],
   imports: [
     BrowserModule,

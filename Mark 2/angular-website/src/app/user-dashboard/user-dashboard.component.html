@@ -1,0 +1,6 @@
+<p>
+  User's Aadhar ID: {{userData.uidaidata.id}}
+</p><br><br>
+
+<button type="button" *ngIf="canApplyButton">Apply for {{userData.nextprocess | titlecase}} License</button>
+<button type="button" *ngIf="canPayFineButton">Pay Fine</button>

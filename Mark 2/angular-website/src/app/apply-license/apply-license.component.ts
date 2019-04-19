@@ -9,17 +9,7 @@ import { LicenseBase, UIDAIDetails } from 'src/assets/data_structures';
 })
 export class ApplyLicenseComponent implements OnInit {
 
-  userData: LicenseBase;
+  constructor() { }
 
-  constructor(private activatedRoute: ActivatedRoute) { }
-
-  ngOnInit() {
-    this.activatedRoute.params
-      .subscribe(event => {
-        console.log(event.userData);
-        this.userData = JSON.parse(event.userData);
-      });
-  }
-
-  
+  ngOnInit() { }
 }

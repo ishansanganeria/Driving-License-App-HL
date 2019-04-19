@@ -16,7 +16,8 @@ export class LicenseBase {
     licensedata: LicenseInfo[];
     vehiclesowned: VehiclesOwned[];
     nextprocess: string;
-    activefile: string;
+    currentfile: string;
+    activelicense: string;
 }
 
 export class UIDAIDetails {

@@ -43,10 +43,6 @@ async function fetchValues() {
 
 }
 
-async function readConnectionConfig() {
-   fabric_client.loadFromConfig('./connection-profile.yaml')
-}
-
 function incrementCountUidai() {
    obj.uidai = obj.uidai + 1;
    let data = JSON.stringify(obj);
@@ -1223,7 +1219,6 @@ module.exports = {
    createUIDAI2,
    createUIDAI3,
    fetchValues,
-   readConnectionConfig,
    fetchDataUidaiToCommonChannel,
    fetchDataUidaiFromCommonChannel,
    fetchDataUidaiFromDlChannel,
