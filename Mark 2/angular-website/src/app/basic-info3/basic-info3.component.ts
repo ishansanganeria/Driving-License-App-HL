@@ -16,7 +16,7 @@ export class BasicInfo3Component implements OnInit {
   uid: number;
   submitButton: Boolean = false;
 
-  constructor(private activatedRoute: ActivatedRoute, private putStateService: PutStateService) { }
+  constructor(private router: Router, private activatedRoute: ActivatedRoute, private putStateService: PutStateService) { }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe(event => {
@@ -46,6 +46,9 @@ export class BasicInfo3Component implements OnInit {
           this.response = res
         }
       })
+  }
 
+  next() {
+    this.router.navigateByUrl('dl/fetchData/' + this.uid)
   }
 }

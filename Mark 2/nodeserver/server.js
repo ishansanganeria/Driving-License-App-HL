@@ -35,10 +35,18 @@ app.route('/api/uidai/part3/:uid/:data')
     res.json(response)
   });
 
-app.route('/api/uidai/fetchData/:uid')
+  app.route('/api/uidai/fetchData/:uid')
   .get(async (req, res) => {
     let uid = req.params['uid']
     let response = await supplements.fetchDataUidaiToCommonChannel(uid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+  app.route('/api/dl/checkIfHaveData/:uid')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let response = await supplements.checkIfHaveData(uid);
     console.log("response: " + JSON.stringify(response))
     res.json(response)
   });

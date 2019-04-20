@@ -1,0 +1,15 @@
+<h1>
+  Welcome to the App!!
+</h1>
+
+<h3>Choose your option:</h3>
+
+<form [formGroup]="form">
+  <input type="radio" formControlName="choice" value="register">Register User
+  <input type="radio" formControlName="choice" value="login">Login User
+  <input type="radio" formControlName="choice" value="rto">Add RTO
+  <br> <br> <br>
+  <button type="submit" (click)="p()" [disabled]="!form.valid">Submit</button>
+</form>
+<br> <br> <br>
+Form Status: {{form.status}}

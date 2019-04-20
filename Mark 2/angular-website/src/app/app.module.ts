@@ -17,6 +17,10 @@ import { AddOfficerComponent } from './add-officer/add-officer.component';
 import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { ApplyLicenseComponent } from './apply-license/apply-license.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { AddTestScoreComponent } from './add-test-score/add-test-score.component';
+import { OfficerDashboardComponent } from './officer-dashboard/officer-dashboard.component';
+import { LoginRegisterComponent } from './login-register/login-register.component';
+import { AskUserOfficerComponent } from './ask-user-officer/ask-user-officer.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +34,11 @@ import { UserDashboardComponent } from './user-dashboard/user-dashboard.componen
     AddOfficerComponent,
     AddVehicleComponent,
     ApplyLicenseComponent,
-    UserDashboardComponent
+    UserDashboardComponent,
+    AddTestScoreComponent,
+    OfficerDashboardComponent,
+    LoginRegisterComponent,
+    AskUserOfficerComponent
   ],
   imports: [
     BrowserModule,

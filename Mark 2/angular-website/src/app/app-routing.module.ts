@@ -10,12 +10,23 @@ import { AddOfficerComponent } from './add-officer/add-officer.component';
 import { AddVehicleComponent } from './add-vehicle/add-vehicle.component';
 import { ApplyLicenseComponent } from './apply-license/apply-license.component';
 import { UserDashboardComponent } from './user-dashboard/user-dashboard.component';
+import { OfficerDashboardComponent } from './officer-dashboard/officer-dashboard.component';
+import { LoginRegisterComponent } from './login-register/login-register.component';
+import { AskUserOfficerComponent } from './ask-user-officer/ask-user-officer.component';
 
 const routes: Routes = [
   {
-    path: 'askAadhar',
+    path: '',
+    component: LoginRegisterComponent,
+  },
+  {
+    path: 'dl/aadharBool',
     component: AadharBoolComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'dl/askUserOfficer',
+    component: AskUserOfficerComponent,
   },
   {
     path: 'uidai/part1',
@@ -30,8 +41,9 @@ const routes: Routes = [
     component: BasicInfo3Component
   },
   {
-    path: 'dl/fetchData',
-    component: FetchUidaiDataComponent
+    path: 'dl/fetchData/:uid',
+    component: FetchUidaiDataComponent,
+    pathMatch: 'full'
   },
   {
     path: 'dl/addRTO',
@@ -46,12 +58,16 @@ const routes: Routes = [
     component: AddVehicleComponent
   },
   {
-    path: 'dl/applyLicense/:userData',
+    path: 'dl/user',
+    component: UserDashboardComponent
+  },
+  {
+    path: 'dl/user/applyLicense/:userData',
     component: ApplyLicenseComponent
   },
   {
-    path: 'dl/dashboard',
-    component: UserDashboardComponent
+    path: 'dl/officer',
+    component: OfficerDashboardComponent
   }
 
 ];

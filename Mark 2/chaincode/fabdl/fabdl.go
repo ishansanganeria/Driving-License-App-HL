@@ -157,6 +157,8 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.AddOfficer(stub, args)
 	} else if function == "LicenseApply" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
 		return t.LicenseApply(stub, args)
+	} else if function == "CheckIfHaveData" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.CheckIfHaveData(stub, args)
 	} 
 	
     fmt.Println("Function not found: " + function)
@@ -166,7 +168,6 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 func (t *SimpleChainCode) BlankRun(stub shim.ChaincodeStubInterface) pb.Response {
 	return shim.Success(nil)
 }
-
 
 // uid
 func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
@@ -417,7 +418,13 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 		return shim.Error(err.Error())
 	}
 
-	
+	dataAsBytes, err = stub.GetState(licenseData.RTO_ID)
+	if err != nil {
+		return shim.Error("Failed to fetch RTO details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This RTO doesn't exist: " + licenseData.RTO_ID + ". Please register it first.")
+	}
+
 	date		:= args[1]
 	time		:= args[2]
 	licensetype	:= licenseData.NextProcess
@@ -452,6 +459,33 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	err = stub.PutState(uid, dataJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+// uid
+func (t *SimpleChainCode) CheckIfHaveData(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	for i := 0; i < 1; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+	uid := args[0]
+
+	dataJSONasBytes, err := stub.GetState(uid)
+	if err != nil {
+		fmt.Println(err);
+		return shim.Error("Unable to check if data exists" + err.Error())
+	} else if dataJSONasBytes != nil {
+		return shim.Error("User already exist")
 	}
 
 	return shim.Success(nil)

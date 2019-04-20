@@ -43,4 +43,17 @@ export class GetStateService {
         })
     })
   }
+
+  async checkIfHaveData(uid: any): Promise<Fabric_Response> {
+    uid = uid.toString();
+    return new Promise((resolve, reject) => {
+      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/checkIfHaveData/' + uid)
+        .subscribe((data: Fabric_Response) => { 
+          resolve(data)
+        },
+        (error) => {
+          console.log(error);
+        });
+    });
+  }
 }

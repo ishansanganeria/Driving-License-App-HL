@@ -1,12 +1,5 @@
 <div *ngIf="!IsSuccess">
-  <h3>Please enter your aadhar number</h3> <br>
-  <form [formGroup]="form" method="POST">
-
-    <input formControlName="uid" type="number" size="15"> <br><br>
-    <button type="submit" (click)="fetchData()" [disabled]="fetchDataButtonDisabled || !form.valid">Fetch Data</button>
-
-    <h3>{{message}}</h3>
-  </form>
+  <h3>{{message}}</h3>
 </div>
 
 <div *ngIf="IsSuccess">
@@ -35,6 +28,6 @@
   <b>Pin : </b> {{uidData.address.pincode}} <br> <br>
   <b>State : </b> {{uidData.address.state}} <br> <br>
 
-  <button type="submit" [routerLink]="['../applyLicense/',userDataString]">Next</button>
+  <button type="submit" [routerLink]="['../../askUserOfficer']">Next</button>
 </div>
 <!-- *ngIf = "model.invalid == 'false'" -->

@@ -19,6 +19,10 @@
       Form Status: {{form.status}} <br><br>
     </div>
     <h4>{{response?.message}}</h4>
-    <!-- <button *ngIf="response?.status == 'success'" type="submit" [routerLink]="[ '/uidai/part3',uid]">Next</button> -->
+    <button *ngIf="response?.status == 'success'" type="button" (click)="next()">
+      Send data to Driving License Authority
+    </button>
   </form>
 </div>
+
+<!-- [routerLink]="[dl/fetchData,uid]" -->
