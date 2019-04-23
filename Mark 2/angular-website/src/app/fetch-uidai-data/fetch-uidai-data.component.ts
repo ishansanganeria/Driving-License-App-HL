@@ -41,12 +41,12 @@ export class FetchUidaiDataComponent implements OnInit {
 					this.IsFailed = true;
 					this.message = "User already registered"
 				} else {
-					console.log("success");
+					// console.log("success");
 				}
 			}).then(async () => {
 
 				if (!this.IsFailed) {
-					console.log("not working");
+					// console.log("not working");
 					await this.getStateService.fetchUidaiDataToCommon(this.uid)
 						.then(async (res: Fabric_Response) => {
 							// console.log("fetchUidaiDataToCommon" + JSON.stringify(res));

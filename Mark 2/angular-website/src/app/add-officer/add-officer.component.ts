@@ -17,8 +17,9 @@ export class AddOfficerComponent implements OnInit {
   submitButton: Boolean = false;
   response: Fabric_Response;
 
+  constructor(private router: Router, private putStateService: PutStateService) { }
 
-  constructor(private router: Router, private putStateService: PutStateService) {
+  ngOnInit() {
     this.form = new FormGroup({
       uid: new FormControl('', Validators.required),
       rtoid: new FormControl('', Validators.required),
@@ -26,13 +27,9 @@ export class AddOfficerComponent implements OnInit {
     this.formChoice = new FormGroup({
       choice: new FormControl('', Validators.required),
     })
-
   }
 
-  ngOnInit() {
-  }
-
-  aadharChoice(){
+  aadharChoice() {
     if (this.formChoice.value.choice == "no") {
       this.router.navigateByUrl('/uidai/part1')
     }
@@ -41,7 +38,7 @@ export class AddOfficerComponent implements OnInit {
     }
   }
 
-  addOfficer(){
+  addOfficer() {
     this.submitButton = true;
     this.response = { status: "Processing", message: "PROCESSING SUBMISSION..." }
 
@@ -50,7 +47,7 @@ export class AddOfficerComponent implements OnInit {
         this.response = res;
         if (res.status == "failed") {
           this.submitButton = false;
-        } 
+        }
       });
   }
 }

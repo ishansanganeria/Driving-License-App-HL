@@ -33,6 +33,7 @@ export class ApplyLicenseComponent implements OnInit {
 
         this.hasApplied = false;
       });
+      this.applyForLicense();
   }
 
   applyForLicense() {

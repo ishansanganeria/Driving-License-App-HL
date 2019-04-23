@@ -416,6 +416,8 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	err = json.Unmarshal(dataAsBytes, &licenseData) //unmarshal it aka JSON.parse()
 	if err != nil {
 		return shim.Error(err.Error())
+	} else if licenseData.NextProcess == "nil" {
+		return shim.Error("Already applied for Learning License")
 	}
 
 	dataAsBytes, err = stub.GetState(licenseData.RTO_ID)

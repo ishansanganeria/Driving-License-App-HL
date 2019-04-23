@@ -22,10 +22,12 @@ export class LoginRegisterComponent implements OnInit {
   p() {
     if (this.form.value.choice == "register") {
       this.router.navigateByUrl('/dl/aadharBool')
-    } else if((this.form.value.choice == "login")) {
+    } else if(this.form.value.choice == "login") {
       this.router.navigateByUrl('/dl/askUserOfficer')
-    } else {
+    } else if(this.form.value.choice == "rto") {
       this.router.navigateByUrl('dl/addRTO')
+    } else if(this.form.value.choice == "officer") {
+      this.router.navigateByUrl('dl/addOfficer')
     }
   }
 }

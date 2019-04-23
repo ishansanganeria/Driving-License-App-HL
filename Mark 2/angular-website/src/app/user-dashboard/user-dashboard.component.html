@@ -1,6 +1,28 @@
-<p>
-  User's Aadhar ID: {{userData.uidaidata.id}}
-</p><br><br>
+<div *ngIf="!IsDataFetched">
+  <br><br>
+  <form [formGroup]="formUid">
+    Aadhar Number : <input type="number" formControlName="uid"><br><br>
+    <button type="button" (click)="fetchUserDetails()" (disabled)="!formUid.valid">Next</button>
+  </form>
+  <h3> {{message}} </h3>
+</div>
 
-<button type="button" *ngIf="canApplyButton">Apply for {{userData.nextprocess | titlecase}} License</button>
-<button type="button" *ngIf="canPayFineButton">Pay Fine</button>
+<div *ngIf="IsDataFetched">
+  <h1 ALIGN=CENTER>
+    USER DASHBOARD
+  </h1>
+  <p>
+    User's Aadhar ID: {{userData.uidaidata.id}}
+  </p><br><br>
+
+  <button type="button" *ngIf="canApplyButton" [routerLink]="['applyLicense',userDataString]">
+    Apply for {{userData.nextprocess | titlecase}} License
+  </button>
+
+  <button type="button" *ngIf="statusButton" [routerLink]="['applyLicense',userDataString]">
+    Show File Status
+  </button>
+
+
+  <button type="button" *ngIf="canPayFineButton">Pay Fine</button>
+</div>
