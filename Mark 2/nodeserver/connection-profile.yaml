@@ -86,7 +86,7 @@ organizations:
     certificateAuthorities:
       - ca.orguidai.example.com
     adminPrivateKey:
-      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/8dba593a5d359eeebd3fcf36dcd28e4cf0caf759d2a99386e24f3e0a3841b063_sk
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/7f70c3d8052b5e06622a5ccac024a5b4d0da198356e3e0cc40a613966f1889f2_sk
     signedCert:
       path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
 
@@ -97,7 +97,7 @@ organizations:
     certificateAuthorities:
       - ca.orgdl.example.com
     adminPrivateKey:
-      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/c44c1990ce65b3870bd1a1fd0c9de374b1795d2ebe44550a1678cafe1d64150b_sk
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/44080a9279963cf350693eb351dd96fd4865db6d9418f02b02fa845466ebd465_sk
     signedCert:
       path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/signcerts/Admin@orgdl.example.com-cert.pem
 

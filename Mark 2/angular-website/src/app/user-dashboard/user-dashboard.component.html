@@ -19,10 +19,16 @@
     Apply for {{userData.nextprocess | titlecase}} License
   </button>
 
-  <button type="button" *ngIf="statusButton" [routerLink]="['applyLicense',userDataString]">
+  <button type="button" *ngIf="statusButton" (click)="ReturnStatus()">
     Show File Status
   </button>
 
+  <p *ngFor="let status of statuses">
+    <b>Number</b> = {{status.number}} &nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Filestatus</b> = {{status.filestatus}} &nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Date</b> = {{status.date}} &nbsp;&nbsp;&nbsp;&nbsp;
+    <b>Time</b> = {{status.string}} &nbsp;&nbsp;&nbsp;&nbsp;
+  </p>
 
   <button type="button" *ngIf="canPayFineButton">Pay Fine</button>
 </div>

@@ -35,7 +35,7 @@ app.route('/api/uidai/part3/:uid/:data')
     res.json(response)
   });
 
-  app.route('/api/uidai/fetchData/:uid')
+app.route('/api/uidai/fetchData/:uid')
   .get(async (req, res) => {
     let uid = req.params['uid']
     let response = await supplements.fetchDataUidaiToCommonChannel(uid);
@@ -43,7 +43,7 @@ app.route('/api/uidai/part3/:uid/:data')
     res.json(response)
   });
 
-  app.route('/api/dl/checkIfHaveData/:uid')
+app.route('/api/dl/checkIfHaveData/:uid')
   .get(async (req, res) => {
     let uid = req.params['uid']
     let response = await supplements.checkIfHaveData(uid);
@@ -89,6 +89,15 @@ app.route('/api/dl/applyLicense/:uid')
   .get(async (req, res) => {
     let uid = req.params['uid']
     let response = await supplements.applyLicnese(uid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/dl/fetchStatus/:uid/:filenumber')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let filenumber = req.params['filenumber']
+    let response = await supplements.ReturnStatus(uid,filenumber);
     console.log("response: " + JSON.stringify(response))
     res.json(response)
   });

@@ -44,6 +44,18 @@ export class GetStateService {
     })
   }
 
+  ReturnStatus(uid: any, filenumber: any): Promise<Fabric_Response_UIDAIDetails> {
+    uid = uid.toString();
+    filenumber = filenumber.toString();
+
+    return new Promise((resolve, reject) => {
+      this.http.get<Fabric_Response_UIDAIDetails>('http://localhost:8000/api/dl/fetchStatus/' + uid + '/' + filenumber)
+        .subscribe((data: Fabric_Response_UIDAIDetails) => {
+          resolve(data);
+        })
+    })
+  }
+
   async checkIfHaveData(uid: any): Promise<Fabric_Response> {
     uid = uid.toString();
     return new Promise((resolve, reject) => {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LicenseBase, UIDAIDetails, Fabric_Response_UIDAIDetails } from 'src/assets/data_structures';
+import { LicenseBase, UIDAIDetails, Fabric_Response_UIDAIDetails, FileStatusInfo } from 'src/assets/data_structures';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { GetStateService } from '../get-state.service';
 
@@ -16,6 +16,8 @@ export class UserDashboardComponent implements OnInit {
 
   userData: LicenseBase;
 
+  statuses: FileStatusInfo[];
+
   nextApplication: string;
   message: string;
   userDataString: string;
@@ -24,6 +26,8 @@ export class UserDashboardComponent implements OnInit {
   canApplyButton: Boolean;
   canPayFineButton: Boolean;
   statusButton: Boolean;
+  showStatus: Boolean = false;
+  
 
   constructor(private activatedRoute: ActivatedRoute, private getStateService: GetStateService) { }
 
@@ -43,7 +47,6 @@ export class UserDashboardComponent implements OnInit {
           this.message = res.message
         } else {
           this.userData = JSON.parse(res.message)
-          console.log(this.userData);
           if (this.userData.nextprocess != "nil") {
             this.canApplyButton = true;
           } else {
@@ -65,8 +68,17 @@ export class UserDashboardComponent implements OnInit {
 
           this.userDataString = JSON.stringify(this.userData)
         }
-
       })
+  }
 
+  ReturnStatus(){
+    this.statusButton = false;
+    console.log(this.formUid.value.currentfile);
+    this.getStateService.ReturnStatus(this.formUid.value.uid, this.userData.currentfile)
+      .then((res: Fabric_Response_UIDAIDetails) => {
+        console.log(res.message);
+        this.statuses = JSON.parse(res.message);
+        console.log(this.statuses[0]);
+      })
   }
 }

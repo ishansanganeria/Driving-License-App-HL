@@ -159,6 +159,8 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.LicenseApply(stub, args)
 	} else if function == "CheckIfHaveData" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
 		return t.CheckIfHaveData(stub, args)
+	} else if function == "ReturnStatus" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.ReturnStatus(stub, args)
 	} 
 	
     fmt.Println("Function not found: " + function)
@@ -491,4 +493,41 @@ func (t *SimpleChainCode) CheckIfHaveData(stub shim.ChaincodeStubInterface, args
 	}
 
 	return shim.Success(nil)
+}
+
+//uid, filenumber
+func (t *SimpleChainCode) ReturnStatus(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	detailsAsBytes, err := stub.GetState(args[0])
+	if err != nil {
+		return shim.Error("Failed to get user details: " + err.Error())
+	} else if detailsAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + args[0])
+	}
+
+	var licensebase LicenseBase;
+	var statusInfo  []FileStatusInfo;
+	err = json.Unmarshal(detailsAsBytes, &licensebase);
+	if err != nil {
+		fmt.Println("1" + err.Error());
+		return shim.Error(err.Error())
+	}
+	
+	for i := range licensebase.LicenseData {
+		if  licensebase.LicenseData[i].FileNumber == args[1] {
+			statusInfo = licensebase.LicenseData[i].FileStatus
+			break 
+		}  
+	}
+
+	detailsAsBytes, err = json.Marshal(statusInfo)
+	if err != nil {
+		fmt.Println("2" + err.Error());
+		return shim.Error(err.Error())
+	}
+	
+	return shim.Success(detailsAsBytes)
 }
