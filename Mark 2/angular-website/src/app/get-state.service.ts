@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { UIDAIDetails, Fabric_Response, Fabric_Response_UIDAIDetails } from '../assets/data_structures'
+import { UIDAIDetails, Fabric_Response } from '../assets/data_structures'
 import { reject } from 'q';
 
 
@@ -34,23 +34,23 @@ export class GetStateService {
     })
   }
 
-  fetchUidaiDataFromDl(uid: any): Promise<Fabric_Response_UIDAIDetails> {
+  fetchUidaiDataFromDl(uid: any): Promise<Fabric_Response> {
     uid = uid.toString();
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response_UIDAIDetails>('http://localhost:8000/api/dl/fetchdataPart2/' + uid)
-        .subscribe((data: Fabric_Response_UIDAIDetails) => {
+      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchdataPart2/' + uid)
+        .subscribe((data: Fabric_Response) => {
           resolve(data);
         })
     })
   }
 
-  ReturnStatus(uid: any, filenumber: any): Promise<Fabric_Response_UIDAIDetails> {
+  ReturnStatus(uid: any, filenumber: any): Promise<Fabric_Response> {
     uid = uid.toString();
     filenumber = filenumber.toString();
 
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response_UIDAIDetails>('http://localhost:8000/api/dl/fetchStatus/' + uid + '/' + filenumber)
-        .subscribe((data: Fabric_Response_UIDAIDetails) => {
+      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchStatus/' + uid + '/' + filenumber)
+        .subscribe((data: Fabric_Response) => {
           resolve(data);
         })
     })

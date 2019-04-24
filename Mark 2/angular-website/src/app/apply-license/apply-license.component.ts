@@ -23,7 +23,6 @@ export class ApplyLicenseComponent implements OnInit {
     this.activatedRoute.params
       .subscribe(event => {
         this.userData = JSON.parse(event.userData);
-        console.log(this.userData);
 
         if (this.userData.nextprocess != "nil") {
           this.canApplyButton = true;

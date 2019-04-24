@@ -3,11 +3,6 @@ export class Fabric_Response {
     message: string;
 }
 
-export class Fabric_Response_UIDAIDetails {
-    status: string;
-    message: string;
-}
-
 export class LicenseBase {
     objectType: string;
     id: string;            				//REFERS UIDAIDetails's ID(json:"id")

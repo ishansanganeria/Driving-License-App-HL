@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { LicenseBase, UIDAIDetails, Fabric_Response_UIDAIDetails, FileStatusInfo } from 'src/assets/data_structures';
+import { LicenseBase, UIDAIDetails, Fabric_Response, FileStatusInfo } from 'src/assets/data_structures';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { GetStateService } from '../get-state.service';
 
@@ -42,7 +42,7 @@ export class UserDashboardComponent implements OnInit {
     this.message = "PROCESSING ..."
 
     this.getStateService.fetchUidaiDataFromDl(this.formUid.value.uid)
-      .then((res: Fabric_Response_UIDAIDetails) => {
+      .then((res: Fabric_Response) => {
         if (res.status == "failed") {
           this.message = res.message
         } else {
@@ -75,7 +75,7 @@ export class UserDashboardComponent implements OnInit {
     this.statusButton = false;
     console.log(this.formUid.value.currentfile);
     this.getStateService.ReturnStatus(this.formUid.value.uid, this.userData.currentfile)
-      .then((res: Fabric_Response_UIDAIDetails) => {
+      .then((res: Fabric_Response) => {
         this.statuses = JSON.parse(res.message);
         this.showStatus = true;
       })

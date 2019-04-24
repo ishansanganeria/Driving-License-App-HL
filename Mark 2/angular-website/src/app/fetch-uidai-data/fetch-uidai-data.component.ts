@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { GetStateService } from '../get-state.service'
-import { Fabric_Response, UIDAIDetails, Fabric_Response_UIDAIDetails, LicenseBase } from 'src/assets/data_structures';
+import { Fabric_Response, UIDAIDetails, LicenseBase } from 'src/assets/data_structures';
 import { async, delay } from 'q';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
@@ -61,7 +61,7 @@ export class FetchUidaiDataComponent implements OnInit {
 										await this.delay(5000);
 										// console.log("fetchUidaiDataFromCommon" + JSON.stringify(res));
 										this.getStateService.fetchUidaiDataFromDl(this.uid)
-											.then((res: Fabric_Response_UIDAIDetails) => {
+											.then((res: Fabric_Response) => {
 												this.IsSuccess = true
 												this.userData = JSON.parse(res.message);
 												this.userDataString = JSON.stringify(this.userData)
