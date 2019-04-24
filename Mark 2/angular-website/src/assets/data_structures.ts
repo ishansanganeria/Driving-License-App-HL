@@ -63,6 +63,7 @@ export class RTOInfo {
     rtoid: string
     address: Basic_Info_3
     contactno: string
+    applicants: string[]
 }
 
 export class LicenseInfo {

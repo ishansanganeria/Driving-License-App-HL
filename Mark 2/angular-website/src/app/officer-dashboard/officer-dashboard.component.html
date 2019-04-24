@@ -1,3 +1,9 @@
-<p>
-  officer-dashboard works!
-</p>
+<div *ngIf="!IsDataFetched">
+    <br><br>
+    <form [formGroup]="formOfficer">
+      Aadhar Number : <input type="number" formControlName="offid"><br><br>
+      <button type="button" (click)="fetchOfficerDetails()" (disabled)="!formUid.valid">Next</button>
+    </form>
+    <h3> {{message}} </h3>
+</div>
+  

@@ -116,10 +116,11 @@ type FileStatusInfo struct {
 
 // SEPERATE DOCUMENT 2.2
 type RTOInfo struct {
-	DocType       			string		        `json:"objectType"`
+  DocType       			string		        `json:"objectType"`
   RTO_ID         			string  	        `json:"rtoid"`
   AddressData   			Address 	        `json:"address"`
   ContactNumber 			string  	        `json:"contactno"`
+  Applicants				[]string				`json:"applicants"`
 }
 
 // SEPERATE DOCUMENT 2.3
@@ -429,6 +430,12 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 		return shim.Error("This RTO doesn't exist: " + licenseData.RTO_ID + ". Please register it first.")
 	}
 
+	var rtoData RTOInfo
+	err = json.Unmarshal(dataAsBytes, &rtoData) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	
 	date		:= args[1]
 	time		:= args[2]
 	licensetype	:= licenseData.NextProcess
@@ -455,12 +462,24 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	filedata.FileStatus  = append(filedata.FileStatus, status)
 	licenseData.LicenseData = append(licenseData.LicenseData, filedata)
 
+	rtoData.Applicants = append(rtoData.Applicants,uid);
+
 	dataJSONasBytes, err := json.Marshal(licenseData)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
 
 	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	dataJSONasBytes, err = json.Marshal(rtoData)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(rtoData.RTO_ID, dataJSONasBytes)
 	if err != nil {
 		return shim.Error(err.Error())
 	}
