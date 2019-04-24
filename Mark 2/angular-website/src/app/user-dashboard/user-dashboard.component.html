@@ -23,12 +23,20 @@
     Show File Status
   </button>
 
-  <p *ngFor="let status of statuses">
-    <b>Number</b> = {{status.number}} &nbsp;&nbsp;&nbsp;&nbsp;
-    <b>Filestatus</b> = {{status.filestatus}} &nbsp;&nbsp;&nbsp;&nbsp;
-    <b>Date</b> = {{status.date}} &nbsp;&nbsp;&nbsp;&nbsp;
-    <b>Time</b> = {{status.string}} &nbsp;&nbsp;&nbsp;&nbsp;
-  </p>
+  <table *ngIf="showStatus" border="3px">
+    <tr>
+      <th>Number</th>
+      <th>Filestatus</th>
+      <th>Date</th>
+      <th>Time</th>
+    </tr>
+    <tr *ngFor="let status of statuses">
+      <td>{{status.number}} </td>
+      <td>{{status.filestatus}} </td>
+      <td>{{status.date}} </td>
+      <td>{{status.string}} </td>
+    </tr>
+  </table>
 
   <button type="button" *ngIf="canPayFineButton">Pay Fine</button>
 </div>

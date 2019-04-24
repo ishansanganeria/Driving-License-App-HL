@@ -76,9 +76,8 @@ export class UserDashboardComponent implements OnInit {
     console.log(this.formUid.value.currentfile);
     this.getStateService.ReturnStatus(this.formUid.value.uid, this.userData.currentfile)
       .then((res: Fabric_Response_UIDAIDetails) => {
-        console.log(res.message);
         this.statuses = JSON.parse(res.message);
-        console.log(this.statuses[0]);
+        this.showStatus = true;
       })
   }
 }
