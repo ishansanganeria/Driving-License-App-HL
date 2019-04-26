@@ -819,7 +819,7 @@ func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []str
   	amount		  := args[6]
 
 	var ticket TicketInfo
-	ticket.TicketID = string(licenseBase.NoOfTickets)
+	ticket.TicketID = strconv.Itoa(licenseBase.NoOfTickets)
 	ticket.TicketIssuer = officerid
 	ticket.Place = reason
 	ticket.Reason = place

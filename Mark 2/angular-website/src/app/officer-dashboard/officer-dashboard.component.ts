@@ -63,7 +63,6 @@ export class OfficerDashboardComponent implements OnInit {
   fetchScoresToBeAdded() {
     this.showTable = false;
     this.message = "FETCHING LIST OF SCORES TO BE ADDED"
-    console.log(this.officerData.rtoid);
     this.getStateService.fetchScoresToBeAdded(this.officerData.rtoid)
       .then((res: Fabric_Response) => {
         if (res.status == "failed") {

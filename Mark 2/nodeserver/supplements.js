@@ -2036,7 +2036,7 @@ async function payFine(uid, ticketid) {
          console.log('Successfully committed the change to the ledger by the peer');
          return ({
             status: "success",
-            message: "Successfully applied for license. Your file number is L" + uid
+            message: "Fine Paid"
          })
       } else {
          console.log('Transaction failed to be committed to the ledger due to ::' + results[1].event_status);

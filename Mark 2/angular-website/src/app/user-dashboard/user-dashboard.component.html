@@ -4,7 +4,6 @@
     Aadhar Number : <input type="number" formControlName="uid"><br><br>
     <button type="button" (click)="fetchUserDetails()" (disabled)="!formUid.valid">Next</button>
   </form>
-  <h3> {{message}} </h3>
 </div>
 
 <div *ngIf="IsDataFetched">
@@ -23,13 +22,17 @@
   <br><br>
 
   <button type="button" *ngIf="canApplyButton" [routerLink]="['applyLicense',userDataString]">
-    Apply for {{userData.nextprocess | titlecase}} License
+    Apply for License
   </button>
 
   <button type="button" *ngIf="statusButton" (click)="ReturnStatus()">
     Show File Status
   </button>
 
+  <button type="button" *ngIf="ticketsButton" (click)="ShowTickets()">
+    Show Tickets issued
+  </button>
+  
   <table *ngIf="showStatus" border="3px">
     <tr>
       <th>Number</th>
@@ -45,5 +48,31 @@
     </tr>
   </table>
 
-  <button type="button" *ngIf="canPayFineButton">Pay Fine</button>
+  <table *ngIf="showTickets" border="3px">
+      <tr>
+        <th>Ticket Issuer</th>
+        <th>Ticket ID</th>
+        <th>Reason</th>
+        <th>Date Of Issue</th>
+        <th>Time Of Issue</th>
+        <th>Place</th>
+        <th>Is Paid?</th>
+        <th>Amount</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let ticket of tickets">
+        <td>{{ticket.ticketissuer}}</td>
+        <td>{{ticket.ticketid}}</td>
+        <td>{{ticket.reason}}</td>
+        <td>{{ticket.dateofissue}}</td>
+        <td>{{ticket.timeofissue}}</td>
+        <td>{{ticket.place}}</td>
+        <td>{{ticket.ispaid}}</td>
+        <td>{{ticket.amount}}</td>
+        <td> <button (click)="payFine(ticket.ticketid)" *ngIf="ticket.ispaid=='false'">Pay Fine</button> </td>
+      </tr>
+  </table>
+  
 </div>
+
+<h3> {{message}} </h3>
