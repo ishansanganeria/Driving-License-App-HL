@@ -13,6 +13,8 @@ export class LicenseBase {
     nextprocess: string;
     currentfile: string;
     activelicense: string;
+    nooftickets: number;
+
 }
 
 export class UIDAIDetails {
@@ -121,7 +123,7 @@ export class OfficerInfo {
     rtoid: string
 }
 
-export class Scores  {
+export class Scores {
     uid: string
     scoretype: string
 } 

@@ -24,6 +24,7 @@ type LicenseBase struct {
 	NextProcess				string				`json:"nextprocess"`
 	CurrentFile				string				`json:"currentfile"`
 	ActiveLicense			string				`json:"activelicense"`
+	NoOfTickets				int					`json:"nooftickets"`
 }
 
 type UIDAIDetails struct {
@@ -169,6 +170,10 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.FetchScoresToBeAdded(stub, args)
 	} else if function == "AddTestResult" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
 		return t.AddTestResult(stub, args)
+	} else if function == "AddTicket" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.AddTicket(stub, args)
+	} else if function == "PayFine" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.PayFine(stub, args)
 	} 
 	
     fmt.Println("Function not found: " + function)
@@ -220,6 +225,7 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 	licensebase.UIDAIData = uidaiData
 	licensebase.NextProcess = "written"
 	licensebase.RTO_ID = "RTO" + uidaiData.AddressData.Pin
+	licensebase.NoOfTickets = 0;
 
 	licensedataJSONasBytes, err := json.Marshal(licensebase)
 	if err != nil {
@@ -764,6 +770,133 @@ func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args [
 	licenseBase.LicenseData[i].FileStatus = append(licenseBase.LicenseData[i].FileStatus, filestatus)
 	licenseBase.LicenseData[i].TestData  = append(licenseBase.LicenseData[i].TestData, testdata)
  
+	dataJSONasBytes, err := json.Marshal(licenseBase)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+// uid, officerid, reason, place, date, time, amount
+func (t *SimpleChainCode) AddTicket(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 7 {
+		return shim.Error("Incorrect number of arguments. Expecting 7")
+	}
+
+	for i := 0; i < 7; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+ 	uid             	:= 	args[0]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+	
+	var licenseBase LicenseBase
+	err = json.Unmarshal(dataAsBytes, &licenseBase) //unmarshal it aka JSON.parse()
+	if err != nil {
+	   return shim.Error(err.Error())
+	}
+  
+	officerid     := args[1]
+	reason		  := args[2]
+	place	      := args[3]
+	date		  := args[4]
+	time		  := args[5]
+  	amount		  := args[6]
+
+	var ticket TicketInfo
+	ticket.TicketID = string(licenseBase.NoOfTickets)
+	ticket.TicketIssuer = officerid
+	ticket.Place = reason
+	ticket.Reason = place
+	ticket.DateOfIssue = date
+	ticket.TimeOfIssue = time
+	ticket.Amount = 	amount
+	ticket.IsPaid = "false"
+	licenseBase.NoOfTickets += 1 
+
+	for i := range licenseBase.LicenseData {
+		if licenseBase.LicenseData[i].LicenseNumber == licenseBase.ActiveLicense {
+			licenseBase.LicenseData[i].Tickets = append(licenseBase.LicenseData[i].Tickets,ticket)
+			break
+		}
+	}
+
+	dataJSONasBytes, err := json.Marshal(licenseBase)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
+}
+
+//uid, ticketid
+func (t *SimpleChainCode) PayFine(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 2 {
+		return shim.Error("Incorrect number of arguments. Expecting 2")
+	}
+
+	for i := 0; i < 2; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+	
+	uid             	:= 	args[0]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+
+	ticketid := args[1]
+
+	var licenseBase LicenseBase
+	err = json.Unmarshal(dataAsBytes, &licenseBase) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	for i := range licenseBase.LicenseData {
+		if licenseBase.LicenseData[i].LicenseNumber == licenseBase.ActiveLicense {
+			for j := range licenseBase.LicenseData[i].Tickets {
+				if  licenseBase.LicenseData[i].Tickets[j].TicketID == ticketid {
+					if licenseBase.LicenseData[i].Tickets[j].IsPaid == "true" {
+						return shim.Error("Already Paid for the ticket")
+					} else {
+						licenseBase.LicenseData[i].Tickets[j].IsPaid = "true"
+					}
+					break 
+				}  
+			}
+			break
+		}
+	}
+
+
+
 	dataJSONasBytes, err := json.Marshal(licenseBase)
 	if err != nil {
 		return shim.Error(err.Error())

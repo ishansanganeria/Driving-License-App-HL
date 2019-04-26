@@ -124,7 +124,28 @@ app.route('/api/dl/addScore/:uid/:testtype/:score/:officerid')
     let testtype = req.params['testtype']
     let score = req.params['score']
     let officerid = req.params['officerid']
-    let response = await supplements.addScore(uid,testtype,score,officerid);
+    let response = await supplements.addScore(uid, testtype, score, officerid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/dl/addTicket/:uid/:officerid/:reason/:place/:amount')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let officerid = req.params['officerid']
+    let reason = req.params['reason']
+    let place = req.params['place']
+    let amount = req.params['amount']
+    let response = await supplements.addTicket(uid, officerid, reason, place, amount);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/dl/payFine/:uid/:ticketid')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let ticketid = req.params['ticketid']
+    let response = await supplements.payFine(uid, ticketid);
     console.log("response: " + JSON.stringify(response))
     res.json(response)
   });

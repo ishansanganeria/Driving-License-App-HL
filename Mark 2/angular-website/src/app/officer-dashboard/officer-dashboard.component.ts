@@ -14,6 +14,7 @@ export class OfficerDashboardComponent implements OnInit {
 
   formOfficer: FormGroup;
   formScore: FormGroup;
+  formTicket: FormGroup;
 
   officerData: OfficerInfo;
 
@@ -27,12 +28,11 @@ export class OfficerDashboardComponent implements OnInit {
   scoretype: string;
 
   IsDataFetched: Boolean = false;
-  canApplyButton: Boolean;
-  canPayFineButton: Boolean;
-  statusButton: Boolean;
-  showStatus: Boolean = false;
+  ticketFormButton: Boolean = false;
+  fetchScoreButton: Boolean = false;
   showTable: Boolean = false;
   showAddScore: Boolean = false;
+  showTicketForm: Boolean = false;
 
 
   constructor(private putStateService: PutStateService, private getStateService: GetStateService) { }
@@ -54,6 +54,8 @@ export class OfficerDashboardComponent implements OnInit {
           this.officerData = JSON.parse(res.message);
           this.message = "";
           this.IsDataFetched = true;
+          this.ticketFormButton = true;
+          this.fetchScoreButton = true;
         }
       })
   }
@@ -70,6 +72,7 @@ export class OfficerDashboardComponent implements OnInit {
           this.tests = JSON.parse(res.message);
           this.showTable = true;
         }
+        this.message = ""
       })
   }
 
@@ -84,14 +87,55 @@ export class OfficerDashboardComponent implements OnInit {
 
   addScore() {
     this.message = "ADDING SCORE"
+    this.ticketFormButton = false;
+    this.fetchScoreButton = false;
 
-    this.putStateService.addScore(this.uid, this.scoretype, this.formScore.value.score,this.officerData.id)
+
+    this.putStateService.addScore(this.uid, this.scoretype, this.formScore.value.score, this.officerData.id)
       .then((res: Fabric_Response) => {
         if (res.status == "failed") {
           this.message = "FAILED IN ADDING SCORE"
         } else {
           this.message = "Score added"
         }
+        this.showAddScore = false;
+        this.showTable = false;
+
+        this.ticketFormButton = true;
+        this.fetchScoreButton = true;
       });
+
+  }
+
+  ticketForm() {
+    this.showTable = false;
+    this.formTicket = new FormGroup({
+      uid: new FormControl('', Validators.required),
+      reason: new FormControl('', Validators.required),
+      place: new FormControl('', Validators.required),
+      amount: new FormControl('', Validators.required),
+    })
+    this.showTicketForm = true;
+  }
+
+  addTicket() {
+    this.message = "ADDING TICKET"
+    this.ticketFormButton = false;
+    this.fetchScoreButton = false;
+
+
+    this.putStateService.addTicket(this.formTicket.value.uid, this.officerData.id, this.formTicket.value.reason, this.formTicket.value.place, this.formTicket.value.amount)
+      .then((res: Fabric_Response) => {
+        if (res.status == "failed") {
+          this.message = "FAILED IN ADDING TICKET"
+        } else {
+          this.message = "Ticket added"
+        }
+        this.showTicketForm = false;
+
+        this.ticketFormButton = true;
+        this.fetchScoreButton = true;
+      });
+
   }
 }

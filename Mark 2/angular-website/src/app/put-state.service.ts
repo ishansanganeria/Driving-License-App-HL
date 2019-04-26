@@ -69,9 +69,27 @@ export class PutStateService {
     });
   }
 
-  addScore(uid:string, scoretype:string, score:string, officerid:string): Promise<Fabric_Response>{
+  addScore(uid: string, scoretype: string, score: string, officerid: string): Promise<Fabric_Response> {
     return new Promise((resolve, reject) => {
       this.http.get<any>('http://localhost:8000/api/dl/addScore/' + uid + '/' + scoretype + '/' + score + '/' + officerid)
+        .subscribe((data: Fabric_Response) => {
+          resolve(data)
+        })
+    });
+  }
+
+  addTicket(uid: string, officerid: string, reason: string, place: string, amount: string): Promise<Fabric_Response> {
+    return new Promise((resolve, reject) => {
+      this.http.get<any>('http://localhost:8000/api/dl/addTicket/' + uid + '/' + officerid + '/' + reason + '/' + place + '/' + amount)
+        .subscribe((data: Fabric_Response) => {
+          resolve(data)
+        })
+    });
+  }
+
+  payFine(uid: string, ticketid: string): Promise<Fabric_Response> {
+    return new Promise((resolve, reject) => {
+      this.http.get<any>('http://localhost:8000/api/dl/payFine/' + uid + '/' + ticketid )
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })

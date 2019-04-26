@@ -6,8 +6,6 @@
   </form>
 </div>
 
-<h3> {{message}} </h3>
-
 <div *ngIf="IsDataFetched">
   <h1 ALIGN=CENTER>
     OFFICER DASHBOARD
@@ -17,11 +15,11 @@
     <b>Officer ID:</b> {{officerData.id}}
   </p><br><br>
 
-  <button type="button" (click)="fetchScoresToBeAdded()">
+  <button type="button" (click)="fetchScoresToBeAdded()" *ngIf="fetchScoreButton">
     Fetch List of Tests of scores to be added
   </button>
 
-  <button type="button" (click)="addTicket()">
+  <button type="button" (click)="ticketForm()" *ngIf="ticketFormButton">
     Add Ticket
   </button>
 
@@ -45,4 +43,17 @@
     Score : <input type="number" formControlName="score"><br><br>
     <button type="button" (click)="addScore()" (disabled)="!formOfficer.valid">Next</button>
   </form>
+
+  <form [formGroup]="formTicket" *ngIf="showTicketForm">
+    <br> <br>
+    UID : <input type="number" formControlName="uid"><br><br>
+    Reason : <input type="text" formControlName="reason"><br><br>
+    Place : <input type="text" formControlName="place"><br><br>
+    Amount in Rupees : <input type="number" formControlName="amount"><br><br>
+    <button type="button" (click)="addTicket()" (disabled)="!formOfficer.valid">Next</button>
+  </form>
+
+
 </div>
+
+<h3> {{message}} </h3>
