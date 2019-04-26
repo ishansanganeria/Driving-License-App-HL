@@ -68,4 +68,13 @@ export class PutStateService {
         })
     });
   }
+
+  addScore(uid:string, scoretype:string, score:string, officerid:string): Promise<Fabric_Response>{
+    return new Promise((resolve, reject) => {
+      this.http.get<any>('http://localhost:8000/api/dl/addScore/' + uid + '/' + scoretype + '/' + score + '/' + officerid)
+        .subscribe((data: Fabric_Response) => {
+          resolve(data)
+        })
+    });
+  }
 }

@@ -4,7 +4,6 @@ import { LicenseBase, UIDAIDetails, Fabric_Response, FileStatusInfo } from 'src/
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 import { GetStateService } from '../get-state.service';
 
-
 @Component({
   selector: 'app-user-dashboard',
   templateUrl: './user-dashboard.component.html',
@@ -28,7 +27,6 @@ export class UserDashboardComponent implements OnInit {
   statusButton: Boolean;
   showStatus: Boolean = false;
   
-
   constructor(private activatedRoute: ActivatedRoute, private getStateService: GetStateService) { }
 
   ngOnInit() {

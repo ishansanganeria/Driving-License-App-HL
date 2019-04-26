@@ -13,7 +13,14 @@
   </h1>
   <p>
     User's Aadhar ID: {{userData.uidaidata.id}}
-  </p><br><br>
+  </p>
+  <p *ngIf='userData.currentfile != ""'>
+    Currently Open Application file: {{userData.currentfile}} 
+  </p>
+  <p *ngIf='userData.activelicense != ""'>
+    Currently Active License: {{userData.activelicense}}
+  </p>
+  <br><br>
 
   <button type="button" *ngIf="canApplyButton" [routerLink]="['applyLicense',userDataString]">
     Apply for {{userData.nextprocess | titlecase}} License

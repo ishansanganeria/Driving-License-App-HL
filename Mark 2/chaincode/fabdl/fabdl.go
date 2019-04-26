@@ -1,12 +1,13 @@
 package main
 
 import (
+	"strconv"
 	"encoding/json"
 	"fmt"
 	"github.com/hyperledger/fabric/core/chaincode/shim"
 	pb "github.com/hyperledger/fabric/protos/peer"
 	// "github.com/hyperledger/fabric/common/util"
-	"strings"
+	// "strings"
 )
 
 type SimpleChainCode struct {
@@ -31,7 +32,6 @@ type UIDAIDetails struct {
 	BasicData_1  		    BasicInfo1         `json:"basicdata1"`
 	BasicData_2  		    BasicInfo2         `json:"basicdata2"`
 	AddressData  		    Address            `json:"address"`
-	IsActive				string			   `json:"isactive"`
 }
 
 type BasicInfo1 struct {
@@ -85,7 +85,8 @@ type LicenseInfo struct {
 	IsPassPrac			    string			  	`json:"ispass_prac"`
 	IsActive		  	    string				`json:"isactive"`
 	Tickets      			[]TicketInfo     	`json:"tickets"`
-	FileStatus				[]FileStatusInfo	`json:"filestatus"`	
+	FileStatus				[]FileStatusInfo	`json:"filestatus"`
+	CurretStatusNo			string				`json:"currentstatusno"`	
 }
 
 type TicketInfo struct {
@@ -162,6 +163,12 @@ func (t *SimpleChainCode) Invoke(stub shim.ChaincodeStubInterface) pb.Response {
 		return t.CheckIfHaveData(stub, args)
 	} else if function == "ReturnStatus" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
 		return t.ReturnStatus(stub, args)
+	} else if function == "FetchOfficerDetails" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.FetchOfficerDetails(stub, args)
+	} else if function == "FetchScoresToBeAdded" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.FetchScoresToBeAdded(stub, args)
+	} else if function == "AddTestResult" 		{ //CREATE ANY GIVEN DL'S APPLICATION FILE
+		return t.AddTestResult(stub, args)
 	} 
 	
     fmt.Println("Function not found: " + function)
@@ -211,7 +218,7 @@ func (t *SimpleChainCode) FetchAccountDetails(stub shim.ChaincodeStubInterface, 
 	licensebase.DocType = "licensebase"
 	licensebase.ID = uidaiData.ID;
 	licensebase.UIDAIData = uidaiData
-	licensebase.NextProcess = "learning"
+	licensebase.NextProcess = "written"
 	licensebase.RTO_ID = "RTO" + uidaiData.AddressData.Pin
 
 	licensedataJSONasBytes, err := json.Marshal(licensebase)
@@ -318,13 +325,6 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 		return shim.Error("Incorrect number of arguments. Expecting 2")
 	}
 
-	for i := 0; i < 2; i++ {
-		if len(args[i]) <= 0 {
-			ERR := "Argument " + string(i) + " should be non empty"
-			return shim.Error(ERR)
-		}
-	}
-
 	uid 				 	:= 		args[0]				//UIDAI
 	dataAsBytesUID, err 	:= 		stub.GetState(uid)
 	if err != nil {
@@ -356,26 +356,27 @@ func (t *SimpleChainCode) AddOfficer(stub shim.ChaincodeStubInterface, args []st
 		return shim.Error(err.Error())
 	}
 	var officerdata OfficerInfo
-	doctype 		:= 		"Officer_Info"
-	firstname 		:= 		uidaiData.BasicData_1.First_Name
-	lastname 		:= 		uidaiData.BasicData_1.Last_Name
-	gender 			:= 		uidaiData.BasicData_1.Gender
-	dob 			:= 		uidaiData.BasicData_1.DOB
-	age 			:= 		uidaiData.BasicData_1.Age
-	contact_number	:=		uidaiData.BasicData_1.ContactNumber
-	Email			:=		uidaiData.BasicData_1.EmailID
+	// firstname 		:= 		uidaiData.BasicData_1.First_Name
+	// lastname 		:= 		uidaiData.BasicData_1.Last_Name
+	// gender 			:= 		uidaiData.BasicData_1.Gender
+	// dob 			:= 		uidaiData.BasicData_1.DOB
+	// age 			:= 		uidaiData.BasicData_1.Age
+	// contact_number	:=		uidaiData.BasicData_1.ContactNumber
+	// Email			:=		uidaiData.BasicData_1.EmailID
 	
-
+	
+	doctype 								:=  "Officer_Info"
 	officerdata.OfficerID 					= 	"OFF" + uid
 	officerdata.DocType 					= 	doctype
-	officerdata.BasicData_1.First_Name	 	= 	firstname
-	officerdata.BasicData_1.Last_Name	 	= 	lastname
-	officerdata.BasicData_1.Gender	 		= 	gender
-	officerdata.BasicData_1.DOB	 			= 	dob
-	officerdata.BasicData_1.Age				= 	age
-	officerdata.BasicData_1.ContactNumber	=	contact_number
-	officerdata.BasicData_1.EmailID			=	Email
 	officerdata.RTO_ID						=	rtoid
+	officerdata.BasicData_1					=   uidaiData.BasicData_1
+	// officerdata.BasicData_1.First_Name	 	= 	firstname
+	// officerdata.BasicData_1.Last_Name	 	= 	lastname
+	// officerdata.BasicData_1.Gender	 		= 	gender
+	// officerdata.BasicData_1.DOB	 			= 	dob
+	// officerdata.BasicData_1.Age				= 	age
+	// officerdata.BasicData_1.ContactNumber	=	contact_number
+	// officerdata.BasicData_1.EmailID			=	Email
 
 	dataJSONasBytes, err := json.Marshal(officerdata)
 	if err != nil {
@@ -420,7 +421,7 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	if err != nil {
 		return shim.Error(err.Error())
 	} else if licenseData.NextProcess == "nil" {
-		return shim.Error("Already applied for Learning License")
+		return shim.Error("Already applied for License")
 	}
 
 	dataAsBytes, err = stub.GetState(licenseData.RTO_ID)
@@ -438,20 +439,20 @@ func (t *SimpleChainCode) LicenseApply(stub shim.ChaincodeStubInterface, args []
 	
 	date		:= args[1]
 	time		:= args[2]
-	licensetype	:= licenseData.NextProcess
-	filenumber 	:= strings.ToUpper(string(licensetype[0])) + uid
+	filenumber 	:= "L" + uid
 
 	licenseData.NextProcess = "nil"
 	licenseData.CurrentFile = filenumber
 	
 	var filedata LicenseInfo
 	filedata.FileNumber            = filenumber 
-	filedata.LicenseType           = licensetype
+	filedata.LicenseType           = ""
 	filedata.IsActive              = "false"
 	filedata.ReasonOfInactivity    = "Under Process for Initial Approval"
 	filedata.IsPassWritten		   = "false"
 	filedata.IsPassSim		 	   = "false"
 	filedata.IsPassPrac     	   = "false"
+	filedata.CurretStatusNo		   = "1"
 	
 	var status FileStatusInfo
 	status.Status  = "Waiting to complete Written Test"
@@ -549,4 +550,229 @@ func (t *SimpleChainCode) ReturnStatus(stub shim.ChaincodeStubInterface, args []
 	}
 	
 	return shim.Success(detailsAsBytes)
+}
+
+//offid
+func (t *SimpleChainCode) FetchOfficerDetails(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	detailsAsBytes, err := stub.GetState(args[0])
+	if err != nil {
+		return shim.Error("Failed to get officer details: " + err.Error())
+	} else if detailsAsBytes == nil {
+		return shim.Error("This officer doesn't exist: " + args[0])
+	}
+
+	var officerdata OfficerInfo;
+	err = json.Unmarshal(detailsAsBytes, &officerdata);
+	if err != nil {
+		fmt.Println("1" + err.Error());
+		return shim.Error(err.Error())
+	}
+	
+	detailsAsBytes, err = json.Marshal(officerdata)
+	if err != nil {
+		fmt.Println("2" + err.Error());
+		return shim.Error(err.Error())
+	}
+	
+	return shim.Success(detailsAsBytes)
+}
+
+//rtoid
+func (t *SimpleChainCode) FetchScoresToBeAdded(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+	
+	type Scores  struct{
+		UID			string			`json:"uid"`
+		ScoreType	string			`json:"scoretype"`
+	} 
+
+	var ds []Scores ;
+	
+	if len(args) != 1 {
+		return shim.Error("Incorrect number of arguments. Expecting 1")
+	}
+
+	detailsAsBytes, err := stub.GetState(args[0])
+	if err != nil {
+		return shim.Error("Failed to get RTO details: " + err.Error())
+	} else if detailsAsBytes == nil {
+		return shim.Error("This RTO doesn't exist: " + args[0])
+	}
+
+	var rtodata RTOInfo;
+	err = json.Unmarshal(detailsAsBytes, &rtodata);
+	if err != nil {
+		fmt.Println("1" + err.Error());
+		return shim.Error(err.Error())
+	}
+	
+	for i := range rtodata.Applicants {
+		detailsAsBytes, err := stub.GetState(rtodata.Applicants[i])
+		if err != nil {
+			return shim.Error("Failed to get user's details: " + err.Error())
+		} else if detailsAsBytes == nil {
+			return shim.Error("This user doesn't exist: " + args[0])
+		}
+
+		var userdata LicenseBase;
+		err = json.Unmarshal(detailsAsBytes, &userdata);
+		if err != nil {
+			fmt.Println("1" + err.Error());
+			return shim.Error(err.Error())
+		}
+		
+		for j := range userdata.LicenseData {
+			if  (userdata.LicenseData[j].FileNumber == userdata.CurrentFile) {
+				if (userdata.LicenseData[j].CurretStatusNo == "1") {
+					var dsx Scores ;
+					dsx.UID = userdata.ID;
+					dsx.ScoreType = "Written"
+					ds = append(ds,dsx);
+				} else if (userdata.LicenseData[j].CurretStatusNo == "2") {
+					var dsx Scores ;
+					dsx.UID = userdata.ID;
+					dsx.ScoreType = "Simulation"
+					ds = append(ds,dsx);
+				} else if (userdata.LicenseData[j].CurretStatusNo == "3") {
+					var dsx Scores ;
+					dsx.UID = userdata.ID;
+					dsx.ScoreType = "Practical"
+					ds = append(ds,dsx);
+				}
+			}
+		}
+
+	}
+
+	detailsAsBytes, err = json.Marshal(ds)
+	if err != nil {
+		fmt.Println("2" + err.Error());
+		return shim.Error(err.Error())
+	}
+	
+	return shim.Success(detailsAsBytes)
+}
+
+// uid, testtype, score, officerid, date, time
+func (t *SimpleChainCode) AddTestResult(stub shim.ChaincodeStubInterface, args []string) pb.Response {
+
+	if len(args) != 6 {
+		return shim.Error("Incorrect number of arguments. Expecting 6")
+	}
+
+	for i := 0; i < 6; i++ {
+		if len(args[i]) <= 0 {
+			ERR := "Argument " + string(i) + " should be non empty"
+			return shim.Error(ERR)
+		}
+	}
+
+ 	uid             	:= 	args[0]
+	dataAsBytes, err 	:= 	stub.GetState(uid)
+	if err != nil {
+		return shim.Error("Failed to fetch user details: " + err.Error())
+	} else if dataAsBytes == nil {
+		return shim.Error("This user doesn't exist: " + uid)
+	}
+  
+	testtype      := args[1]
+	score, err := strconv.Atoi(args[2])
+	officerid     := args[3]
+	date		  := args[4]
+	time		  := args[5]
+  	passingmarks  := 40
+	var ispass,status string
+
+	if score >= passingmarks {
+		ispass = "true" 
+		status = "You passed the " + testtype + " test."
+	} else {
+		ispass = "false"
+		status = "You failed the " + testtype + " test."
+	}
+
+ 	var licenseBase LicenseBase
+	err = json.Unmarshal(dataAsBytes, &licenseBase) //unmarshal it aka JSON.parse()
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+	
+	var i int
+	//FIND THE INDEX OF THE FILE OUT OF ALL THE USERS EXISITNG FILES OF APPLICATIONS
+	for i := range licenseBase.LicenseData {
+		if  licenseBase.LicenseData[i].FileNumber == licenseBase.CurrentFile {
+			break 
+		}  
+	}
+  
+	if testtype == "Simulation" && licenseBase.LicenseData[i].IsPassWritten != "true" {
+ 	   return shim.Error("Not eligible for the test " + testtype + ". Qualify written test first")
+	} else if testtype == "Practical" && (licenseBase.LicenseData[i].IsPassSim != "true" || licenseBase.LicenseData[i].IsPassWritten != "true") {
+ 	   return shim.Error("Not eligible for the test " + testtype + ". Qualify earlier tests first")
+	}
+
+	var testdata TestInfo
+  	testdata.TestType        = testtype 
+  	testdata.Score           = args[2]
+  	testdata.MaxMarks        = "100"
+	testdata.PassingMarks    = "40"
+	testdata.Invigilator     = officerid 
+	
+	var filestatus FileStatusInfo
+	if testtype == "Written" {
+		licenseBase.LicenseData[i].IsPassWritten = ispass
+		if ispass == "true" {
+			filestatus.Number   = "2"
+			licenseBase.LicenseData[i].CurretStatusNo = "2"
+		} else {
+			filestatus.Number   = "1.Failed"
+		}
+	} else if testtype == "Simulation" {
+		licenseBase.LicenseData[i].IsPassSim = ispass
+		if ispass == "true" {
+			filestatus.Number   = "3"
+			licenseBase.LicenseData[i].CurretStatusNo = "3"
+		} else {
+			filestatus.Number   = "3.Failed"
+		}
+	} else if testtype == "Practical" {
+		licenseBase.LicenseData[i].IsPassPrac = ispass
+		if ispass == "true" {
+			filestatus.Number   = "4"
+			licenseBase.LicenseData[i].CurretStatusNo = "4"
+			status = "Succesfully cleared all tests. Your License Process has been completed and will be dispatched shortly"
+			licenseBase.LicenseData[i].LicenseNumber = licenseBase.CurrentFile
+			licenseBase.ActiveLicense = licenseBase.CurrentFile
+			licenseBase.LicenseData[i].DateOfIssue   = date
+			// date[4] = date[4] + 1
+			licenseBase.LicenseData[i].DateOfExpiry  = date + "10 years"
+			licenseBase.LicenseData[i].IsActive  = "true"
+			licenseBase.LicenseData[i].LicenseNumber = licenseBase.CurrentFile
+			
+			licenseBase.CurrentFile = ""
+		} else {
+			filestatus.Number   = "4.Failed"
+		}
+	}
+	filestatus.Status 	= status
+	filestatus.Date     = date
+	filestatus.Time     = time
+
+	licenseBase.LicenseData[i].FileStatus = append(licenseBase.LicenseData[i].FileStatus, filestatus)
+	licenseBase.LicenseData[i].TestData  = append(licenseBase.LicenseData[i].TestData, testdata)
+ 
+	dataJSONasBytes, err := json.Marshal(licenseBase)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	err = stub.PutState(uid, dataJSONasBytes)
+	if err != nil {
+		return shim.Error(err.Error())
+	}
+
+	return shim.Success(nil)
 }

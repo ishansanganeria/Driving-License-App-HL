@@ -21,7 +21,6 @@ export class UIDAIDetails {
     basicdata1: Basic_Info_1
     basicdata2: Basic_Info_2
     address: Basic_Info_3
-    isactive: string
 }
 
 export class Basic_Info_1 {
@@ -75,6 +74,7 @@ export class LicenseInfo {
     isactive: string
     tickets: TicketInfo[]
     filestatus: FileStatusInfo[]
+    currentstatusno: string
 
 }
 
@@ -113,3 +113,15 @@ export class FileStatusInfo {
     date: string
     string: string
 }
+
+export class OfficerInfo {
+    id: string
+    objectType: string
+    basicdata: Basic_Info_1
+    rtoid: string
+}
+
+export class Scores  {
+    uid: string
+    scoretype: string
+} 

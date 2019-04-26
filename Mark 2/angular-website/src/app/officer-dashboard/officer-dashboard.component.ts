@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
-import { LicenseBase, UIDAIDetails, Fabric_Response, FileStatusInfo } from 'src/assets/data_structures';
+import { LicenseBase, UIDAIDetails, Fabric_Response, FileStatusInfo, OfficerInfo, Scores } from 'src/assets/data_structures';
 import { ActivatedRoute } from '@angular/router';
 import { GetStateService } from '../get-state.service';
+import { PutStateService } from '../put-state.service';
 
 @Component({
   selector: 'app-officer-dashboard',
@@ -11,44 +12,86 @@ import { GetStateService } from '../get-state.service';
 })
 export class OfficerDashboardComponent implements OnInit {
 
+  formOfficer: FormGroup;
+  formScore: FormGroup;
 
-  formUid: FormGroup;
+  officerData: OfficerInfo;
 
-  userData: LicenseBase;
-
-  statuses: FileStatusInfo[];
+  tests: Scores[];
 
   nextApplication: string;
   message: string;
   userDataString: string;
+
+  uid: string;
+  scoretype: string;
 
   IsDataFetched: Boolean = false;
   canApplyButton: Boolean;
   canPayFineButton: Boolean;
   statusButton: Boolean;
   showStatus: Boolean = false;
+  showTable: Boolean = false;
+  showAddScore: Boolean = false;
 
 
-  constructor(private activatedRoute: ActivatedRoute, private getStateService: GetStateService) { }
+  constructor(private putStateService: PutStateService, private getStateService: GetStateService) { }
 
   ngOnInit() {
-    this.formUid = new FormGroup({
-      offid: new FormControl('', Validators.required)
+    this.formOfficer = new FormGroup({
+      offid: new FormControl('OFF', Validators.required)
     })
   }
 
-  fetchUserDetails() {
-
+  fetchOfficerDetails() {
+    this.showTable = false;
     this.message = "PROCESSING ..."
-
-    this.getStateService.fetchUidaiDataFromDl(this.formUid.value.offid)
+    this.getStateService.fetchOfficerDetails(this.formOfficer.value.offid)
       .then((res: Fabric_Response) => {
         if (res.status == "failed") {
           this.message = res.message
         } else {
+          this.officerData = JSON.parse(res.message);
+          this.message = "";
+          this.IsDataFetched = true;
         }
       })
   }
 
+  fetchScoresToBeAdded() {
+    this.showTable = false;
+    this.message = "FETCHING LIST OF SCORES TO BE ADDED"
+    console.log(this.officerData.rtoid);
+    this.getStateService.fetchScoresToBeAdded(this.officerData.rtoid)
+      .then((res: Fabric_Response) => {
+        if (res.status == "failed") {
+          this.message = res.message
+        } else {
+          this.tests = JSON.parse(res.message);
+          this.showTable = true;
+        }
+      })
+  }
 
+  scoreForm(uid, scoretype) {
+    this.uid = uid;
+    this.scoretype = scoretype;
+    this.formScore = new FormGroup({
+      score: new FormControl('', Validators.required),
+    })
+    this.showAddScore = true;
+  }
+
+  addScore() {
+    this.message = "ADDING SCORE"
+
+    this.putStateService.addScore(this.uid, this.scoretype, this.formScore.value.score,this.officerData.id)
+      .then((res: Fabric_Response) => {
+        if (res.status == "failed") {
+          this.message = "FAILED IN ADDING SCORE"
+        } else {
+          this.message = "Score added"
+        }
+      });
+  }
 }

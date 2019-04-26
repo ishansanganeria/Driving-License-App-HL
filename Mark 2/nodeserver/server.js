@@ -97,7 +97,34 @@ app.route('/api/dl/fetchStatus/:uid/:filenumber')
   .get(async (req, res) => {
     let uid = req.params['uid']
     let filenumber = req.params['filenumber']
-    let response = await supplements.ReturnStatus(uid,filenumber);
+    let response = await supplements.ReturnStatus(uid, filenumber);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/dl/fetchOfficerDetails/:offid')
+  .get(async (req, res) => {
+    let offid = req.params['offid']
+    let response = await supplements.fetchOfficerDetails(offid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/dl/fetchScoresToBeAdded/:rtoid')
+  .get(async (req, res) => {
+    let rtoid = req.params['rtoid']
+    let response = await supplements.fetchScoresToBeAdded(rtoid);
+    console.log("response: " + JSON.stringify(response))
+    res.json(response)
+  });
+
+app.route('/api/dl/addScore/:uid/:testtype/:score/:officerid')
+  .get(async (req, res) => {
+    let uid = req.params['uid']
+    let testtype = req.params['testtype']
+    let score = req.params['score']
+    let officerid = req.params['officerid']
+    let response = await supplements.addScore(uid,testtype,score,officerid);
     console.log("response: " + JSON.stringify(response))
     res.json(response)
   });

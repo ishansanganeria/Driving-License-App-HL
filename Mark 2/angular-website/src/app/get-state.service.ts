@@ -56,6 +56,29 @@ export class GetStateService {
     })
   }
 
+  fetchOfficerDetails(offid: any): Promise<Fabric_Response> {
+    offid = offid.toString();
+
+    return new Promise((resolve, reject) => {
+      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchOfficerDetails/' + offid)
+        .subscribe((data: Fabric_Response) => {
+          resolve(data);
+        })
+    })
+  }
+
+  fetchScoresToBeAdded(rtoid: any): Promise<Fabric_Response> {
+    rtoid = rtoid.toString();
+
+    return new Promise((resolve, reject) => {
+      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchScoresToBeAdded/' + rtoid)
+        .subscribe((data: Fabric_Response) => {
+          resolve(data);
+        })
+    })
+  }
+
+
   async checkIfHaveData(uid: any): Promise<Fabric_Response> {
     uid = uid.toString();
     return new Promise((resolve, reject) => {
