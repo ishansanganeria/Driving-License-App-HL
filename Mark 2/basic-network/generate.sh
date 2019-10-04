@@ -9,6 +9,8 @@ CHANNEL_DL=channeldl
 rm -fr config/*
 rm -fr crypto-config/*
 
+mkdir config crytpo-config
+
 # generate crypto material
 echo
 
