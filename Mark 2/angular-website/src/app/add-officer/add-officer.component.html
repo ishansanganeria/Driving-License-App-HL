@@ -1,0 +1,33 @@
+<div *ngIf="!hasAadhar">
+  <h1>Does the applying officer have an AADHAR card?</h1>
+ 
+  <form [formGroup]="formChoice">
+    <input type="radio" formControlName="choice" value="yes">Yes
+    <input type="radio" formControlName="choice" value="no">No
+    <br> <br> <br>
+    <button type="submit" (click)="aadharChoice()" [disabled]="!formChoice.valid">Submit</button>
+  </form>
+  <br> <br> <br>
+  Form Status: {{formChoice.status}}
+</div>
+
+<div *ngIf="hasAadhar">
+
+  <h1>Please fill the form details</h1>
+
+  <form [formGroup]="form">
+    UIDAI Number : <input formControlName="uid" type="number"><br><br><br>
+    RTO ID : <input formControlName="rtoid" type="text"><br><br>
+
+    <div *ngIf="response?.status != 'success'">
+
+      <button type="submit" (click)="addOfficer()" [disabled]="!form.valid || submitButton">
+        Submit
+      </button><br> <br>
+      Form Status: {{form.status}}
+    
+    </div>
+    <h4>{{response?.message}}</h4>
+  </form>
+
+</div>

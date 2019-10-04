@@ -1,0 +1,59 @@
+<div *ngIf="!IsDataFetched">
+  <br><br>
+  <form [formGroup]="formOfficer">
+    Officer's ID : <input type="text" formControlName="offid"><br><br>
+    <button type="button" (click)="fetchOfficerDetails()" (disabled)="!formOfficer.valid">Next</button>
+  </form>
+</div>
+
+<div *ngIf="IsDataFetched">
+  <h1 ALIGN=CENTER>
+    OFFICER DASHBOARD
+  </h1>
+
+  <p>
+    <b>Officer ID:</b> {{officerData.id}}
+  </p><br><br>
+
+  <button type="button" (click)="fetchScoresToBeAdded()" *ngIf="fetchScoreButton">
+    Fetch List of Tests of scores to be added
+  </button>
+
+  <button type="button" (click)="ticketForm()" *ngIf="ticketFormButton">
+    Add Ticket
+  </button>
+
+  <br><br>
+
+  <table *ngIf="showTable" border="3px">
+    <tr>
+      <th>UID</th>
+      <th>Test Type</th>
+      <th>_____________________</th>
+    </tr>
+    <tr *ngFor="let test of tests">
+      <td> {{test.uid}} </td>
+      <td> {{test.scoretype}} </td>
+      <td ALIGN=CENTER> <button (click)=scoreForm(test.uid,test.scoretype)> Add Score </button> </td>
+    </tr>
+  </table>
+
+  <form [formGroup]="formScore" *ngIf="showAddScore">
+    <br> <br>
+    Score : <input type="number" formControlName="score"><br><br>
+    <button type="button" (click)="addScore()" (disabled)="!formOfficer.valid">Next</button>
+  </form>
+
+  <form [formGroup]="formTicket" *ngIf="showTicketForm">
+    <br> <br>
+    UID : <input type="number" formControlName="uid"><br><br>
+    Reason : <input type="text" formControlName="reason"><br><br>
+    Place : <input type="text" formControlName="place"><br><br>
+    Amount in Rupees : <input type="number" formControlName="amount"><br><br>
+    <button type="button" (click)="addTicket()" (disabled)="!formOfficer.valid">Next</button>
+  </form>
+
+
+</div>
+
+<h3> {{message}} </h3>

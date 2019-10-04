@@ -1,0 +1,10 @@
+<h1>LOGIN: Are you a user or an officer:</h1>
+
+<form [formGroup]="form">
+  <input type="radio" formControlName="choice" value="user">User
+  <input type="radio" formControlName="choice" value="officer">Officer
+  <br> <br> <br>
+  <button type="submit" (click)="p()" [disabled]="!form.valid">Submit</button>
+</form>
+<br> <br> <br>
+Form Status: {{form.status}}

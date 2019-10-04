@@ -1,0 +1,36 @@
+<h1>Please fill the Part-2 of UIDAI form </h1>
+
+<div>
+  <h3>
+    UIDAI Number : {{uid}}
+  </h3>
+  <form [formGroup]="form" method="POST" action="/sendData">
+    Relative's First Name: <input formControlName="relfname" type="text"> <br><br><br>
+    Relative's Last Name: <input formControlName="rellname" type="text"> <br><br><br>
+    Birth Place: <input formControlName="birthplace" type="text"> <br><br><br>
+    Nationality: <select formControlName="nationality" name="---">
+      <option value="" disabled selected hidden>-------</option>
+      <option value="Indian">Indian</option>
+      <option value="USA">USA</option>
+      <option value="UK">UK</option>
+      <option value="Russian">Russian</option>
+    </select><br><br><br>
+    Emergency Number:<input formControlName="emergency_number" type="number"> <br><br><br>
+    Blood Group:<select formControlName="bloodgroup" aria-placeholder="---">
+      <option value="" disabled selected hidden>-------</option>
+      <option value="A+">A+</option>
+      <option value="A-">A-</option>
+      <option value="B+">B+</option>
+      <option value="B-">B-</option>
+    </select><br><br><br>
+
+    <div *ngIf="response?.status != 'success'">
+      <button *ngIf="response?.status != 'success'" type="submit" (click)="fillbd2()" [disabled]="!form.valid || submitButton">
+        Submit
+      </button><br><br>
+      Form Status: {{form.status}} <br><br>
+    </div>
+    <h4>{{response?.message}}</h4>
+    <button *ngIf="response?.status == 'success'" type="submit" [routerLink]="[ '/uidai/part3',uid]">Next</button>
+  </form>
+</div>

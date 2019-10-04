@@ -1,0 +1,78 @@
+<div *ngIf="!IsDataFetched">
+  <br><br>
+  <form [formGroup]="formUid">
+    Aadhar Number : <input type="number" formControlName="uid"><br><br>
+    <button type="button" (click)="fetchUserDetails()" (disabled)="!formUid.valid">Next</button>
+  </form>
+</div>
+
+<div *ngIf="IsDataFetched">
+  <h1 ALIGN=CENTER>
+    USER DASHBOARD
+  </h1>
+  <p>
+    User's Aadhar ID: {{userData.uidaidata.id}}
+  </p>
+  <p *ngIf='userData.currentfile != ""'>
+    Currently Open Application file: {{userData.currentfile}} 
+  </p>
+  <p *ngIf='userData.activelicense != ""'>
+    Currently Active License: {{userData.activelicense}}
+  </p>
+  <br><br>
+
+  <button type="button" *ngIf="canApplyButton" [routerLink]="['applyLicense',userDataString]">
+    Apply for License
+  </button>
+
+  <button type="button" *ngIf="statusButton" (click)="ReturnStatus()">
+    Show File Status
+  </button>
+
+  <button type="button" *ngIf="ticketsButton" (click)="ShowTickets()">
+    Show Tickets issued
+  </button>
+  
+  <table *ngIf="showStatus" border="3px">
+    <tr>
+      <th>Number</th>
+      <th>Filestatus</th>
+      <th>Date</th>
+      <th>Time</th>
+    </tr>
+    <tr *ngFor="let status of statuses">
+      <td>{{status.number}} </td>
+      <td>{{status.filestatus}} </td>
+      <td>{{status.date}} </td>
+      <td>{{status.string}} </td>
+    </tr>
+  </table>
+
+  <table *ngIf="showTickets" border="3px">
+      <tr>
+        <th>Ticket Issuer</th>
+        <th>Ticket ID</th>
+        <th>Reason</th>
+        <th>Date Of Issue</th>
+        <th>Time Of Issue</th>
+        <th>Place</th>
+        <th>Is Paid?</th>
+        <th>Amount</th>
+        <th></th>
+      </tr>
+      <tr *ngFor="let ticket of tickets">
+        <td>{{ticket.ticketissuer}}</td>
+        <td>{{ticket.ticketid}}</td>
+        <td>{{ticket.reason}}</td>
+        <td>{{ticket.dateofissue}}</td>
+        <td>{{ticket.timeofissue}}</td>
+        <td>{{ticket.place}}</td>
+        <td>{{ticket.ispaid}}</td>
+        <td>{{ticket.amount}}</td>
+        <td> <button (click)="payFine(ticket.ticketid)" *ngIf="ticket.ispaid=='false'">Pay Fine</button> </td>
+      </tr>
+  </table>
+  
+</div>
+
+<h3> {{message}} </h3>

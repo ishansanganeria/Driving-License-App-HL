@@ -1,0 +1,125 @@
+# name: "Orguidai Client"
+version: "1.0"
+
+certificateAuthorities:
+  ca.example.com:
+    url: http://localhost:7054
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: ../basic-network/crypto-config/ordererOrganizations/example.com/ca/ca.example.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+    caName: ca-orgorderer
+  
+  ca.orguidai.example.com:
+    url: http://localhost:7054
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/ca/ca.orguidai.example.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+    caName: ca-orguidai
+
+  ca.orgdl.example.com:
+    url: http://localhost:7054
+    httpOptions:
+      verify: false
+    tlsCACerts:
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/ca/ca.orgdl.example.com-cert.pem
+    registrar:
+      - enrollId: admin
+        enrollSecret: adminpw
+    caName: ca-orgdl
+
+client:
+  - organization: Orguidai
+    credentialStore:
+      path: "../nodeserver/nodejsfiles/hfc-key-store"
+      cryptoStore:
+        path: "../nodeserver/nodejsfiles/hfc-key-store"
+  - organization: Orgdl
+    credentialStore:
+      path: "../nodeserver/nodejsfiles/hfc-key-store"
+      cryptoStore:
+        path: "../nodeserver/nodejsfiles/hfc-key-store"
+      
+channels:
+  channelboth:
+    orderers:
+      - orderer.example.com
+    peers:
+      peer0.orguidai.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+  channeluidai:
+    orderers:
+      - orderer.example.com
+    peers:
+      peer0.orguidai.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+  channeldl:
+    orderers:
+      - orderer.example.com
+    peers:
+      peer0.orgdl.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+
+organizations:
+  Orguidai:
+    mspid: OrguidaiMSP
+    peers:
+      - peer0.orguidai.example.com
+    certificateAuthorities:
+      - ca.orguidai.example.com
+    adminPrivateKey:
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/d152193963c113e888fef8242f1b24097698f3656036bd204fcab6a0ec23f843_sk
+    signedCert:
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
+
+  Orgdl:
+    mspid: OrgdlMSP
+    peers:
+      - peer0.orgdl.example.com
+    certificateAuthorities:
+      - ca.orgdl.example.com
+    adminPrivateKey:
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/0a79bb1d67e252aa9c06d4bfcd2f9c24a3ca516a07d270b446723cacba6c4213_sk
+    signedCert:
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/signcerts/Admin@orgdl.example.com-cert.pem
+
+orderers:
+  orderer.example.com:
+    url: grpc://localhost:7050
+    # grpcOptions:
+    #   ssl-target-name-override: orderer.example.com
+    #   grpc-max-send-message-length: 15
+    # tlsCACerts:
+    #   path: crypto-config/ordererOrganizations/example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+
+peers:
+  peer0.orguidai.example.com:
+    url: grpc://localhost:7051
+    eventUrl: grpc://localhost:7053
+    # grpcOptions:
+    #   ssl-target-name-override: peer0.orguidai.example.com
+    #   grpc.keepalive_time_ms: 600000
+    # tlsCACerts:
+    #   path: crypto-config/peerOrganizations/orguidai.example.com/peers/peer0.orguidai.example.com/msp/tlscacerts/tlsca.orguidai.example.com-cert.pem
+  peer0.orgdl.example.com:
+    url: grpc://localhost:8051
+    eventUrl: grpc://localhost:8053
+    

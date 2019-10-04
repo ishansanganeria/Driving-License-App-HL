@@ -1,0 +1,26 @@
+<h1>Please fill the Part-3 of UIDAI form </h1>
+
+<div>
+  <h3>
+    UIDAI Number : {{uid}}
+  </h3>
+  <form [formGroup]="form" method="POST" action="/sendData">
+
+    Address Line 1: <input type="text" formControlName="addressline1"> <br><br><br>
+    Address Line 2: <input type="text" formControlName="addressline2"> <br><br><br>
+    City: <input type="text" formControlName="city"> <br><br><br>
+    Pin: <input type="number" formControlName="pincode"> <br><br><br>
+    State: <input type="text" formControlName="state"> <br><br><br>
+
+    <div *ngIf="response?.status != 'success'">
+      <button *ngIf="response?.status != 'success'" type="submit" (click)="fillbd3()" [disabled]="!form.valid || submitButton">
+        Submit
+      </button><br><br>
+      Form Status: {{form.status}} <br><br>
+    </div>
+    <h4>{{response?.message}}</h4>
+    <button *ngIf="response?.status == 'success'" type="button" (click)="next()">
+      Send data to Driving License Authority
+    </button>
+  </form>
+</div>

@@ -1,0 +1,33 @@
+<div *ngIf="!IsSuccess">
+  <h3>{{message}}</h3>
+</div>
+
+<div *ngIf="IsSuccess">
+  <h1>The following data was fetched from UIDAI</h1>
+
+  <h2>Basic Info - 1</h2><hr>
+  <b> First Name : </b> {{uidData.basicdata1.firstname}} <br><br>
+  <b>Last Name : </b> {{uidData.basicdata1.lastname}} <br><br>
+  <b>Gender : </b> {{uidData.basicdata1.gender}} <br><br>
+  <b>Date Of Birth : </b> {{uidData.basicdata1.dob}} <br><br>
+  <b>Contact Number: </b> {{uidData.basicdata1.contact_number}} <br><br>
+  <b>Email ID : </b> {{uidData.basicdata1.emailid}} <br><br>
+  
+  <h2>Basic Info - 2</h2><hr>
+  <b>Relative's First Name : </b>    {{uidData.basicdata2.relfname}} <br><br>
+  <b>Relative's Last Name : </b>    {{uidData.basicdata2.rellname}} <br><br>
+  <b>Birth Place : </b>    {{uidData.basicdata2.birthplace}} <br><br>
+  <b>Nationality : </b>    {{uidData.basicdata2.nationality}} <br><br>
+  <b>Emergency Number : </b>    {{uidData.basicdata2.emergency_number}} <br><br>
+  <b>Blood Group : </b> {{uidData.basicdata2.bloodgroup}} <br><br>
+  
+  <h2>Address Data</h2><hr>
+  <b>Address Line 1 : </b> {{uidData.address.addressline1}} <br> <br>
+  <b>Address Line 2 : </b> {{uidData.address.addressline2}} <br> <br>
+  <b>City : </b> {{uidData.address.city}} <br> <br>
+  <b>Pin : </b> {{uidData.address.pincode}} <br> <br>
+  <b>State : </b> {{uidData.address.state}} <br> <br>
+
+  <button type="submit" [routerLink]="['../../askUserOfficer']">Next</button>
+</div>
+<!-- *ngIf = "model.invalid == 'false'" -->
