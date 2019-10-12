@@ -9,12 +9,12 @@ ingress:
   path: /
   hosts:
     # TODO: Change this to your Domain Name
-    - ca.dlapp.xyz
+    - ca.hlf.dlapp.xyz
   tls:
     - secretName: ca--tls
       hosts:
         # TODO: Change this to your Domain Name
-        - ca.dlapp.xyz
+        - ca.hlf.dlapp.xyz
 
 persistence:
   accessMode: ReadWriteOnce
