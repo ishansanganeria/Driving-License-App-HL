@@ -38,6 +38,21 @@ Before running this tutorial you will need:
 4) A `cert-manager` installation (using the Helm chart)
 5) A domain name for your components (e.g. the Certificate Authority), connected to your `nginx-ingress` IP address - you can obtain one for free or $1.00 at many Domain Name Registrars.
 
+#### Helm init
+
+    kubectl create -f ./helm-rbac.yaml
+
+    helm init --service-account tiller
+
+    ##### helm init --service-account tiller --override spec.selector.matchLabels.'name'='tiller',spec.selector.matchLabels.'app'='helm' --output yaml | sed 's@apiVersion: extensions/v1beta1@apiVersion: apps/v1@' | kubectl apply -f -
+
+    #### Add the `incubator` repository, so you are able to install Kafka, etc.
+
+    helm repo add incubator https://kubernetes-charts-incubator.storage.googleapis.com/
+
+    helm repo update
+
+
 #### NGINX Ingress controller
 
 You can install the ingress controller by running this command:
