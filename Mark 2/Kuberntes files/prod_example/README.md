@@ -103,7 +103,10 @@ Alternatively, you may not use the Ingress at all and disable it, and instead us
 
 Create the required namespaces:
 
-    kubectl create ns cas orderers peers
+    kubectl create ns cas
+    kubectl create ns orderers
+    kubectl create ns peer-orguidai
+    kubectl create ns peer-orgdl
 
 ### Fabric CA
 
@@ -115,7 +118,7 @@ Install the Fabric CA chart (it automatically creates a postgresql database)
 
 Get pod for CA release
 
-    CA_POD=$(kubectl get pods -n cas -l "app=hlf-ca,release=ca" -o jsonpath="{.items[0].metadata.name}")
+    export CA_POD=$(kubectl get pods -n cas -l "app=hlf-ca,release=ca" -o jsonpath="{.items[0].metadata.name}")
 
 Check if server is ready
 
@@ -131,7 +134,7 @@ Check that we don't have a certificate
 
 Check that ingress works correctly
 
-    CA_INGRESS=$(kubectl get ingress -n cas -l "app=hlf-ca,release=ca" -o jsonpath="{.items[0].spec.rules[0].host}")
+    export CA_INGRESS=$(kubectl get ingress -n cas -l "app=hlf-ca,release=ca" -o jsonpath="{.items[0].spec.rules[0].host}")
 
     curl http://$CA_INGRESS/cainfo
 
@@ -153,11 +156,17 @@ Register Orderer Admin if the previous command did not work
 
 Get identity of ord-admin (this should not exist at first)
 
-    kubectl exec -n cas $CA_POD -- fabric-ca-client identity list --id peer-admin
+<!--
+    kubectl exec -n cas $CA_POD -- fabric-ca-client identity list --id peer-admin -->
+    kubectl exec -n cas $CA_POD -- fabric-ca-client identity list --id peer-admin-orgdl
+    kubectl exec -n cas $CA_POD -- fabric-ca-client identity list --id peer-admin-orguidai
 
 Register Peer Admin if the previous command did not work
 
-    kubectl exec -n cas $CA_POD -- fabric-ca-client register --id.name peer-admin --id.secret PeerAdm1nPW --id.attrs 'admin=true:ecert'
+<!-- 
+    kubectl exec -n cas $CA_POD -- fabric-ca-client register --id.name peer-admin          --id.secret PeerAdm1nPW         --id.attrs 'admin=true:ecert' -->
+    kubectl exec -n cas $CA_POD -- fabric-ca-client register --id.name peer-admin-orgdl    --id.secret PeerAdm1OrgDlnPW    --id.attrs 'admin=true:ecert'
+    kubectl exec -n cas $CA_POD -- fabric-ca-client register --id.name peer-admin-orguidai --id.secret PeerAdm1OrgUidainPW --id.attrs 'admin=true:ecert'
 
 ##### Enroll
 
@@ -178,13 +187,23 @@ Copy the signcerts to admincerts
 
 Enroll the Organisation Admin identity (typically we would use a more secure password than `PeerAdm1nPW`, etc.)
 
-    FABRIC_CA_CLIENT_HOME=./config fabric-ca-client enroll -u http://peer-admin:PeerAdm1nPW@$CA_INGRESS -M ./PeerMSP
+<!-- 
+    FABRIC_CA_CLIENT_HOME=./config fabric-ca-client enroll -u http://peer-admin   :PeerAdm1nPW@$CA_INGRESS -M ./PeerMSP -->
+    FABRIC_CA_CLIENT_HOME=./config fabric-ca-client enroll -u http://peer-admin-orgdl:PeerAdm1OrgDlnPW@$CA_INGRESS -M ./PeerMSPOrgUidai
+    FABRIC_CA_CLIENT_HOME=./config fabric-ca-client enroll -u http://peer-admin-orguidai:PeerAdm1OrgUidainPW@$CA_INGRESS -M ./PeerMSPOrgDl
 
 Copy the signcerts to admincerts
 
+<!-- 
     mkdir -p ./config/PeerMSP/admincerts
+    cp ./config/PeerMSP/signcerts/* ./config/PeerMSP/admincerts -->
 
-    cp ./config/PeerMSP/signcerts/* ./config/PeerMSP/admincerts
+    mkdir -p ./config/PeerMSPOrgUidai/admincerts
+    cp ./config/PeerMSPOrgUidai/signcerts/* ./config/PeerMSPOrgUidai/admincerts
+
+    mkdir -p ./config/PeerMSPOrgDl/admincerts
+    cp ./config/PeerMSPOrgDl/signcerts/* ./config/PeerMSPOrgDl/admincerts
+
 
 ##### Save Crypto Material
 
@@ -211,22 +230,37 @@ Create a secret to hold the admin key CA certificate:
 ###### Peer Organisation
 
 Create a secret to hold the admincert:
-
+<!-- 
     ORG_CERT=$(ls ./config/PeerMSP/admincerts/cert.pem)
+    kubectl create secret generic -n peers hlf--peer-admincert --from-file=cert.pem=$ORG_CERT -->
+    
+    ORG_UIDAI_CERT=$(ls ./config/PeerMSPOrgUidai/admincerts/cert.pem)
+    kubectl create secret generic -n peer-orguidai hlf--peer-admincert --from-file=cert.pem=$ORG_UIDAI_CERT
 
-    kubectl create secret generic -n peers hlf--peer-admincert --from-file=cert.pem=$ORG_CERT
+    ORG_DL_CERT=$(ls ./config/PeerMSPOrgDl/admincerts/cert.pem)
+    kubectl create secret generic -n peer-orgdl hlf--peer-admincert --from-file=cert.pem=$ORG_DL_CERT
 
 Create a secret to hold the admin key:
-
+<!-- 
     ORG_KEY=$(ls ./config/PeerMSP/keystore/*_sk)
+    kubectl create secret generic -n peers hlf--peer-adminkey --from-file=key.pem=$ORG_KEY -->
 
-    kubectl create secret generic -n peers hlf--peer-adminkey --from-file=key.pem=$ORG_KEY
+    ORG_UIDAI_KEY=$(ls ./config/PeerMSPOrgUidai/keystore/*_sk)
+    kubectl create secret generic -n peer-orguidai hlf--peer-adminkey --from-file=key.pem=$ORG_UIDAI_KEY
 
-Create a secret to hold the CA certificate:
+    ORG_DL_KEY=$(ls ./config/PeerMSPOrgDl/keystore/*_sk)
+    kubectl create secret generic -n peer-orgdl hlf--peer-adminkey --from-file=key.pem=$ORG_DL_KEY
 
+Create a secret to hold the CA certificate: (Will be same for both org as using only 1 CA)
+<!-- 
     CA_CERT=$(ls ./config/PeerMSP/cacerts/*.pem)
+    kubectl create secret generic -n peers hlf--peer-ca-cert --from-file=cacert.pem=$CA_CERT -->
 
-    kubectl create secret generic -n peers hlf--peer-ca-cert --from-file=cacert.pem=$CA_CERT
+    CA_CERT=$(ls ./config/PeerMSPOrgUidai/cacerts/*.pem)
+
+    kubectl create secret generic -n peer-orguidai hlf--peer-ca-cert --from-file=cacert.pem=$CA_CERT
+
+    kubectl create secret generic -n peer-orgdl    hlf--peer-ca-cert --from-file=cacert.pem=$CA_CERT
 
 ### Genesis and channel
 
