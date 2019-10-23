@@ -134,4 +134,5 @@ echo
 node registerUser.js OrgdlMSP
 
 cd ..
+npm install -i
 node server.js

@@ -86,7 +86,7 @@ export class UserDashboardComponent implements OnInit {
     this.statusButton = false;
     this.showTickets = false;
 
-    console.log(this.formUid.value.currentfile);
+    // console.log(this.formUid.value.currentfile);
     this.getStateService.ReturnStatus(this.formUid.value.uid, this.userData.currentfile)
       .then((res: Fabric_Response) => {
         this.statuses = JSON.parse(res.message);
