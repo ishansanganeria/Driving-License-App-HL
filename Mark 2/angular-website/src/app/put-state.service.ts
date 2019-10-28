@@ -12,7 +12,7 @@ export class PutStateService {
   createUIDAI(data: Basic_Info_1): Promise<Fabric_Response> {
     let datastring = JSON.stringify(data)
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/uidai/part1/' + datastring)
+      this.http.get<any>('http://34.70.124.165:8000/api/uidai/part1/' + datastring)
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })
@@ -23,7 +23,7 @@ export class PutStateService {
     let datastring = JSON.stringify(data)
     let uidString = uid.toString();
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/uidai/part2/' + uid + "/" + datastring)
+      this.http.get<any>('http://34.70.124.165:8000/api/uidai/part2/' + uid + "/" + datastring)
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })
@@ -34,7 +34,7 @@ export class PutStateService {
     let datastring = JSON.stringify(data)
     let uidString = uid.toString();
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/uidai/part3/' + uid + "/" + datastring)
+      this.http.get<any>('http://34.70.124.165:8000/api/uidai/part3/' + uid + "/" + datastring)
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })
@@ -44,7 +44,7 @@ export class PutStateService {
   addRto(data: any): Promise<Fabric_Response> {
     let datastring = JSON.stringify(data)
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/dl/addRto/' + datastring)
+      this.http.get<any>('http://34.70.124.165:8000/api/dl/addRto/' + datastring)
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })
@@ -53,7 +53,7 @@ export class PutStateService {
 
   addOfficer(uid: number, rtoid: number): Promise<Fabric_Response> {
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/dl/addOfficer/' + uid.toString() + '/' + rtoid.toString())
+      this.http.get<any>('http://34.70.124.165:8000/api/dl/addOfficer/' + uid.toString() + '/' + rtoid.toString())
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })
@@ -62,7 +62,7 @@ export class PutStateService {
 
   applyLicense(uid: string): Promise<Fabric_Response> {
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/dl/applyLicense/' + uid)
+      this.http.get<any>('http://34.70.124.165:8000/api/dl/applyLicense/' + uid)
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })
@@ -71,7 +71,7 @@ export class PutStateService {
 
   addScore(uid: string, scoretype: string, score: string, officerid: string): Promise<Fabric_Response> {
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/dl/addScore/' + uid + '/' + scoretype + '/' + score + '/' + officerid)
+      this.http.get<any>('http://34.70.124.165:8000/api/dl/addScore/' + uid + '/' + scoretype + '/' + score + '/' + officerid)
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })
@@ -80,7 +80,7 @@ export class PutStateService {
 
   addTicket(uid: string, officerid: string, reason: string, place: string, amount: string): Promise<Fabric_Response> {
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/dl/addTicket/' + uid + '/' + officerid + '/' + reason + '/' + place + '/' + amount)
+      this.http.get<any>('http://34.70.124.165:8000/api/dl/addTicket/' + uid + '/' + officerid + '/' + reason + '/' + place + '/' + amount)
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })
@@ -89,7 +89,7 @@ export class PutStateService {
 
   payFine(uid: string, ticketid: string): Promise<Fabric_Response> {
     return new Promise((resolve, reject) => {
-      this.http.get<any>('http://localhost:8000/api/dl/payFine/' + uid + '/' + ticketid )
+      this.http.get<any>('http://34.70.124.165:8000/api/dl/payFine/' + uid + '/' + ticketid )
         .subscribe((data: Fabric_Response) => {
           resolve(data)
         })

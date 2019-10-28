@@ -1,0 +1,101 @@
+version: '2'
+
+networks:
+  custom_network:
+    external:
+      name: trial_net
+
+services:
+
+  ca.orguidai.example.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.orguidai.example.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.orguidai.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/*_sk
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw'
+    volumes:
+      - ./crypto-config/peerOrganizations/orguidai.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/orguidai.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp/keystore
+    container_name: ca.orguidai.example.com
+    networks:
+      custom_network:
+        aliases:
+          - ca.orguidai.example.com
+ 
+  peer0.orguidai.example.com:
+      container_name: peer0.orguidai.example.com
+      image: hyperledger/fabric-peer
+      environment:
+        - CORE_PEER_ID=peer0.orguidai.example.com
+        - CORE_PEER_ADDRESS=peer0.orguidai.example.com:7051
+        - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orguidai.example.com:7051
+        - CORE_PEER_LOCALMSPID=OrguidaiMSP
+        - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+        - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=trial_net
+        - CORE_LOGGING_PEER=debug
+        - CORE_CHAINCODE_LOGGING_LEVEL=debug
+        - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+        - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orgdl.example.com:7051
+        - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+        - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.orguidai.example.com:5984
+        - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+        - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+      working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+      command: peer node start
+      ports:
+        - 7051:7051
+        - 7053:7053
+      volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/orguidai.example.com/peers/peer0.orguidai.example.com/msp:/etc/hyperledger/msp/peer
+        - ./crypto-config/peerOrganizations/orguidai.example.com/users:/etc/hyperledger/msp/users
+        - ./config:/etc/hyperledger/configtx
+      depends_on:
+        - couchdb.peer0.orguidai.example.com
+      networks:
+        custom_network:
+          aliases:
+            - peer0.orguidai.example.com
+
+  couchdb.peer0.orguidai.example.com:
+      container_name: couchdb.peer0.orguidai.example.com
+      image: hyperledger/fabric-couchdb
+      environment:
+        - COUCHDB_USER=
+        - COUCHDB_PASSWORD=
+      ports:
+        - 5984:5984
+      networks:
+        custom_network:
+          aliases:
+            - couchdb.peer0.orguidai.example.com
+
+  cliuidai:
+    container_name: cliuidai
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=info
+      - CORE_PEER_ID=cliuidai
+      - CORE_PEER_ADDRESS=peer0.orguidai.example.com:7051
+      - CORE_PEER_LOCALMSPID=OrguidaiMSP
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp
+      - CORE_CHAINCODE_KEEPALIVE=10
+      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./../chaincode/:/opt/gopath/src/github.com/
+      - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+    networks:
+      - custom_network
+    depends_on:
+     - peer0.orguidai.example.com
+     - couchdb.peer0.orguidai.example.com

@@ -9,10 +9,11 @@ then
 fi
 
 # set -e
-LANGUAGE=${1:-"golang"}
-CC_UIDAI_PATH=github.com/fabuidai
-CC_DL_PATH=github.com/fabdl
-CC_BOTH_PATH=github.com/fabboth
+export LANGUAGE=${1:-"golang"}
+
+export CC_UIDAI_PATH=github.com/fabuidai
+export CC_DL_PATH=github.com/fabdl
+export CC_BOTH_PATH=github.com/fabboth
 
 docker rm -f $(docker ps -aq) > /dev/null 2>&1
 docker network prune -f
@@ -65,8 +66,15 @@ echo "##########################################################################
 echo "############ Installing chaincode fabboth on peer0.org{uidai,dl}  #############"
 echo "###############################################################################"
 echo
-docker exec cliuidai peer chaincode install -n fabboth -v 1.0 -p "$CC_BOTH_PATH" -l golang
-docker exec clidl peer chaincode install -n fabboth -v 1.0 -p "$CC_BOTH_PATH" -l golang
+# docker exec cliuidai peer chaincode install -n fabboth -v 1.0 -p "$CC_BOTH_PATH" -l golang
+# docker exec clidl peer chaincode install            -n fabboth -v 1.0 -p "$CC_BOTH_PATH" -l golang
+
+docker exec clidl peer chaincode package ccpack.out -n fabboth -v 1.0 -p "$CC_BOTH_PATH" -l golang
+####### COPY the file to all systems
+docker exec clidl peer chaincode install            -n fabboth -v 1.0 -p "$CC_BOTH_PATH" -l golang
+docker exec cliuidai peer chaincode install /opt/gopath/src/github.com/fabboth/ccpack.out
+docker exec clidl peer chaincode install /opt/gopath/src/github.com/fabboth/ccpack.out
+
 echo
 
 echo

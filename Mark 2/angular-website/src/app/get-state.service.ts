@@ -14,7 +14,7 @@ export class GetStateService {
   async fetchUidaiDataToCommon(uid: any): Promise<Fabric_Response> {
     uid = uid.toString();
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response>('http://localhost:8000/api/uidai/fetchData/' + uid)
+      this.http.get<Fabric_Response>('http://34.70.124.165:8000/api/uidai/fetchData/' + uid)
         .subscribe((data: Fabric_Response) => { 
           resolve(data)
         },
@@ -27,7 +27,7 @@ export class GetStateService {
   fetchUidaiDataFromCommon(uid: any): Promise<Fabric_Response> {
     uid = uid.toString();
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchdataPart1/' + uid)
+      this.http.get<Fabric_Response>('http://34.70.124.165:8000/api/dl/fetchdataPart1/' + uid)
         .subscribe((data: Fabric_Response) => {
           resolve(data);
         })
@@ -37,7 +37,7 @@ export class GetStateService {
   fetchUidaiDataFromDl(uid: any): Promise<Fabric_Response> {
     uid = uid.toString();
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchdataPart2/' + uid)
+      this.http.get<Fabric_Response>('http://34.70.124.165:8000/api/dl/fetchdataPart2/' + uid)
         .subscribe((data: Fabric_Response) => {
           resolve(data);
         })
@@ -49,7 +49,7 @@ export class GetStateService {
     filenumber = filenumber.toString();
 
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchStatus/' + uid + '/' + filenumber)
+      this.http.get<Fabric_Response>('http://34.70.124.165:8000/api/dl/fetchStatus/' + uid + '/' + filenumber)
         .subscribe((data: Fabric_Response) => {
           resolve(data);
         })
@@ -60,7 +60,7 @@ export class GetStateService {
     offid = offid.toString();
 
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchOfficerDetails/' + offid)
+      this.http.get<Fabric_Response>('http://34.70.124.165:8000/api/dl/fetchOfficerDetails/' + offid)
         .subscribe((data: Fabric_Response) => {
           resolve(data);
         })
@@ -71,7 +71,7 @@ export class GetStateService {
     rtoid = rtoid.toString();
 
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/fetchScoresToBeAdded/' + rtoid)
+      this.http.get<Fabric_Response>('http://34.70.124.165:8000/api/dl/fetchScoresToBeAdded/' + rtoid)
         .subscribe((data: Fabric_Response) => {
           resolve(data);
         })
@@ -82,7 +82,7 @@ export class GetStateService {
   async checkIfHaveData(uid: any): Promise<Fabric_Response> {
     uid = uid.toString();
     return new Promise((resolve, reject) => {
-      this.http.get<Fabric_Response>('http://localhost:8000/api/dl/checkIfHaveData/' + uid)
+      this.http.get<Fabric_Response>('http://34.70.124.165:8000/api/dl/checkIfHaveData/' + uid)
         .subscribe((data: Fabric_Response) => { 
           resolve(data)
         },

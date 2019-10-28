@@ -1,15 +1,14 @@
 export PATH=$GOPATH/src/github.com/hyperledger/fabric/build/bin:${PWD}/../bin:${PWD}:$PATH
-export FABRIC_CFG_PATH=${PWD}
 
-CHANNEL_BOTH=channelboth
-CHANNEL_UIDAI=channeluidai
-CHANNEL_DL=channeldl
+export CHANNEL_BOTH=channelboth
+export CHANNEL_UIDAI=channeluidai
+export CHANNEL_DL=channeldl
 
 # remove previous crypto material and config transactions
 rm -fr config/*
 rm -fr crypto-config/*
 
-mkdir config crytpo-config
+mkdir config crypto-config
 
 # generate crypto material
 echo

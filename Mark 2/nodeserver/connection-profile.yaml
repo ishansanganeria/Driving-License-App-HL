@@ -3,7 +3,7 @@ version: "1.0"
 
 certificateAuthorities:
   ca.example.com:
-    url: http://localhost:7054
+    url: http://35.224.122.45:7054
     httpOptions:
       verify: false
     tlsCACerts:
@@ -14,7 +14,7 @@ certificateAuthorities:
     caName: ca-orgorderer
   
   ca.orguidai.example.com:
-    url: http://localhost:7054
+    url: http://35.222.63.17:7054
     httpOptions:
       verify: false
     tlsCACerts:
@@ -25,7 +25,7 @@ certificateAuthorities:
     caName: ca-orguidai
 
   ca.orgdl.example.com:
-    url: http://localhost:7054
+    url: http://13.232.205.97:7054
     httpOptions:
       verify: false
     tlsCACerts:
@@ -103,7 +103,7 @@ organizations:
 
 orderers:
   orderer.example.com:
-    url: grpc://localhost:7050
+    url: grpc://35.224.122.45:7050
     # grpcOptions:
     #   ssl-target-name-override: orderer.example.com
     #   grpc-max-send-message-length: 15
@@ -112,14 +112,14 @@ orderers:
 
 peers:
   peer0.orguidai.example.com:
-    url: grpc://localhost:7051
-    eventUrl: grpc://localhost:7053
+    url: grpc://35.222.63.17:7051
+    eventUrl: grpc://35.222.63.17:7053
     # grpcOptions:
     #   ssl-target-name-override: peer0.orguidai.example.com
     #   grpc.keepalive_time_ms: 600000
     # tlsCACerts:
     #   path: crypto-config/peerOrganizations/orguidai.example.com/peers/peer0.orguidai.example.com/msp/tlscacerts/tlsca.orguidai.example.com-cert.pem
   peer0.orgdl.example.com:
-    url: grpc://localhost:8051
-    eventUrl: grpc://localhost:8053
+    url: grpc://13.232.205.97:8051
+    eventUrl: grpc://13.232.205.97:8053
     

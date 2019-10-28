@@ -1,0 +1,101 @@
+version: '2'
+
+networks:
+  custom_network:
+    external:
+      name: trial_net
+
+services:
+  ca.orgdl.example.com:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca.orgdl.example.com
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.orgdl.example.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/*_sk
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start -b admin:adminpw'
+    volumes:
+      - ./crypto-config/peerOrganizations/orgdl.example.com/ca/:/etc/hyperledger/fabric-ca-server-config
+      - ./crypto-config/peerOrganizations/orgdl.example.com/ca/:/etc/hyperledger/fabric-ca-server/msp/keystore
+    container_name: ca.orgdl.example.com
+    networks:
+      custom_network:
+        aliases:
+          - ca.orgdl.example.com
+
+  peer0.orgdl.example.com:
+    container_name: peer0.orgdl.example.com
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_PEER_ID=peer0.orgdl.example.com
+      - CORE_PEER_ADDRESS=peer0.orgdl.example.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.orgdl.example.com:7051
+      - CORE_PEER_LOCALMSPID=OrgdlMSP
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=trial_net
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_PEER=debug
+      - CORE_CHAINCODE_LOGGING_LEVEL=debug
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/msp/peer/
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.orguidai.example.com:7051
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb.peer0.orgdl.example.com:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: peer node start
+    # command: peer node start --peer-chaincodedev=true
+    ports:
+      - 8051:7051
+      - 8053:7053
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./crypto-config/peerOrganizations/orgdl.example.com/peers/peer0.orgdl.example.com/msp:/etc/hyperledger/msp/peer
+      - ./crypto-config/peerOrganizations/orgdl.example.com/users:/etc/hyperledger/msp/users
+      - ./config:/etc/hyperledger/configtx
+    depends_on:
+      - couchdb.peer0.orgdl.example.com
+    networks:
+      custom_network:
+        aliases:
+          - peer0.orgdl.example.com
+
+  couchdb.peer0.orgdl.example.com:
+    container_name: couchdb.peer0.orgdl.example.com
+    image: hyperledger/fabric-couchdb
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 6984:5984
+    networks:
+        custom_network:
+          aliases:
+            - couchdb.peer0.orgdl.example.com
+
+  clidl:
+    container_name: clidl
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=info
+      - CORE_PEER_ID=clidl
+      - CORE_PEER_ADDRESS=peer0.orgdl.example.com:7051
+      - CORE_PEER_LOCALMSPID=OrgdlMSP
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp
+      - CORE_CHAINCODE_KEEPALIVE=10
+      - ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/example.com/orderers/orderer.example.com/msp/tlscacerts/tlsca.example.com-cert.pem
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+      - /var/run/:/host/var/run/
+      - ./../chaincode/:/opt/gopath/src/github.com/
+      - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+    networks:
+      - custom_network
+    depends_on:
+     - peer0.orgdl.example.com
+     - couchdb.peer0.orgdl.example.com

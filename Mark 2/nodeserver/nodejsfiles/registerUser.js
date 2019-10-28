@@ -1,6 +1,8 @@
 'use strict';
 
-let mspid = process.argv[2];
+let caIP = process.argv[2];
+let mspid = process.argv[3];
+
 let orgname = mspid.substring(0, mspid.length-3)
 let username = 'user' + orgname
 if (orgname === "Orguidai") {
@@ -15,7 +17,7 @@ if (orgname === "Orguidai") {
 } else {
     caport = "9054"
 }
-let caUrl = 'http://localhost:' + caport
+let caUrl = 'http://' + caIP +':' + caport
 
 var Fabric_Client = require('fabric-client');
 var Fabric_CA_Client = require('fabric-ca-client');

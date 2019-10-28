@@ -1,6 +1,8 @@
 'use strict';
 
-let mspid = process.argv[2];
+let caIP = process.argv[2];
+let mspid = process.argv[3];
+
 let orgname = mspid.substring(0, mspid.length - 3)
 let caName = 'ca.' + orgname.toLowerCase() + '.example.com'
 let caport;
@@ -9,7 +11,7 @@ if (orgname === "Orguidai") {
 } else {
     caport = "9054"
 }
-let caUrl = 'http://localhost:' + caport
+let caUrl = 'http://' + caIP + ':' + caport;
 let username = 'admin';
 
 var Fabric_Client = require('fabric-client');
@@ -77,24 +79,3 @@ Fabric_Client.newDefaultKeyValueStore({
 }).catch((err) => {
     console.error('Failed to enroll admin: ' + err);
 });
-/*
-async function affiliationsss() {
-    let adminUserObj = await client.setUserContext({
-        username: username,
-        password: 'adminpw'
-    });
-    let caClient = client.getCertificateAuthority();
-    let affiliationService = caClient.newAffiliationService();
-
-    let registeredAffiliations = await affiliationService.getAll(adminUserObj);
-    if (!registeredAffiliations.result.affiliations.some(
-            x => x.name == orgname)) {
-        let affiliation = orgname;
-        await affiliationService.create({
-            name: affiliation,
-            force: true
-        }, adminUserObj);
-    }
-}
-
-affiliationsss();*/
