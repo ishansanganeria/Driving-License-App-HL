@@ -57,6 +57,11 @@ channels:
         chaincodeQuery: true
         ledgerQuery: true
         eventSource: true
+      peer0.orgdl.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
 
   channeluidai:
     orderers:
@@ -86,7 +91,7 @@ organizations:
     certificateAuthorities:
       - ca.orguidai.example.com
     adminPrivateKey:
-      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/470af5462af561fae9eab0a92046fc14faef3346fac58acba58e288502d43ada_sk
+      path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/keystore/7da861e70b609108f153da582ad61d09c29d14eb7aa8e46d45277e07ebe0454a_sk
     signedCert:
       path: ../basic-network/crypto-config/peerOrganizations/orguidai.example.com/users/Admin@orguidai.example.com/msp/signcerts/Admin@orguidai.example.com-cert.pem
 
@@ -97,7 +102,7 @@ organizations:
     certificateAuthorities:
       - ca.orgdl.example.com
     adminPrivateKey:
-      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/96c9a9404426670b42aa33270318abd85dccf9fa48f2e64875aa81128543e0b9_sk
+      path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/keystore/5fb56c2666033d331bb18519bd271bdb74957b1d57ba8b44b3dbd554003412d1_sk
     signedCert:
       path: ../basic-network/crypto-config/peerOrganizations/orgdl.example.com/users/Admin@orgdl.example.com/msp/signcerts/Admin@orgdl.example.com-cert.pem
 
