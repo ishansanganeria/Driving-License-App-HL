@@ -4,23 +4,4 @@
 *nohup.out*
 *hfc-key-store*
 *configtxlator*
-
-Mark 2/chaincode/fabdl/fabdl
-
-
-Mark 2/bin/discover
-
-Mark 2/bin/fabric-ca-client
-
-Mark 2/bin/get-docker-images\.sh
-
-Mark 2/bin/idemixgen
-
-Mark 2/bin/orderer
-
-Mark 2/bin/peer
-
-Mark 2/basic-network/config/
-
-# Mark 2/nodeserver/count.json
 *.vscode*
